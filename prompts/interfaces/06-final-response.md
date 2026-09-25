@@ -1,33 +1,35 @@
-# Interface Prompt — Final Response Console
+# Prompt de interfaz — Consola de respuesta
 
-Diseña la consola de decisión final para **Código Rojo: Cancún 2035**.
+Diseña la consola final de VÉRTICE.
 
-## Función narrativa
+## Etapa 1 — Candado de correlación
 
-Convertir toda la investigación previa en una decisión profesional con consecuencias.
+Solicitar cuatro identificadores bajo:
+- ORIGEN
+- IDENTIDAD
+- PROPAGACIÓN
+- CORRELACIÓN
 
-## Acceso
+Clave canónica:
+COR-512 / ACC-417 / NOD-204 / AGR-27
 
-La consola comienza bloqueada. Debe aceptar la clave/phrase derivada de los acertijos. No revelar qué fragmento falta ni de qué estación proviene.
+No revelar qué estación corresponde a cada campo.
 
-## Contenido tras desbloqueo
+Respuesta correcta:
 
-- resumen neutral del estado actual,
-- acciones de respuesta posibles,
-- acciones específicas y combinables si el game design lo requiere,
-- confirmación de ejecución,
-- sensación de irreversibilidad/tensión.
+> CORRELACIÓN VERIFICADA  
+> AUTORIZACIÓN DE RESPUESTA CONCEDIDA
 
-Posibles acciones narrativas:
-- bloquear identidad comprometida,
-- rotar credenciales,
-- aislar nodo/servicio,
-- mantener servicios sanos operativos,
-- apagar todos los sistemas,
-- no intervenir.
+## Etapa 2 — Planes
 
-No marcar opciones como correctas o incorrectas.
+Mostrar:
+- PLAN ALFA — Apagado general
+- PLAN BETA — Contención de identidad
+- PLAN GAMMA — Aislamiento de inteligencia
+- PLAN DELTA — Contención dirigida
 
-## Estética
+No marcar ninguna opción como correcta, recomendada, segura o insegura.
 
-Más sobria y ceremonial que las estaciones de investigación. Debe sentirse como el clímax de la misión.
+La ejecución debe sentirse importante y tener confirmación final.
+
+Todo visible en español.

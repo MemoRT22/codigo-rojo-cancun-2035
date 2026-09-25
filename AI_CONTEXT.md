@@ -1,63 +1,67 @@
-# AI Context — read this first
+# Contexto de IA — leer primero
 
-You are working on **Código Rojo: Cancún 2035**, an immersive technological escape-room experience for prospective high-school students visiting the AI & Cybersecurity HUB at Universidad Anáhuac Cancún.
+Estás trabajando en **Código Rojo: Cancún 2035**, una experiencia inmersiva tipo escape room tecnológico para aspirantes de preparatoria que visitan el HUB de Inteligencia Artificial y Ciberseguridad de la Universidad Anáhuac Cancún.
 
-This repository is deliberately optimized for **experience design and rapid prototyping**, not enterprise production.
+Este repositorio está optimizado para **diseño de experiencia y prototipado rápido**, no para producción empresarial.
 
-## North star
+## Regla de idioma
 
-A participant should leave saying:
+Todo contenido visible para participantes debe estar en **español**: títulos, botones, estados, alertas, registros, mensajes, hipótesis, nombres de estaciones y textos de sistema.
+
+Los nombres internos del código pueden estar en inglés si conviene al desarrollo, pero nunca deben filtrarse a la experiencia visible.
+
+## Universo ficticio
+
+La empresa ficticia es **Vértice Sistemas Urbanos**.
+
+La plataforma operativa se llama **VÉRTICE**.
+
+Evitar nombres que mezclen siglas geográficas como "CUN" con términos en inglés. Cancún es el escenario narrativo; VÉRTICE es la plataforma.
+
+## Estrella guía
+
+El participante debería salir diciendo:
 
 > “Sentí que estaba dentro de un centro de operaciones resolviendo una crisis real.”
 
-Not:
+No:
 
 > “Me dieron una presentación de IA y ciberseguridad.”
 
-## What the experience is
+## Formato
 
-- 20–25 minute immersive mission.
-- 4–10 participants; optimal 6–8.
-- One shared crisis, not teams competing against one another.
-- A large central LED acts as the living status board for Cancún 2035.
-- Around the room are investigation stations.
-- Players discover clues and unlock progress with codes/ciphers.
-- The system does not explicitly guide the next action.
-- The final action is a professional incident-response decision.
+- 20–25 minutos.
+- 4–10 participantes; óptimo 6–8.
+- Un solo equipo de respuesta.
+- Una LED central funciona como estado vivo del incidente.
+- Varias estaciones contienen evidencia parcial.
+- El equipo debe correlacionar información entre estaciones.
+- El avance principal se basa en identificadores/candados derivados de evidencia.
+- El sistema no guía explícitamente el siguiente paso.
+- La resolución termina en una decisión profesional con consecuencias.
 
-## What the experience is not
+## Incidente canónico
 
-- A quiz.
-- A cybersecurity hacking challenge.
-- A guided product tour.
-- A generic chatbot demo.
-- A childish video game.
-- A production SaaS product.
+Una colaboradora recibe un correo falso de soporte, entrega sus credenciales en una página fraudulenta y su identidad se utiliza posteriormente desde un dispositivo desconocido. Esa sesión alcanza un servicio interno de sincronización y genera actividad anómala hacia otros sistemas. La capa de inteligencia detecta patrones, pero formula una hipótesis plausible que no representa correctamente la causa raíz. Los jugadores deben reconstruir la secuencia completa antes de autorizar una contención.
 
-## Current canonical incident
+Todo el incidente, personas, dominios, equipos y datos son ficticios.
 
-A staff member receives a convincing fake support email and enters credentials into a fraudulent page. The compromised account is used to access an internal service. Activity propagates into connected systems. The AI layer recognizes anomalous patterns but cannot independently determine the full cause. Players must correlate evidence across email, authentication, infrastructure, and AI analysis before choosing a containment response.
+## Prioridades
 
-The incident is fictional and all data is simulated.
+1. Coherencia narrativa.
+2. Calidad y justicia de los acertijos.
+3. Inmersión y calidad visual.
+4. Experiencia física de sala.
+5. Fiabilidad del flujo presencial.
+6. Elegancia del código.
+7. Cobertura automatizada de pruebas.
 
-## Development philosophy
+Hardcodear contenido es aceptable en el piloto.
 
-Prioritize, in this order:
+## Comportamiento obligatorio de agentes
 
-1. Narrative coherence.
-2. Puzzle quality and discoverability.
-3. Immersion and visual quality.
-4. Physical-room experience.
-5. Reliable demo flow.
-6. Code elegance.
-7. Automated test coverage.
+Antes de implementar algo, identifica qué momento narrativo y qué dependencia de pista sirve. Si no sirve a ninguno, no lo agregues solamente porque se vea impresionante.
 
-Hardcoding is acceptable during the pilot. Refactor only when it materially improves iteration or reliability.
+Nunca reveles soluciones mediante colores obvios, etiquetas, tutoriales, flechas, respuestas resaltadas ni textos como “selecciona al usuario sospechoso”.
 
-## Mandatory agent behavior
-
-Before implementing a feature, identify which narrative beat and clue dependency it serves. If neither exists, do not add it merely because it looks impressive.
-
-Never reveal the solution through labels, obvious warning colors, tutorial copy, highlighted correct options, or instructions such as “select the suspicious user.”
-
-See `AGENTS.md` for workflow and role rules.
+Consulta `AGENTS.md` y los documentos canónicos en `docs/`.

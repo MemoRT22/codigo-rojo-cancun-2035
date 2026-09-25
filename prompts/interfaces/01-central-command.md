@@ -1,39 +1,43 @@
-# Interface Prompt — Central LED / Command Center
+# Prompt de interfaz — LED central / Centro de Operaciones
 
-Diseña y programa una pantalla full-screen tipo command center para **Código Rojo: Cancún 2035**. Se proyectará en la LED central del HUB y será el corazón ambiental de la experiencia.
+Diseña y programa la pantalla full-screen principal de **VÉRTICE** para Código Rojo: Cancún 2035.
 
-## Función narrativa
+## Propósito
 
-Mostrar el estado general de NEXUS CUN mientras ocurre la crisis. Genera tensión y contexto; **no dirige a los jugadores**.
+Es el corazón ambiental de la experiencia. Comunica que existe un sistema urbano activo, muestra presión y evoluciona con el incidente. **No guía los acertijos.**
 
-## Debe mostrar
+## Contenido
 
-- identidad NEXUS CUN / Command Lab,
-- cuenta regresiva visible,
-- estado de Accesos, Infraestructura, Movilidad, Servicios turísticos, Monitoreo/Sensores e IA Core,
-- mapa territorial o topología abstracta de Cancún,
-- eventos recientes,
-- incident severity / nivel de riesgo,
-- actividad visual sutil entre sistemas.
+- marca VÉRTICE,
+- “Centro de Operaciones”,
+- cuenta regresiva,
+- estado de Identidad y accesos,
+- Infraestructura,
+- Movilidad,
+- Servicios turísticos,
+- Sensores y monitoreo,
+- Núcleo de Inteligencia,
+- mapa/topología abstracta,
+- severidad del incidente,
+- flujo breve de eventos,
+- transiciones de propagación y contención.
 
 ## Estados
 
-Diseña al menos:
-- normal,
-- anomalía detectada,
-- escalamiento,
-- evidencia correlacionada,
-- respuesta autorizada,
-- contención / consecuencia.
+- Operación normal
+- Anomalía detectada
+- Incidente en escalamiento
+- Correlación establecida
+- Respuesta autorizada
+- Incidente contenido / Contención incompleta
 
 ## Reglas
 
-- No mostrar “ve a estación X”.
-- No usar checklist de acertijos.
-- No mostrar progreso explícito tipo 2/4.
-- El avance se percibe por cambios en el sistema.
-- La animación debe comunicar actividad y degradación, no ser decoración.
+- Todo visible en español.
+- Nunca mostrar “siguiente objetivo”.
+- Nunca mostrar cuántos acertijos faltan.
+- Nunca señalar una estación.
+- El color comunica estado del sistema, no la respuesta del puzzle.
+- Movimiento solo cuando represente actividad o cambio de estado.
 
-## Estética
-
-Oscura, premium, operacional, legible a distancia, cinematográfica sin caer en cliché cyberpunk.
+Estética: centro de operaciones 2035, oscuro, premium, legible en LED grande, cinematográfico pero creíble.

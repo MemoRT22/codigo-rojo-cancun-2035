@@ -1,35 +1,33 @@
-# Interface Prompt — AI Anomaly Analysis
+# Prompt de interfaz — Inteligencia
 
-Diseña una interfaz analítica de IA para **Código Rojo: Cancún 2035**.
+Diseña una herramienta analítica de inteligencia para VÉRTICE. No es un chatbot.
 
-## Función narrativa
+## Propósito
 
-Demostrar que la IA puede encontrar patrones y correlaciones sin reemplazar el juicio humano.
+Mostrar detección de patrones y correlaciones, incluyendo una hipótesis plausible pero incorrecta que exija criterio humano.
 
-## Contenido
+## Agrupaciones canónicas
 
-- anomalías agrupadas,
-- confidence scores,
-- relaciones entre eventos,
-- timeline correlacionada,
-- visualización de patrones,
-- hipótesis generadas por el sistema,
-- posibilidad de explorar cada hallazgo.
+- AGR-18 — Desviación de identidad — confianza aproximada 79%
+- AGR-27 — Propagación entre servicios — confianza aproximada 92%
+- AGR-31 — Inestabilidad del Núcleo de Inteligencia — confianza aproximada 84%
 
-## Mecánica
+AGR-31 sugiere que el Núcleo de Inteligencia podría ser el origen. Sin embargo:
+- NOD-204 ocurre a las 09:17:22
+- anomalía del Núcleo ocurre a las 09:19:44
 
-Incluye al menos una hipótesis de alta confianza que sea plausible pero que la evidencia completa no sostenga como acción final. La estación debe recompensar el pensamiento crítico.
+La secuencia temporal contradice tratar al Núcleo como causa raíz.
 
-La IA no debe declarar la solución del incidente.
+## Lenguaje visible
 
-## Lenguaje
+Todo en español:
+- Agrupación
+- Nivel de confianza
+- Correlación
+- Hipótesis
+- Evidencia insuficiente
+- Requiere validación humana
 
-Usar frases como:
-- “correlación probable”,
-- “evidencia insuficiente”,
-- “confianza del modelo”,
-- “requiere validación humana”.
+Nunca usar “AI Core”, “cluster”, “confidence score” u otros textos visibles en inglés.
 
-## Estética
-
-Herramienta de investigación avanzada, premium, oscura y analítica. Evitar la estética de chatbot genérico.
+No revelar que AGR-27 es la respuesta correcta.

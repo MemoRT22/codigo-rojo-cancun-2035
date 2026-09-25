@@ -1,94 +1,103 @@
-# 02 — Story Bible
+# 02 — Biblia narrativa
 
-## World
+## Mundo
 
 Cancún, 2035.
 
-A fictional integrated platform called **NEXUS CUN** coordinates data from urban and tourism systems. It does not literally control every real-world service; it is a narrative abstraction designed for the workshop.
+La empresa ficticia **Vértice Sistemas Urbanos** opera **VÉRTICE**, una plataforma integrada que coordina información de distintos servicios urbanos y turísticos. Es una abstracción narrativa para el taller, no una representación de infraestructura real.
 
-Connected domains shown in the experience can include:
-- mobility,
-- tourism services,
-- access control,
-- operations infrastructure,
-- sensor/monitoring systems,
-- AI Core.
+Dominios visibles:
+- movilidad,
+- servicios turísticos,
+- identidad y accesos,
+- infraestructura operativa,
+- sensores y monitoreo,
+- Núcleo de Inteligencia.
 
-## Player identity
+## Identidad del jugador
 
-Participants are an emergency response cell temporarily activated inside the **HUB Command Lab**.
+Los participantes son una **Célula de Respuesta** activada temporalmente dentro del Centro de Operaciones Vértice.
 
-They are not “students doing an exercise.” Within the fiction, they are analysts/operators responding to a live incident.
+Durante la ficción no son “alumnos haciendo un ejercicio”; son analistas y operadores respondiendo a un incidente activo.
 
-## Cold open
+## Personaje comprometido
 
-The room appears operational. The central LED shows mostly healthy systems. A subtle anomaly occurs, followed by an escalation.
+**Valeria Cruz**  
+Cargo: Coordinadora de Operaciones Turísticas  
+Usuario: `vcruz`  
+Equipo habitual: `EST-OPS-12`  
+Zona habitual: `CENTRO-OPERACIONES`
 
-Suggested opening copy:
+Valeria es víctima del incidente, no antagonista.
 
-> NEXUS CUN // OPERACIÓN NORMAL
->
+## Verdad interna del incidente
+
+1. 09:11:08 — Valeria recibe un correo falso de soporte.
+2. 09:13 aprox. — interactúa con una falsa validación de identidad.
+3. 09:16:04 — `vcruz` se autentica desde un dispositivo desconocido.
+4. 09:16:51 — esa sesión accede a un servicio fuera de su patrón normal.
+5. 09:17:22 — el nodo `SIN-04` comienza actividad irregular.
+6. 09:18:36 — aparecen conexiones anómalas hacia servicios asociados.
+7. 09:19:44 — el Núcleo de Inteligencia empieza a mostrar comportamiento fuera de patrón.
+8. 09:20:11 — la capa de inteligencia correlaciona anomalías.
+9. 09:20:38 — genera una hipótesis plausible pero equivocada: el Núcleo de Inteligencia podría ser el origen.
+10. Los jugadores deben demostrar que la anomalía del Núcleo ocurre después de la propagación y por tanto puede ser consecuencia, no causa.
+
+Cadena real:
+
+**Correo fraudulento → identidad comprometida → acceso anómalo → SIN-04 → propagación → anomalías detectadas por inteligencia.**
+
+## Apertura en LED
+
+Estado inicial:
+
+> VÉRTICE  
+> CENTRO DE OPERACIONES  
+> Operación normal  
 > Sincronización de servicios: 99.8%
 
-Then:
+Escalamiento:
 
-> ANOMALÍA DE IDENTIDAD DETECTADA
->
-> Correlación incompleta. Validación humana requerida.
+> ANOMALÍA DE IDENTIDAD DETECTADA  
+> Correlación incompleta  
+> Validación humana requerida
 
-Do not say “go check the access terminal.”
+No indicar qué estación revisar.
 
-## Canonical incident — internal truth
+## Tesis narrativa
 
-This is the answer behind the mystery. Players should never receive it verbatim before the reveal.
+> La tecnología detecta señales. El profesional conecta evidencia, cuestiona recomendaciones, entiende consecuencias y decide.
 
-1. A staff member receives a fake support email.
-2. The message sends the user to a fraudulent credential page.
-3. The user's credentials are exposed.
-4. The compromised account authenticates from an unusual context.
-5. The account reaches an internal service beyond its normal behavioral pattern.
-6. Activity appears across connected infrastructure.
-7. NEXUS AI identifies anomalous correlation but cannot prove the root cause.
-8. Players must combine email, identity, network, and AI evidence.
-9. The safest final response is targeted containment rather than indiscriminately shutting down all services.
+## Inteligencia Artificial dentro de la historia
 
-## Narrative thesis
+Puede:
+- detectar anomalías,
+- correlacionar horarios,
+- agrupar eventos,
+- asignar niveles de confianza,
+- sugerir hipótesis.
 
-The experience should communicate:
+No puede:
+- conocer intención con certeza,
+- reconstruir sola toda la cadena,
+- elegir correctamente una respuesta operativa sin contexto.
 
-> Technology can detect signals. Professionals must connect evidence, question recommendations, understand consequences, and decide.
+La hipótesis equivocada del Núcleo de Inteligencia es deliberada y enseña que **confianza no significa certeza** y **correlación no significa causalidad**.
 
-## AI behavior in the story
+## Tono
 
-AI must never be portrayed as magic.
+Serio, emocionante y creíble.
 
-It can:
-- surface anomalies,
-- correlate timestamps,
-- group related events,
-- assign confidence,
-- suggest hypotheses.
+Evitar:
+- catástrofe exagerada,
+- hackers encapuchados,
+- calaveras,
+- lluvia Matrix,
+- terminales con texto falso decorativo,
+- lenguaje infantil o de videojuego.
 
-It cannot:
-- know intent with certainty,
-- automatically identify the entire chain,
-- choose the correct business response without context.
+## Convenciones
 
-At least one AI recommendation or confidence signal should require human skepticism.
+Todas las personas, dominios, equipos, identificadores y servicios son ficticios.
 
-## Tone
-
-Serious but exciting. Think credible command center, not dystopian apocalypse.
-
-Avoid:
-- “the whole city will explode” stakes,
-- melodramatic hacker clichés,
-- anonymous hooded-hacker imagery,
-- fake terminal gibberish,
-- overuse of red skulls / Matrix rain.
-
-The threat is meaningful because services and trust are at risk, not because the story exaggerates catastrophe.
-
-## Naming conventions
-
-All people, credentials, domains, IPs, logs, organizations, and services used in the game must be fictional or reserved/safe examples. Do not use real credentials or imply compromise of real organizations.
+Todo contenido visible para participantes está en español.

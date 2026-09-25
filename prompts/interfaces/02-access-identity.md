@@ -1,31 +1,39 @@
-# Interface Prompt — Access & Identity
+# Prompt de interfaz — Identidad y accesos
 
-Diseña una terminal de seguridad de identidad para **Código Rojo: Cancún 2035**.
+Diseña una consola de identidad para VÉRTICE.
 
-## Función narrativa
+## Propósito
 
-Permitir que el equipo descubra qué identidad presenta comportamiento incompatible con su actividad normal y correlacione ese evento con evidencias de otras estaciones.
+Permitir al equipo descubrir qué identidad presenta actividad incompatible con su comportamiento habitual y correlacionarla con evidencia externa.
 
-## Contenido
+## Datos canónicos importantes
 
-- timeline/tabla de autenticaciones,
-- usuarios ficticios,
-- timestamps,
-- dispositivos,
-- zonas/ubicaciones,
-- resultados de autenticación,
-- contexto de rol,
-- detalle inspeccionable de eventos,
-- campo de desbloqueo/código cuando corresponda al diseño del puzzle.
+Evento relevante:
+- hora: 09:16:04
+- usuario: vcruz
+- dispositivo: TER-REM-91
+- zona: REMOTO
+- resultado: ACCESO CONCEDIDO
+- identificador: ACC-417
 
-## Diseño del reto
+Equipo habitual de Valeria:
+- EST-OPS-12
+- zona: CENTRO-OPERACIONES
 
-Incluye múltiples eventos normales y distractores plausibles. El evento relevante debe ser deducible mediante tiempo + contexto + evidencia externa, no porque esté pintado de rojo.
+Debe haber eventos normales y distractores plausibles.
 
-## UX
+## Interfaz
 
-No escribir “encuentra el usuario comprometido”, “selecciona el acceso sospechoso” ni instrucciones equivalentes. La herramienta presenta evidencia; el jugador formula la hipótesis.
+Mostrar en español:
+- usuario,
+- hora,
+- dispositivo,
+- zona,
+- resultado,
+- actividad habitual,
+- detalle del evento,
+- identificador.
 
-## Estética
+No usar “login”, “success”, “failed”, “device”, “event ID” ni otros textos visibles en inglés.
 
-Consola moderna de IAM/SOC, sobria, densa pero legible, coherente con NEXUS CUN.
+No etiquetar ACC-417 como sospechoso. La importancia debe deducirse por contexto y cronología.

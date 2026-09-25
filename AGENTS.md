@@ -1,14 +1,14 @@
 # AGENTS.md
 
-This file defines the operating rules for any coding or design agent working in this repository.
+Reglas obligatorias para cualquier agente de diseño o desarrollo que trabaje en este repositorio.
 
-## Mission
+## Misión
 
-Build **Código Rojo: Cancún 2035** as an immersive, replayable escape-room workshop that introduces prospective students to the professional worlds of AI and Cybersecurity through investigation and decision-making.
+Construir **Código Rojo: Cancún 2035** como una experiencia inmersiva, repetible y físicamente creíble que acerque a aspirantes al trabajo profesional relacionado con Inteligencia Artificial y Ciberseguridad.
 
-## Required reading order
+## Lectura obligatoria
 
-Before changing code or game content, read:
+Antes de modificar código o mecánicas:
 
 1. `AI_CONTEXT.md`
 2. `docs/01-experience-vision.md`
@@ -16,94 +16,96 @@ Before changing code or game content, read:
 4. `docs/03-game-design.md`
 5. `docs/04-interface-system.md`
 6. `docs/05-technical-strategy.md`
+7. `docs/10-session-flow.md`
 
-If changing a specific station, also read its prompt in `prompts/interfaces/`.
+Si trabajas en una estación, lee también su prompt en `prompts/interfaces/`.
 
-## Source-of-truth hierarchy
+## Jerarquía de verdad
 
-When documents conflict, use this priority:
+1. `docs/03-game-design.md` — mecánicas, pistas y solución.
+2. `docs/02-story-bible.md` — verdad narrativa.
+3. `docs/10-session-flow.md` — experiencia de inicio a fin.
+4. `docs/04-interface-system.md` — interfaz y lenguaje visual.
+5. `docs/05-technical-strategy.md` — implementación.
+6. Prompts de interfaz — briefs subordinados a los documentos anteriores.
 
-1. `docs/03-game-design.md` — puzzle and progression truth.
-2. `docs/02-story-bible.md` — narrative truth.
-3. `docs/04-interface-system.md` — visual/interaction truth.
-4. `docs/05-technical-strategy.md` — implementation guidance.
-5. Interface prompts — implementation briefs, subordinate to the above.
+No reescribas silenciosamente la historia para facilitar la implementación.
 
-Do not silently rewrite the story to make implementation easier.
+## Reglas de producto
 
-## Product rules
+- Escape room, no tutorial.
+- Ningún elemento puede decir “haz clic aquí”, “ve a la estación X” o equivalente.
+- Toda pista debe ser deducible.
+- Ningún reto debe exigir experiencia previa en ciberseguridad.
+- Solo evidencia simulada y ficticia.
+- La IA puede ayudar y también equivocarse.
+- La LED comunica estado y presión; no es una lista de misiones.
+- Las decisiones incorrectas pueden tener consecuencias, pero siempre deben ser explicables.
+- El sistema debe funcionar con grupos pequeños.
+- Los roles orientan; no encarcelan al jugador en una estación.
 
-- No tutorial arrows, pulsing “click me” controls, explicit next-step instructions, or gamified hand-holding.
-- A clue may be subtle; it must not be arbitrary.
-- Every puzzle must have a logical path from evidence to inference.
-- Avoid expert-only cybersecurity knowledge.
-- Use simulated evidence only.
-- AI outputs must be helpful but not infallible.
-- Incorrect player decisions may have consequences, but the game must remain explainable and fair.
-- The central screen communicates state and pressure; it is not a quest log.
-- Visual language must feel like a credible 2035 command center, not a movie parody.
+## Idioma visible — regla estricta
 
-## Engineering rules
+**Todo lo que vea un participante debe estar en español.**
 
-### Optimize for pilot speed
+Esto incluye:
+- nombres de estaciones,
+- botones,
+- estados,
+- alertas,
+- registros,
+- encabezados,
+- campos,
+- hipótesis de IA,
+- resultados de autenticación,
+- mensajes de error,
+- desenlaces.
 
-Preferred initial stack:
+No usar mezclas como “LOGIN EXITOSO”, “AI CORE”, “NODE”, “EVENT ID”, “Command Center” o “System Status” en pantalla.
+
+Los nombres de variables, componentes y archivos internos sí pueden usar inglés si ayuda al desarrollo.
+
+## Ingeniería
+
+Stack inicial preferido:
 - Vite
 - React
 - TypeScript
 - Tailwind CSS
-- local/static JSON or TypeScript fixtures
-- lightweight shared state
+- datos locales/estáticos
+- estado compartido ligero cuando sea necesario
 
-Do not add a backend, database, authentication, cloud queue, observability platform, or elaborate state-management framework without a concrete gameplay need.
+No agregar backend, base de datos, autenticación real, infraestructura cloud o frameworks complejos sin una necesidad concreta de experiencia.
 
-### Testing policy
+## Política de pruebas
 
-Automated tests are **not a default deliverable** for this prototype.
+Las pruebas automatizadas **no son un entregable por defecto**.
 
-Add a test only when failure would likely destroy a live session and the behavior is cheap to verify automatically, especially:
-- code/cipher validation,
-- state transitions that unlock another station,
-- central-screen state synchronization,
-- deterministic puzzle rules.
+Agregar pruebas solamente cuando un fallo pueda arruinar una sesión presencial y sea barato comprobarlo automáticamente, especialmente:
+- validación de candados,
+- transiciones de estado,
+- sincronización con LED central,
+- desenlace,
+- restablecimiento de sesión.
 
-Do not spend time on broad unit coverage, integration suites, smoke suites, visual regression infrastructure, or CI complexity during the pilot unless specifically requested.
+No invertir en cobertura amplia, suites de integración, smoke tests, regresión visual o CI compleja durante el piloto salvo necesidad demostrada.
 
-### Demo reliability
+## UX
 
-Even without broad testing, manually verify the happy path after meaningful changes:
-- app starts,
-- each station renders,
-- valid code unlocks,
-- invalid code does not,
-- central state can reach final outcome,
-- reset works.
+- Full screen primero.
+- Diseñar para 1080p y LED grande.
+- Tipografía legible.
+- Densidad informativa alta pero ordenada.
+- Oscuro, premium, operativo.
+- Futurismo sobrio.
+- Movimiento con propósito.
+- No resaltar visualmente la pista correcta.
 
-## UX rules
+## Disciplina de cambios
 
-- Full-screen first.
-- Designed for 1080p displays and a large central LED.
-- Large readable typography.
-- Information density may be high, but hierarchy must be immediate.
-- Dark, premium, operational aesthetic.
-- Avoid generic neon-cyberpunk overload.
-- Use motion to indicate system activity, not decoration.
-- Do not make the suspicious clue visually scream “answer.”
-
-## Content rules
-
-Use Spanish as the participant-facing default unless otherwise specified.
-Technical labels can use familiar English conventions when realistic (e.g. LOGIN, NODE, EVENT ID), but narrative copy should remain understandable.
-
-## Change discipline
-
-For any non-trivial feature:
-1. State the narrative purpose.
-2. State the clue or mechanic affected.
-3. Implement the smallest coherent version.
-4. Check it against the anti-hand-holding rules.
-5. Update documentation when gameplay truth changes.
-
-## Role boundaries
-
-Specialized role prompts live in `agents/`. An orchestrating agent may delegate work using those role definitions. No specialized agent may redefine the canonical story or puzzle graph without updating the source-of-truth docs.
+Para cualquier cambio no trivial:
+1. Explica el propósito narrativo.
+2. Identifica la pista o mecánica afectada.
+3. Implementa la versión mínima coherente.
+4. Revísala contra las reglas anti-guiado.
+5. Actualiza documentación si cambió una verdad del juego.

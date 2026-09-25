@@ -1,25 +1,39 @@
-# Interface Prompt — Outcome / Debrief
+# Prompt de interfaz — Desenlace
 
-Diseña el desenlace de **Código Rojo: Cancún 2035** con variantes de contención exitosa y consecuencia parcial.
+Diseña las pantallas de consecuencia y debrief para VÉRTICE.
 
-## Objetivo
+## DELTA
 
-Dar un payoff visual fuerte y explicar brevemente lo ocurrido sin romper la inmersión de golpe.
+Mostrar una secuencia:
+- Identidad: REVOCADA
+- SIN-04: AISLANDO → AISLADO
+- Propagación: CRÍTICA → CONTENIDA → ESTABLE
+- Núcleo de Inteligencia: ADVERTENCIA → ESTABLE
+- Servicios no afectados: OPERATIVOS
 
-## Mostrar
+Cierre:
 
-- transición del sistema,
-- estabilización o degradación,
-- estado final de servicios,
-- reconstrucción breve del incidente,
-- qué evidencias fueron decisivas,
-- papel de IA + ciberseguridad + decisión humana,
-- cierre de misión.
+> INCIDENTE CONTENIDO  
+> Servicios preservados: 5/6
 
-## Regla de cierre
+## Otros planes
 
-Después del payoff, incluir un debrief corto que conecte la actividad con el trabajo profesional. No convertirlo en una clase larga.
+Cada plan debe producir una consecuencia específica, no un simple “incorrecto”.
 
-## Estética
+Ejemplo GAMMA:
+- Núcleo de Inteligencia: FUERA DE SERVICIO
+- SIN-04: ACTIVIDAD CONTINÚA
+- resultado: CONTENCIÓN INCOMPLETA
 
-Cinematográfica y satisfactoria. El cambio de estado debe sentirse significativo en la LED central y, cuando sea posible, sincronizado con la consola final.
+## Debrief
+
+Reconstruir visualmente:
+
+CORREO FRAUDULENTO → IDENTIDAD COMPROMETIDA → ACCESO NO AUTORIZADO → PROPAGACIÓN → ANOMALÍA DETECTADA
+
+Cerrar con:
+
+> La inteligencia detectó patrones.  
+> El equipo encontró la causa.
+
+Todo visible en español.

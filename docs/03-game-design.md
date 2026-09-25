@@ -1,152 +1,212 @@
-# 03 — Game Design
+# 03 — Diseño del juego
 
-## Design status
+## Estado
 
-This document defines the **pilot structure**. Specific codes and exact clue values may still change during prototype iteration, but the dependency logic should remain coherent.
+**Piloto v1 — base congelada para implementación.**
 
-## Core mechanic
+La dificultad se calibrará después de pruebas con participantes reales. La solución y la cadena causal sí se consideran canónicas para esta primera implementación.
 
-**Code/lock progression.**
+## Mecánica principal
 
-Players collect evidence and derive codes or keywords. Correct codes unlock deeper information or the final response console. The experience should minimize facilitator intervention.
+Progresión por **evidencia + identificadores + candado final**.
 
-A code must be the *result of reasoning*, not a random number hidden in the UI.
+No existe un teclado de “código secreto” al final de cada estación. Los jugadores descubren identificadores que parecen formar parte natural del sistema y que, al correlacionarse, autorizan la consola final.
 
-## Puzzle graph — pilot v0
+Los cuatro identificadores canónicos del piloto son:
 
-The pilot uses four investigation threads that converge into a final authorization phrase.
+- Correo: `COR-512`
+- Acceso: `ACC-417`
+- Infraestructura: `NOD-204`
+- Inteligencia: `AGR-27`
 
-### Thread A — Mail
-Purpose: establish the likely initial social-engineering event.
+Clave de correlación final:
 
-Evidence:
-- inbox with normal messages,
-- one convincing fake support message,
-- sender/display-name mismatch,
-- subtle domain discrepancy,
-- timestamp that becomes important later.
+`COR-512 / ACC-417 / NOD-204 / AGR-27`
 
-Output:
-- keyword or short code derived from the suspicious message.
+## Regla de colaboración
 
-### Thread B — Access & Identity
-Purpose: establish which account exhibited impossible or abnormal behavior.
+Ninguna estación debe resolver por sí sola toda la historia.
 
-Evidence:
-- successful and failed logins,
-- time,
-- device,
-- location/zone,
-- role/normal access pattern.
+La experiencia debe provocar conversaciones como:
+- “¿Qué hora te aparece a ti?”
+- “¿Cuál era el usuario?”
+- “Pásame ese identificador.”
+- “Eso ocurrió antes o después de la alerta de inteligencia?”
 
-Reasoning:
-Players correlate the mail timestamp with an unusual authentication event and discover the compromised account.
+## Hilo A — Comunicaciones
 
-Output:
-- user identifier / numeric fragment / code.
+### Propósito
+Detectar el probable punto de entrada.
 
-### Thread C — Infrastructure
-Purpose: establish which internal system was reached and how activity propagated.
+### Correo relevante
+Hora: **09:11:08**  
+Identificador: **COR-512**  
+Asunto: **Validación requerida — actualización de identidad**
 
-Evidence:
-- simplified network/service topology,
-- traffic changes,
-- node activity,
-- event timestamps,
-- one misleading but plausible noisy node.
+Dominio oficial:
+`@vertice-sistemas.example`
 
-Reasoning:
-Players identify the node whose behavior changes immediately after the suspicious login and before downstream alerts.
+Dominio falso:
+`@vertice-sistema.example`
 
-Output:
-- node/service identifier.
+El correo falso debe ser convincente y mezclarse con 7–9 mensajes normales.
 
-### Thread D — AI Analysis
-Purpose: establish the correlation among events without letting AI solve the case.
+### Distractor
+Debe existir al menos un mensaje que parezca alarmante o urgente pero sea legítimo. Su dominio, firma y contexto deben ser consistentes.
 
-Evidence:
-- anomaly clusters,
-- confidence scores,
-- timeline correlations,
-- one model hypothesis that is plausible but not fully supported.
+### Inferencia
+El equipo no debe “adivinar phishing”; debe observar discrepancias de remitente/dominio, contexto y horario.
 
-Reasoning:
-Players compare AI findings with the evidence from the other stations and determine which relationship is actually supported.
+## Hilo B — Identidad y accesos
 
-Output:
-- final clue fragment / ordering instruction.
+### Propósito
+Determinar qué identidad presenta comportamiento incompatible con su patrón normal.
 
-## Final lock
+### Evento relevante
+Hora: **09:16:04**  
+Usuario: **vcruz**  
+Dispositivo: **TER-REM-91**  
+Zona: **REMOTO**  
+Resultado: **ACCESO CONCEDIDO**  
+Identificador: **ACC-417**
 
-The outputs from A–D combine into a final authorization code or phrase.
+Valeria mantiene actividad en su estación habitual `EST-OPS-12`, lo que vuelve relevante la nueva sesión.
 
-The final console must remain unavailable until the team has solved the investigation. It should not show which fragment is missing in a way that reveals the source station.
+### Distractor
+Un usuario distinto puede mostrar fallo seguido de acceso concedido o una sesión remota legítima respaldada por una ventana de soporte programada.
 
-Example pattern only (not canonical):
+### Inferencia
+La relación con el correo de las 09:11 vuelve especialmente importante el evento de las 09:16.
 
-`[MAIL WORD] – [USER ID] – [NODE] – [ORDER]`
+## Hilo C — Infraestructura
 
-Do not hardcode this example as the final puzzle without intentionally designing the evidence around it.
+### Propósito
+Descubrir qué servicio cambia de comportamiento después del acceso anómalo y antes de las alertas posteriores.
 
-## Final decision
+### Nodo relevante
+Nodo: **SIN-04**  
+Inicio de anomalía: **09:17:22**  
+Actividad aproximada: de **14 solicitudes/s** a **163 solicitudes/s**  
+Referencia de sesión: **ACC-417**  
+Identificador de evidencia: **NOD-204**
 
-Once authorized, players choose a containment strategy.
+### Distractor
+`BUS-SEN-02` presenta un pico a las **09:12:40**, pero corresponde a una sincronización programada y documentada.
 
-Candidate actions can include:
-- revoke/lock compromised identity,
-- rotate credentials,
-- isolate affected service/node,
-- preserve unaffected services,
-- monitor residual activity,
-- shut down all systems,
-- do nothing / wait for more data.
+### Inferencia
+La secuencia temporal y la referencia de sesión relacionan el acceso con `SIN-04`.
 
-The best outcome should require **targeted containment** based on the evidence rather than maximal shutdown.
+## Hilo D — Inteligencia
 
-The interface must not label choices as safe/unsafe or correct/incorrect before submission.
+### Propósito
+Usar IA como herramienta analítica sin convertirla en oráculo.
 
-## Failure philosophy
+### Agrupaciones
 
-A wrong code should not punish players with a dead end.
+**AGR-18 — Desviación de identidad**  
+Confianza aproximada: 79%
 
-Possible response:
-- reject code neutrally,
-- introduce a short cooldown,
-- leave the evidence available.
+**AGR-27 — Propagación entre servicios**  
+Confianza aproximada: 92%  
+Relaciona `ACC-417` → `NOD-204` → actividad posterior.
 
-Do not show “wrong, look at the phishing email.”
+**AGR-31 — Inestabilidad del Núcleo de Inteligencia**  
+Confianza aproximada: 84%  
+Hipótesis: el Núcleo de Inteligencia podría estar originando la inestabilidad.
 
-A wrong final decision can produce a consequence ending, followed by an explanatory debrief.
+### Trampa conceptual
 
-## Hint system
+La hipótesis de `AGR-31` es plausible pero temporalmente inconsistente:
 
-Pilot preference: environmental hints before facilitator hints.
+- `NOD-204`: 09:17:22
+- anomalía del Núcleo de Inteligencia: 09:19:44
 
-Possible levels:
-1. Ambient clue becomes slightly more visible after time threshold.
-2. Central LED surfaces a new system event that indirectly reinforces the relevant timeline.
-3. Facilitator may deliver an in-fiction message only if the team stalls badly.
+La evidencia permite concluir que el Núcleo puede ser consecuencia y no causa.
 
-Do not automatically reveal answers.
+El identificador correcto para la correlación final es **AGR-27**.
 
-## Fairness checklist for every puzzle
+## Candado final
 
-A puzzle is acceptable only if:
-- all required information exists,
-- the inference is logically defensible,
-- distractors are plausible but distinguishable,
-- no specialized cybersecurity vocabulary is required to solve it,
-- the answer is not visually highlighted,
-- a first-time high-school participant can understand why the solution was correct after reveal.
+La consola solicita cuatro identificadores bajo categorías neutrales:
 
-## Physical roles
+- ORIGEN
+- IDENTIDAD
+- PROPAGACIÓN
+- CORRELACIÓN
 
-Optional role cards can create identity without limiting movement:
-- Analista de Inteligencia
-- Investigador Digital
-- Analista de Identidad
-- Operador de Infraestructura
-- Responsable de Continuidad
-- Líder de Misión
+No debe decir de qué estación proviene cada respuesta.
 
-Roles suggest where to begin, not where a participant must stay.
+Clave correcta:
+
+`COR-512 / ACC-417 / NOD-204 / AGR-27`
+
+Al validarse:
+
+> CORRELACIÓN VERIFICADA  
+> AUTORIZACIÓN DE RESPUESTA CONCEDIDA
+
+## Planes de respuesta
+
+### PLAN ALFA — Apagado general
+Desconecta VÉRTICE, termina sesiones y suspende servicios conectados.
+
+Consecuencia: detiene gran parte de la actividad, pero provoca pérdida innecesaria de continuidad.
+
+### PLAN BETA — Contención de identidad
+Bloquea `vcruz` y rota sus credenciales, pero mantiene `SIN-04` operativo.
+
+Consecuencia: contención incompleta; la actividad ya establecida puede continuar.
+
+### PLAN GAMMA — Aislamiento de inteligencia
+Desconecta el Núcleo de Inteligencia y reinicia sus procesos.
+
+Consecuencia: la actividad de `SIN-04` continúa. Demuestra por qué la hipótesis de IA no debía aceptarse sin contraste.
+
+### PLAN DELTA — Contención dirigida
+- revocar identidad comprometida,
+- invalidar sesiones asociadas,
+- aislar `SIN-04`,
+- rotar credenciales del servicio,
+- preservar servicios no afectados,
+- monitorear actividad residual.
+
+Es el desenlace de mayor preservación operativa y mejor correspondencia con la evidencia.
+
+La interfaz nunca lo marca como “correcto” antes de ejecutarlo.
+
+## Desenlace DELTA
+
+La LED debe mostrar una secuencia similar:
+
+- Identidad: REVOCADA
+- SIN-04: AISLANDO → AISLADO
+- Propagación: CRÍTICA → CONTENIDA → ESTABLE
+- Núcleo de Inteligencia: ADVERTENCIA → ESTABLE
+- servicios no afectados: OPERATIVOS
+
+Cierre:
+
+> INCIDENTE CONTENIDO  
+> Servicios preservados: 5/6
+
+## Fallos
+
+Un identificador incorrecto:
+- se rechaza de forma neutral,
+- no revela qué campo está mal,
+- no bloquea permanentemente.
+
+Una decisión final equivocada:
+- produce una consecuencia observable,
+- nunca muestra simplemente “INCORRECTO”,
+- termina con debrief que explica la causalidad.
+
+## Calibración
+
+No asumir que esta versión ya tiene la dificultad correcta. La prueba piloto debe medir:
+- tiempo hasta primera evidencia relevante,
+- tiempo de correlación entre estaciones,
+- intervenciones del facilitador,
+- pistas demasiado obvias,
+- pistas injustas,
+- comprensión del desenlace.

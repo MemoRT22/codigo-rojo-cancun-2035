@@ -1,37 +1,34 @@
-# Interface Prompt — Mail / Social Engineering
+# Prompt de interfaz — Comunicaciones
 
-Diseña un cliente de correo corporativo simulado para **Código Rojo: Cancún 2035**.
+Diseña un cliente corporativo de correo ficticio para Vértice Sistemas Urbanos.
 
-## Función narrativa
+## Propósito
 
 Contener la evidencia del evento de ingeniería social que inicia la cadena del incidente.
 
-## Contenido
+## Mensaje canónico
 
-- inbox con mensajes normales,
-- remitentes, asunto y timestamp,
-- lectura completa de mensajes,
-- uno o más mensajes que puedan parecer sospechosos,
-- detalles inspeccionables de remitente/dominio,
-- redacción y firma realistas,
-- enlaces ficticios/no operativos,
-- posible pista secundaria en metadata o estructura del mensaje.
+- hora: 09:11:08
+- identificador: COR-512
+- asunto: “Validación requerida — actualización de identidad”
+- dominio oficial: @vertice-sistemas.example
+- dominio falso: @vertice-sistema.example
 
-## Diseño del reto
+El mensaje falso debe ser profesional y convincente, mezclado entre 7–9 correos normales.
 
-El correo relevante debe ser convincente. Las señales pueden incluir:
-- display name vs dominio,
-- pequeña variación del dominio,
-- urgencia inusual,
-- firma inconsistente,
-- contexto temporal.
+Debe existir al menos un distractor urgente pero legítimo.
 
-No mostrar banner “PHISHING DETECTED”.
+## Interfaz
 
-## Seguridad
+Todo visible en español:
+- Bandeja de entrada
+- Remitente
+- Asunto
+- Hora
+- Mensaje
+- Detalles
+- Identificador del mensaje
 
-No conectar a correo real. No usar links maliciosos reales. Todo contenido es fixture ficticio.
+No mostrar avisos automáticos de phishing. No resaltar COR-512 como respuesta.
 
-## Estética
-
-Cliente empresarial moderno y creíble, integrado con el lenguaje visual NEXUS CUN sin parecer una pantalla de juego.
+Todos los enlaces son ficticios y no operativos.

@@ -1,161 +1,166 @@
-# 04 — Interface System
+# 04 — Sistema de interfaces
 
-## Visual objective
+## Objetivo visual
 
-Build a coherent fictional operating environment that feels plausible enough to suspend disbelief.
+Crear un entorno operativo ficticio suficientemente creíble para suspender la incredulidad.
 
-Keywords:
+Palabras clave:
 - premium,
-- command center,
-- operational,
-- intelligent city,
-- analytical,
-- restrained futurism,
-- cinematic but credible.
+- centro de operaciones,
+- analítico,
+- infraestructura urbana,
+- futurismo sobrio,
+- cinematográfico pero creíble.
 
-## Anti-style
+## Identidad compartida
 
-Avoid:
-- generic hacker green,
-- Matrix rain,
-- excessive glitch effects,
-- skull icons,
-- childish game UI,
-- giant neon gradients everywhere,
-- fake code streams used as decoration,
-- excessive glassmorphism that hurts readability,
-- obvious red highlighting around the correct clue.
+Todas las interfaces pertenecen a **VÉRTICE**, plataforma de **Vértice Sistemas Urbanos**.
 
-## Shared shell
+El escenario es Cancún 2035, pero no usar siglas tipo CUN dentro del nombre de plataforma.
 
-All station interfaces should feel part of **NEXUS CUN**.
+## Idioma
 
-Shared elements may include:
-- system wordmark,
-- station identifier,
-- current simulated time,
-- connection/system state,
-- restrained event IDs,
-- consistent typography,
-- consistent spacing and panel language.
+Regla absoluta: **todo texto visible para participantes está en español**.
 
-Do not copy the central LED layout onto every station; each station should have a functional identity.
+Usar:
+- Acceso concedido / Acceso denegado
+- Estado del sistema
+- Identificador de evento
+- Nodo
+- Agrupación
+- Núcleo de Inteligencia
+- Centro de Operaciones
+- Actividad
+- Advertencia / Crítico / Estable / Aislado
 
-## Color semantics
+No mostrar mezclas como:
+- Login exitoso
+- AI Core
+- Node
+- Event ID
+- System status
+- Command Center
 
-Use semantic colors carefully:
-- healthy,
-- warning,
-- critical,
-- informational,
-- selected/focused.
+## Anti-estilo
 
-A clue being suspicious does **not** automatically mean it is red. System severity and puzzle answer are different concepts.
+Evitar:
+- verde hacker genérico,
+- lluvia Matrix,
+- glitches excesivos,
+- calaveras,
+- UI infantil,
+- gradientes neón sin propósito,
+- código falso decorativo,
+- glassmorphism que reduzca legibilidad,
+- resaltar en rojo la respuesta correcta.
 
-## Motion
+## Componentes compartidos
 
-Use motion to communicate:
-- system pulse,
-- data arrival,
-- node activity,
-- status transitions,
-- unlock moments,
-- escalation/de-escalation.
+Pueden repetirse:
+- marca VÉRTICE,
+- identificador de estación,
+- hora simulada,
+- estado de conexión,
+- identificadores discretos,
+- tipografía y espaciado,
+- lenguaje consistente de paneles.
 
-Motion should never exist just to look futuristic.
+Cada estación debe mantener identidad funcional propia.
 
-## Central LED
+## LED central
 
-The LED is environmental storytelling.
+Es storytelling ambiental.
 
-Must include:
-- city/system topology or abstract territory view,
-- countdown,
-- health/status by domain,
-- incident severity,
-- event feed,
-- visual evolution across story beats.
+Debe mostrar:
+- mapa/topología abstracta de ciudad y servicios,
+- cuenta regresiva,
+- salud por dominio,
+- severidad,
+- flujo breve de eventos,
+- cambios de estado.
 
-Must not include:
-- checklist of stations,
-- “next objective,”
-- “3/4 puzzles solved,”
-- arrows telling participants where to go.
+No debe mostrar:
+- lista de acertijos,
+- “objetivo siguiente”,
+- porcentaje de progreso,
+- flechas hacia estaciones.
 
-Progress can be shown indirectly through system behavior.
+## Estación: Comunicaciones
 
-## Station: Access & Identity
+Cliente corporativo de correo realista.
 
-Feels like a modern identity-security console.
+Mostrar:
+- bandeja de entrada,
+- remitente,
+- dirección,
+- hora,
+- asunto,
+- cuerpo,
+- detalles inspeccionables,
+- identificador de mensaje.
 
-Present:
-- login event timeline/table,
-- user identities,
-- device context,
-- zones/locations,
-- authentication result,
-- inspectable event detail.
+No mostrar una advertencia automática que resuelva el phishing.
 
-Do not label an event “suspicious login” unless that label is itself a clue justified by another system. Prefer neutral evidence.
+## Estación: Identidad y accesos
 
-## Station: Mail
+Consola moderna de identidad.
 
-Feels like a credible corporate mail client.
+Mostrar:
+- registros de acceso,
+- usuario,
+- dispositivo,
+- zona,
+- hora,
+- resultado,
+- perfil habitual,
+- identificador.
 
-Present:
-- normal traffic,
-- read/unread messages,
-- sender display name,
-- sender address/domain,
-- timestamps,
-- realistic body copy,
-- inspectable message details.
+Los eventos importantes no se pintan como “sospechosos” por defecto.
 
-The phishing clue should be discoverable through inconsistencies, not a warning banner.
+## Estación: Infraestructura
 
-## Station: Infrastructure
+Observabilidad de servicios, no herramienta de hacking.
 
-Feels like service/network observability rather than a hacker tool.
+Mostrar:
+- nodos,
+- conexiones,
+- actividad,
+- solicitudes por segundo,
+- horarios,
+- inspección de servicio,
+- referencias de sesión.
 
-Present:
-- connected nodes/services,
-- status and activity,
-- simplified traffic metrics,
-- inspectable relationships,
-- time-correlated change.
+Debe comprenderse sin conocimientos de redes.
 
-Keep it understandable without networking expertise.
+## Estación: Inteligencia
 
-## Station: AI Analysis
+Herramienta analítica, no chatbot.
 
-Feels like an advanced analytical tool.
+Mostrar:
+- agrupaciones de anomalías,
+- confianza,
+- correlaciones,
+- línea temporal,
+- hipótesis.
 
-Present:
-- anomaly grouping,
-- confidence,
-- correlations,
-- pattern visualization,
-- hypotheses.
+La interfaz debe expresar incertidumbre.
 
-AI language should acknowledge uncertainty.
+## Consola de respuesta
 
-## Final Response Console
+Más sobria que las estaciones.
 
-The tone changes from investigation to responsibility.
+Primero: candado de correlación.  
+Después: planes ALFA/BETA/GAMMA/DELTA.  
+Nunca marcar la respuesta adecuada antes de ejecución.
 
-Requirements:
-- visually sparse compared with earlier stations,
-- clear incident summary without revealing the answer,
-- meaningful action choices,
-- confirmation moment,
-- consequence transition.
+## Movimiento
 
-## Outcome screen
+Solo para comunicar:
+- actividad,
+- llegada de datos,
+- transición de estados,
+- propagación,
+- contención,
+- desbloqueo.
 
-Reward the team with a strong state transition:
-- network stabilizes or degrades,
-- central LED reacts,
-- concise incident reconstruction,
-- professional debrief.
-
-The closing explanation should connect what they just did to AI and Cybersecurity careers without becoming a lecture.
+No animar solamente para “verse futurista”.

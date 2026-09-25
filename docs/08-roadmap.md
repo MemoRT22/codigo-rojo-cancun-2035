@@ -1,47 +1,50 @@
 # 08 — Roadmap
 
-## Phase 0 — Canonical design
-- [x] Define experience vision.
-- [x] Define canonical incident.
-- [x] Define station set.
-- [x] Define agent and engineering rules.
-- [ ] Freeze pilot clue graph with exact fictional data and lock answers.
+## Fase 0 — Diseño canónico
+- [x] Definir visión.
+- [x] Definir incidente.
+- [x] Definir empresa/plataforma ficticia: Vértice Sistemas Urbanos / VÉRTICE.
+- [x] Definir idioma visible exclusivamente en español.
+- [x] Definir roles y flujo completo de sesión.
+- [x] Congelar solución base del piloto y cuatro identificadores.
+- [ ] Completar datos simulados exactos de cada estación.
 
-## Phase 1 — Visual language
-- [ ] Establish design tokens: typography, spacing, surfaces, semantic states.
-- [ ] Prototype Central Command at 1080p/full screen.
-- [ ] Review on the actual HUB LED.
+## Fase 1 — Lenguaje visual
+- [ ] Tokens visuales.
+- [ ] Prototipo LED central 1080p/full screen.
+- [ ] Revisión en LED real del HUB.
 
-## Phase 2 — Causal chain stations
-- [ ] Mail station.
-- [ ] Access & Identity station.
-- [ ] Validate that players can correlate both without facilitator instruction.
+## Fase 2 — Cadena causal
+- [ ] Estación Comunicaciones.
+- [ ] Estación Identidad y accesos.
+- [ ] Validar correlación sin facilitador.
 
-## Phase 3 — Systems analysis
-- [ ] Infrastructure station.
-- [ ] AI anomaly station.
-- [ ] Validate cross-station reasoning.
+## Fase 3 — Análisis
+- [ ] Estación Infraestructura.
+- [ ] Estación Inteligencia.
+- [ ] Validar razonamiento entre estaciones.
 
-## Phase 4 — Resolution
-- [ ] Final lock.
-- [ ] Response console.
-- [ ] Success/partial-failure outcomes.
-- [ ] One-action reset.
+## Fase 4 — Resolución
+- [ ] Candado final.
+- [ ] Consola de respuesta.
+- [ ] Desenlaces.
+- [ ] Restablecimiento de una acción.
 
-## Phase 5 — Shared room state
-- [ ] Connect stations to central LED only after independent station UX is stable.
-- [ ] Keep local-network dependency minimal.
+## Fase 5 — Estado compartido
+- [ ] Conectar estaciones a LED.
+- [ ] Mantener dependencia de red local mínima.
 
-## Phase 6 — Pilot
-- [ ] Run with 4–8 first-time participants.
-- [ ] Record observed behavior and intervention count.
-- [ ] Fix unfair/obvious clues.
-- [ ] Re-run.
+## Fase 6 — Piloto
+- [ ] Ejecutar con 4–8 participantes nuevos.
+- [ ] Registrar comportamiento e intervenciones.
+- [ ] Ajustar dificultad.
+- [ ] Repetir piloto.
 
-## Later, not now
-- [ ] Multiple scenarios.
-- [ ] Difficulty variants.
-- [ ] Facilitator console.
-- [ ] Scenario editor.
-- [ ] School-specific experiences.
-- [ ] Analytics.
+## Futuro — hardware físico, NO para el piloto inicial
+- [ ] Interacción con switch/router de laboratorio aislado.
+- [ ] Acción física simple: conectar una laptop por Ethernet para activar/restaurar un enlace.
+- [ ] Detectar estado físico sin exigir configuración de redes.
+- [ ] Mantener todo separado de infraestructura real de la universidad.
+- [ ] Evaluar VLAN/equipo dedicado únicamente cuando la experiencia digital ya esté estable.
+
+La interacción física debe ampliar la inmersión, no convertir el taller en una práctica técnica de redes.

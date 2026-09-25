@@ -1,28 +1,38 @@
-# Interface Prompt — Network & Infrastructure
+# Prompt de interfaz — Infraestructura
 
-Diseña una interfaz de observabilidad de infraestructura para **Código Rojo: Cancún 2035**.
+Diseña una interfaz de observabilidad de servicios para VÉRTICE.
 
-## Función narrativa
+## Propósito
 
-Permitir que los jugadores identifiquen qué servicio/nodo cambia de comportamiento después del acceso anómalo y cómo se relaciona con alertas posteriores.
+Permitir deducir qué servicio cambia después del acceso anómalo y antes de las alertas posteriores.
 
-## Contenido
+## Evidencia canónica
 
-- topología simplificada de nodos/servicios,
-- actividad/tráfico,
-- latencia o carga resumida,
-- timestamp de eventos,
-- detalle de nodo,
-- conexiones entre servicios,
-- un distractor ruidoso pero explicable,
-- un patrón temporal relevante.
+Nodo relevante:
+- SIN-04
+- anomalía: 09:17:22
+- actividad: 14 → 163 solicitudes/s
+- referencia: ACC-417
+- identificador de evidencia: NOD-204
+
+Distractor:
+- BUS-SEN-02
+- pico: 09:12:40
+- causa legítima: sincronización programada
 
 ## UX
 
-Debe poder resolverse por observación y correlación, sin exigir conocimientos de subnetting, protocolos o comandos de red.
+Debe entenderse sin conocimientos de redes.
 
-No etiquetar el nodo correcto como “comprometido” antes de que el jugador lo deduzca.
+Mostrar en español:
+- Nodos
+- Servicios
+- Conexiones
+- Actividad
+- Solicitudes por segundo
+- Hora
+- Referencia de sesión
+- Estado
+- Detalle
 
-## Estética
-
-Observabilidad de infraestructura crítica; sofisticada, visual y legible, no “herramienta de hacker”.
+No usar una estética de “herramienta hacker” ni requerir comandos de red.

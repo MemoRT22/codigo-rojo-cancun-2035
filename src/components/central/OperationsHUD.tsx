@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import type { SeverityLevel, DomainState, SystemEvent } from '../../types';
+import type { TelemetrySnapshot } from '../../hooks/useTelemetry';
 import { VerticeBrand } from '../../brand/VerticeLogo';
 import { DOMAIN_ICONS } from '../../brand/DomainIcons';
 import { CORP, DOMAINS, SEVERITY } from '../../brand/tokens';
+import { TelemetryPanel } from './TelemetryPanel';
 
 interface Props {
   headline: string;
@@ -15,9 +17,10 @@ interface Props {
   countdownDisplay: string;
   countdownRunning: boolean;
   countdownVisible: boolean;
+  telemetry: TelemetrySnapshot;
+  isEscalating: boolean;
 }
 
-// ── Simulated clock that ticks from canon base time ──
 function parseTimeToSec(t: string): number {
   const p = t.split(':');
   return (parseInt(p[0] ?? '0') * 3600) + (parseInt(p[1] ?? '0') * 60) + parseInt(p[2] ?? '0');
@@ -41,6 +44,7 @@ export function OperationsHUD({
   headline, subheadline, severity, sync, baseTime,
   domains, events,
   countdownDisplay, countdownRunning, countdownVisible,
+  telemetry, isEscalating,
 }: Props) {
   const isCritical = severity === 'ALTO' || severity === 'CRÍTICO';
   const sevColor = severity === 'NORMAL' ? CORP.caribeCyan
@@ -48,7 +52,7 @@ export function OperationsHUD({
     : severity === 'MODERADO' ? SEVERITY.warning
     : SEVERITY.critical;
 
-  const visibleEvents = events.slice(-5);
+  const visibleEvents = events.slice(-6);
 
   return (
     <>
@@ -78,12 +82,9 @@ export function OperationsHUD({
             {sync.toFixed(1)}%
           </span>
         </div>
-        <div className="text-[9px] font-mono mt-1" style={{ color: CORP.textTertiary + '88' }}>
-          {domains.filter((d) => d.status === 'OPERATIVO' || d.status === 'ESTABLE').length * 7 + 4} nodos conectados
-        </div>
       </div>
 
-      {/* ── Headline (below brand, spanning) ── */}
+      {/* ── Headline (below brand) ── */}
       <div className="absolute top-[115px] left-8 z-10">
         <div className="flex items-center gap-3">
           <div
@@ -104,27 +105,32 @@ export function OperationsHUD({
         )}
       </div>
 
-      {/* ── Countdown (when visible) — bottom-right ── */}
-      {countdownVisible && (
-        <div className="absolute bottom-7 right-8 z-10 text-right">
-          <div className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: CORP.textTertiary }}>
-            Tiempo de Respuesta
-          </div>
-          <div
-            className={`text-[64px] font-mono font-extralight tracking-[0.1em] leading-none transition-colors duration-500`}
-            style={{ color: countdownRunning ? CORP.textPrimary : CORP.textTertiary }}
+      {/* ── Severity indicator — top-center ── */}
+      {severity !== 'NORMAL' && (
+        <div className="absolute top-7 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2">
+          <span className="text-[9px] uppercase tracking-[0.2em]" style={{ color: CORP.textTertiary }}>
+            Severidad
+          </span>
+          <span
+            className={`text-[14px] font-mono tracking-[0.1em] ${isCritical ? 'animate-status-flash' : ''}`}
+            style={{ color: sevColor }}
           >
-            {countdownDisplay}
-          </div>
+            {severity}
+          </span>
         </div>
       )}
+
+      {/* ── Left panel: Telemetry micro-dashboard (below headline) ── */}
+      <div className="absolute top-[175px] left-8 z-10">
+        <TelemetryPanel telemetry={telemetry} isEscalating={isEscalating} />
+      </div>
 
       {/* ── Domain legend — bottom-left ── */}
       <div className="absolute bottom-7 left-8 z-10">
         <div className="text-[9px] uppercase tracking-[0.2em] mb-3" style={{ color: CORP.textTertiary }}>
           Dominios del Sistema
         </div>
-        <div className="grid grid-cols-2 gap-x-6 gap-y-2">
+        <div className="grid grid-cols-3 gap-x-5 gap-y-1.5">
           {DOMAINS.map((dt) => {
             const state = domains.find((d) => d.id === dt.id);
             const isOp = !state || state.status === 'OPERATIVO' || state.status === 'ESTABLE';
@@ -132,18 +138,18 @@ export function OperationsHUD({
             const Icon = DOMAIN_ICONS[dt.id];
 
             const statusColor = isOff ? SEVERITY.offline
-              : !isOp ? (state!.status === 'ADVERTENCIA' ? SEVERITY.warning : SEVERITY.critical)
-              : 'transparent';
+              : !isOp ? (state!.status === 'ADVERTENCIA' || state!.status === 'ALERTA' ? SEVERITY.warning : SEVERITY.critical)
+              : dt.color;
 
             return (
-              <div key={dt.id} className="flex items-center gap-2">
-                {Icon && <Icon size={15} color={isOff ? SEVERITY.offline : dt.color} />}
-                <span className="text-[12px] tracking-[0.04em]" style={{ color: isOff ? SEVERITY.offline : dt.color }}>
+              <div key={dt.id} className="flex items-center gap-1.5">
+                {Icon && <Icon size={13} color={isOff ? SEVERITY.offline : dt.color} />}
+                <span className="text-[11px] tracking-[0.02em]" style={{ color: isOff ? SEVERITY.offline : dt.color }}>
                   {dt.label}
                 </span>
                 {!isOp && (
                   <span
-                    className={`text-[9px] font-mono tracking-wider ${!isOff ? 'animate-status-flash' : ''}`}
+                    className={`text-[8px] font-mono tracking-wider ml-1 ${!isOff ? 'animate-status-flash' : ''}`}
                     style={{ color: statusColor }}
                   >
                     {state!.status}
@@ -155,15 +161,30 @@ export function OperationsHUD({
         </div>
       </div>
 
-      {/* ── Telemetry feed — right side, mid-height ── */}
+      {/* ── Countdown — bottom-right ── */}
+      {countdownVisible && (
+        <div className="absolute bottom-7 right-8 z-10 text-right">
+          <div className="text-[10px] uppercase tracking-[0.2em] mb-1" style={{ color: CORP.textTertiary }}>
+            Tiempo de Respuesta
+          </div>
+          <div
+            className="text-[64px] font-mono font-extralight tracking-[0.1em] leading-none transition-colors duration-500"
+            style={{ color: countdownRunning ? CORP.textPrimary : CORP.textTertiary }}
+          >
+            {countdownDisplay}
+          </div>
+        </div>
+      )}
+
+      {/* ── Telemetry feed — right side ── */}
       <div className="absolute right-8 top-[140px] z-10 w-[300px]">
         <div className="text-[9px] uppercase tracking-[0.2em] mb-3" style={{ color: CORP.textTertiary }}>
           Actividad Reciente
         </div>
-        <div className="space-y-2.5">
+        <div className="space-y-2">
           {visibleEvents.map((ev, i) => {
             const age = visibleEvents.length - i;
-            const fadeAlpha = Math.max(0.45, 1 - (age - 1) * 0.15);
+            const fadeAlpha = Math.max(0.45, 1 - (age - 1) * 0.12);
             const levelColor = ev.level === 'critical' ? SEVERITY.critical
               : ev.level === 'warning' ? SEVERITY.warning
               : CORP.textSecondary;
@@ -189,21 +210,6 @@ export function OperationsHUD({
           })}
         </div>
       </div>
-
-      {/* ── Severity indicator — top-center, only during incidents ── */}
-      {severity !== 'NORMAL' && (
-        <div className="absolute top-7 left-1/2 -translate-x-1/2 z-10 flex items-center gap-2">
-          <span className="text-[9px] uppercase tracking-[0.2em]" style={{ color: CORP.textTertiary }}>
-            Severidad
-          </span>
-          <span
-            className={`text-[14px] font-mono tracking-[0.1em] ${isCritical ? 'animate-status-flash' : ''}`}
-            style={{ color: sevColor }}
-          >
-            {severity}
-          </span>
-        </div>
-      )}
     </>
   );
 }

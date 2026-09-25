@@ -3,6 +3,7 @@ import type { NarrativeState } from './types';
 import { NARRATIVE_STATES } from './types';
 import { useNarrativeState } from './hooks/useNarrativeState';
 import { useCountdown } from './hooks/useCountdown';
+import { useTelemetry } from './hooks/useTelemetry';
 import { DigitalTwinMap } from './map/DigitalTwinMap';
 import { OperationsHUD } from './components/central/OperationsHUD';
 import { DevPanel } from './components/DevPanel';
@@ -11,6 +12,7 @@ import { CORP, SEVERITY } from './brand/tokens';
 export default function App() {
   const { state, config, allEvents, setNarrativeState, reset: resetNarrative, injectEvent } = useNarrativeState();
   const { display, running, start, toggle, resetTimer, stop } = useCountdown();
+  const telemetry = useTelemetry(state, config.baseTime);
 
   const showCountdown = state !== 'OPERACION_NORMAL';
   const isEscalating = state !== 'OPERACION_NORMAL';
@@ -67,15 +69,15 @@ export default function App() {
   }, [handleStateChange, handleReset, toggle]);
 
   const atmosColor = isEscalating ? SEVERITY.critical : CORP.verticeBlue;
-  const atmosAlpha = isEscalating ? '0.07' : '0.03';
+  const atmosOpacity = isEscalating ? 0.07 : 0.03;
 
   return (
     <div className="h-screen w-screen overflow-hidden relative" style={{ background: CORP.bgDeep }}>
-      {/* Atmospheric tint that shifts with severity */}
+      {/* Atmospheric tint */}
       <div
         className="absolute inset-0 transition-all duration-[3000ms] pointer-events-none"
         style={{
-          background: `radial-gradient(ellipse at 45% 50%, ${atmosColor}${Math.round(parseFloat(atmosAlpha) * 255).toString(16).padStart(2, '0')} 0%, transparent 65%)`,
+          background: `radial-gradient(ellipse at 45% 50%, ${atmosColor}${Math.round(atmosOpacity * 255).toString(16).padStart(2, '0')} 0%, transparent 65%)`,
         }}
       />
 
@@ -83,6 +85,7 @@ export default function App() {
       <DigitalTwinMap
         domains={config.domains}
         isEscalating={isEscalating}
+        telemetry={telemetry}
       />
 
       {/* Information overlays */}
@@ -97,9 +100,11 @@ export default function App() {
         countdownDisplay={display}
         countdownRunning={running}
         countdownVisible={showCountdown}
+        telemetry={telemetry}
+        isEscalating={isEscalating}
       />
 
-      {/* Vignette edges for LED depth */}
+      {/* Vignette */}
       <div className="absolute inset-0 pointer-events-none z-20"
         style={{
           boxShadow: 'inset 0 0 120px 40px rgba(0,0,0,0.6), inset 0 0 300px 80px rgba(0,0,0,0.3)',

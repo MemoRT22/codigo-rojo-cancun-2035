@@ -9,7 +9,7 @@
 }
 
 body {
-  background: #060a10;
+  background: #050B12;
   color: #c8d6e5;
   font-family: 'Inter', system-ui, sans-serif;
   overflow: hidden;
@@ -20,6 +20,8 @@ body.dev-mode {
   cursor: default;
 }
 
+/* ── Animations ── */
+
 @keyframes fade-in-up {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
@@ -27,12 +29,17 @@ body.dev-mode {
 
 @keyframes status-flash {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.4; }
+  50% { opacity: 0.35; }
 }
 
 @keyframes pulse-slow {
   0%, 100% { opacity: 0.4; }
   50% { opacity: 0.8; }
+}
+
+@keyframes scan-line {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
 }
 
 .animate-fade-in-up {
@@ -45,8 +52,4 @@ body.dev-mode {
 
 .animate-pulse-slow {
   animation: pulse-slow 4s ease-in-out infinite;
-}
-
-.bg-gradient-radial {
-  background: radial-gradient(ellipse at center, var(--tw-gradient-from), var(--tw-gradient-via), var(--tw-gradient-to));
 }

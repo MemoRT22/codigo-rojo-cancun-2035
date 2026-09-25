@@ -7,7 +7,7 @@ import { useTelemetry } from './hooks/useTelemetry';
 import { DigitalTwinMap } from './map/DigitalTwinMap';
 import { OperationsHUD } from './components/central/OperationsHUD';
 import { DevPanel } from './components/DevPanel';
-import { CORP, SEVERITY } from './brand/tokens';
+import { CORP } from './brand/tokens';
 
 export default function App() {
   const { state, config, allEvents, setNarrativeState, reset: resetNarrative, injectEvent } = useNarrativeState();
@@ -68,27 +68,32 @@ export default function App() {
     return () => window.removeEventListener('keydown', handler);
   }, [handleStateChange, handleReset, toggle]);
 
-  const atmosColor = isEscalating ? SEVERITY.critical : CORP.verticeBlue;
-  const atmosOpacity = isEscalating ? 0.07 : 0.03;
-
   return (
-    <div className="h-screen w-screen overflow-hidden relative" style={{ background: CORP.bgDeep }}>
-      {/* Atmospheric tint */}
+    <div className="h-screen w-screen overflow-hidden relative" style={{ background: CORP.bgBase }}>
+      {/* Territory container with subtle perspective tilt — only the map is tilted */}
       <div
-        className="absolute inset-0 transition-all duration-[3000ms] pointer-events-none"
+        className="absolute inset-0"
         style={{
-          background: `radial-gradient(ellipse at 45% 50%, ${atmosColor}${Math.round(atmosOpacity * 255).toString(16).padStart(2, '0')} 0%, transparent 65%)`,
+          perspective: '2400px',
+          perspectiveOrigin: '50% 40%',
         }}
-      />
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            transform: 'rotateX(6deg)',
+            transformOrigin: '50% 55%',
+          }}
+        >
+          <DigitalTwinMap
+            domains={config.domains}
+            isEscalating={isEscalating}
+            telemetry={telemetry}
+          />
+        </div>
+      </div>
 
-      {/* Territory + animated activity */}
-      <DigitalTwinMap
-        domains={config.domains}
-        isEscalating={isEscalating}
-        telemetry={telemetry}
-      />
-
-      {/* Information overlays */}
+      {/* HUD overlays — perfectly flat, outside perspective container */}
       <OperationsHUD
         headline={config.headline}
         subheadline={config.subheadline}
@@ -102,13 +107,6 @@ export default function App() {
         countdownVisible={showCountdown}
         telemetry={telemetry}
         isEscalating={isEscalating}
-      />
-
-      {/* Vignette */}
-      <div className="absolute inset-0 pointer-events-none z-20"
-        style={{
-          boxShadow: 'inset 0 0 120px 40px rgba(0,0,0,0.6), inset 0 0 300px 80px rgba(0,0,0,0.3)',
-        }}
       />
 
       {/* Dev panel */}

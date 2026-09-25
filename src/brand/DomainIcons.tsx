@@ -1,5 +1,3 @@
-// Coherent monoline icon family — shared stroke width and geometry.
-
 interface IconProps {
   size?: number;
   color?: string;
@@ -7,7 +5,7 @@ interface IconProps {
 
 const D = { strokeWidth: 1.6, strokeLinecap: 'round' as const, strokeLinejoin: 'round' as const, fill: 'none' };
 
-export function IconIdentidad({ size = 18, color = '#9b7aff' }: IconProps) {
+export function IconIdentidad({ size = 18, color = '#7657D5' }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <rect x="4" y="3" width="16" height="18" rx="2" stroke={color} {...D} />
@@ -17,7 +15,7 @@ export function IconIdentidad({ size = 18, color = '#9b7aff' }: IconProps) {
   );
 }
 
-export function IconInfraestructura({ size = 18, color = '#e8923a' }: IconProps) {
+export function IconInfraestructura({ size = 18, color = '#E98836' }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <rect x="6" y="3" width="12" height="8" rx="1.5" stroke={color} {...D} />
@@ -30,7 +28,7 @@ export function IconInfraestructura({ size = 18, color = '#e8923a' }: IconProps)
   );
 }
 
-export function IconMovilidad({ size = 18, color = '#4d9fff' }: IconProps) {
+export function IconMovilidad({ size = 18, color = '#2878E8' }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <path d="M 3 12 L 9 12 L 12 6 L 15 18 L 18 12 L 21 12" stroke={color} {...D} />
@@ -40,7 +38,7 @@ export function IconMovilidad({ size = 18, color = '#4d9fff' }: IconProps) {
   );
 }
 
-export function IconTurismo({ size = 18, color = '#22c5c5' }: IconProps) {
+export function IconTurismo({ size = 18, color = '#00A89D' }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <path d="M 12 2 L 12 2 C 16 2 19 5 19 9 C 19 14 12 22 12 22 C 12 22 5 14 5 9 C 5 5 8 2 12 2Z" stroke={color} {...D} />
@@ -49,7 +47,7 @@ export function IconTurismo({ size = 18, color = '#22c5c5' }: IconProps) {
   );
 }
 
-export function IconSensores({ size = 18, color = '#7acc29' }: IconProps) {
+export function IconSensores({ size = 18, color = '#70A943' }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <circle cx="12" cy="12" r="2" fill={color} />
@@ -59,7 +57,7 @@ export function IconSensores({ size = 18, color = '#7acc29' }: IconProps) {
   );
 }
 
-export function IconInteligencia({ size = 18, color = '#b065f0' }: IconProps) {
+export function IconInteligencia({ size = 18, color = '#B24BC8' }: IconProps) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
       <circle cx="12" cy="5" r="2" stroke={color} {...D} />

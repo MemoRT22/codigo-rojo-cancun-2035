@@ -1,34 +1,54 @@
+// ── VÉRTICE v4 — Light-mode enterprise design tokens ──
+
 // ── Corporate palette ──
 export const CORP = {
-  bgDeep:    '#050B12',
-  bgSurface: '#0A1624',
-  bgPanel:   '#0E1D30',
-  border:    '#162840',
-  textPrimary:   '#EAF2F8',
-  textSecondary: '#8FA4BD',
-  textTertiary:  '#4A6480',
-  verticeBlue:   '#2878FF',
-  caribeCyan:    '#00C2D8',
-  white:         '#EAF2F8',
+  // Backgrounds — light mode
+  bgBase:       '#F5F8FB',
+  bgSurface:    '#FFFFFF',
+  bgElevated:   '#FFFFFF',
+  bgPanel:      '#F0F4F8',
+
+  // Map surfaces
+  mapLand:      '#E8EEF5',
+  mapSea:       '#D0DFF0',
+  mapLagoon:    '#C2D8E8',
+  mapHotelZone: '#DDE6F0',
+  mapGrid:      '#CBD5E1',
+
+  // Text hierarchy
+  textPrimary:   '#132238',
+  textSecondary: '#557086',
+  textTertiary:  '#8DA0AF',
+
+  // Borders & structure
+  border:        '#D2DCE6',
+  borderSubtle:  '#E4EBF2',
+  shadow:        'rgba(19, 34, 56, 0.08)',
+  shadowStrong:  'rgba(19, 34, 56, 0.14)',
+
+  // Corporate accent
+  verticeBlue:   '#1268E8',
+  caribeCyan:    '#00AFC4',
+  white:         '#FFFFFF',
 } as const;
 
 // ── Domain identity colors ──
-// Each domain has its own chromatic identity independent of operational state.
+// Tuned for legibility on light backgrounds.
 export interface DomainToken {
   id: string;
   label: string;
-  color: string;       // Primary domain hue
-  colorDim: string;    // Reduced intensity for backgrounds/subtle elements
-  colorBright: string; // For emphasis/alerts within this domain
+  color: string;
+  colorDim: string;
+  colorBright: string;
 }
 
 export const DOMAINS: DomainToken[] = [
-  { id: 'identidad',       label: 'Identidad y Accesos',     color: '#9b7aff', colorDim: '#9b7aff40', colorBright: '#b899ff' },
-  { id: 'infraestructura', label: 'Infraestructura',          color: '#e8923a', colorDim: '#e8923a40', colorBright: '#ffa94d' },
-  { id: 'movilidad',       label: 'Movilidad',                color: '#4d9fff', colorDim: '#4d9fff40', colorBright: '#6cb4ff' },
-  { id: 'turismo',         label: 'Servicios Turísticos',     color: '#22c5c5', colorDim: '#22c5c540', colorBright: '#3de0e0' },
-  { id: 'sensores',        label: 'Sensores y Monitoreo',     color: '#7acc29', colorDim: '#7acc2940', colorBright: '#96e847' },
-  { id: 'inteligencia',    label: 'Núcleo de Inteligencia',   color: '#b065f0', colorDim: '#b065f040', colorBright: '#c98aff' },
+  { id: 'identidad',       label: 'Identidad y Accesos',     color: '#7657D5', colorDim: '#7657D520', colorBright: '#5B3DBF' },
+  { id: 'infraestructura', label: 'Infraestructura',          color: '#E98836', colorDim: '#E9883620', colorBright: '#D07020' },
+  { id: 'movilidad',       label: 'Movilidad',                color: '#2878E8', colorDim: '#2878E820', colorBright: '#1460D0' },
+  { id: 'turismo',         label: 'Servicios Turísticos',     color: '#00A89D', colorDim: '#00A89D20', colorBright: '#008C83' },
+  { id: 'sensores',        label: 'Sensores y Monitoreo',     color: '#70A943', colorDim: '#70A94320', colorBright: '#5A8F30' },
+  { id: 'inteligencia',    label: 'Núcleo de Inteligencia',   color: '#B24BC8', colorDim: '#B24BC820', colorBright: '#9830AE' },
 ];
 
 export const DOMAIN_MAP = new Map(DOMAINS.map((d) => [d.id, d]));
@@ -38,15 +58,10 @@ export function domainColor(id: string): string {
 }
 
 // ── State severity overlay colors ──
-// These layer ON TOP of domain colors to indicate operational state.
+// These layer ON TOP of domain colors — never replacing them.
 export const SEVERITY = {
-  normal:  'transparent',
-  warning: '#F0A848',
-  critical:'#E74C3C',
-  offline: '#4A6480',
+  normal:   'transparent',
+  warning:  '#E8A020',
+  critical: '#DC3545',
+  offline:  '#8DA0AF',
 } as const;
-
-// ── Typography scale (in Tailwind-style references) ──
-// Level 1 (visible from 5m+): brand 32px, headline 26px, countdown 60px
-// Level 2 (visible from 3m): domains 15px, status 14px, zones 12px
-// Level 3 (close reading): timestamps 11px, micro-labels 10px

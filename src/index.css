@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-bg: #0a0e14;
+  --color-surface: #111820;
+  --color-panel: #151c26;
+  --color-border: #1e2a38;
+  --color-accent: #2a8a8a;
+  --color-accent-bright: #3bb5b0;
+  --color-text: #c8d6e5;
+  --color-text-muted: #6b7f95;
+  --color-text-bright: #e8f0f8;
+  --color-warning: #d4913a;
+  --color-warning-bright: #f0a848;
+  --color-danger: #c0392b;
+  --color-danger-bright: #e74c3c;
+  --color-success: #27ae60;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: 'Inter', system-ui, sans-serif;
+  overflow: hidden;
+  cursor: none;
+}
+
+body.dev-mode {
+  cursor: default;
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.8; }
+}
+
+@keyframes pulse-node {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
+}
+
+@keyframes data-flow {
+  0% { stroke-dashoffset: 20; }
+  100% { stroke-dashoffset: 0; }
+}
+
+@keyframes data-flow-reverse {
+  0% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: 20; }
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes status-flash {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes scan-line {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes containment-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(42, 138, 138, 0.4); }
+  70% { box-shadow: 0 0 0 12px rgba(42, 138, 138, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(42, 138, 138, 0); }
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 0.5s ease-out both;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+
+.animate-status-flash {
+  animation: status-flash 1.5s ease-in-out infinite;
+}
+
+.animate-containment-pulse {
+  animation: containment-pulse 2s ease-out infinite;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

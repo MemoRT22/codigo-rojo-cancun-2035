@@ -1,0 +1,30 @@
+{
+  "name": "codigo-rojo-cancun-2035",
+  "displayName": "Código Rojo: Cancún 2035",
+  "type": "immersive-escape-room-workshop",
+  "institution": "Universidad Anáhuac Cancún",
+  "areas": ["Artificial Intelligence", "Cybersecurity"],
+  "audience": "prospective high-school students",
+  "players": {"min": 4, "optimal": [6, 8], "max": 10},
+  "sessionMinutes": [20, 25],
+  "phase": "experience-design",
+  "priorityOrder": [
+    "narrative-coherence",
+    "puzzle-quality",
+    "immersion",
+    "physical-room-experience",
+    "demo-reliability",
+    "code-elegance",
+    "automated-test-coverage"
+  ],
+  "canonicalDocs": [
+    "AI_CONTEXT.md",
+    "AGENTS.md",
+    "docs/01-experience-vision.md",
+    "docs/02-story-bible.md",
+    "docs/03-game-design.md",
+    "docs/04-interface-system.md",
+    "docs/05-technical-strategy.md",
+    "docs/06-pilot-plan.md"
+  ]
+}

@@ -23,6 +23,7 @@ export const STATE_CONFIGS: Record<string, StateConfig> = {
     severity: 'NORMAL',
     sync: 99.8,
     accentColor: 'teal',
+    baseTime: '09:08:00',
     domains: domains({}),
     events: [
       ev('09:08:12', 'Sincronización de servicios completada'),
@@ -40,6 +41,7 @@ export const STATE_CONFIGS: Record<string, StateConfig> = {
     severity: 'BAJO',
     sync: 98.4,
     accentColor: 'amber',
+    baseTime: '09:11:08',
     domains: domains({
       identidad: { status: 'ADVERTENCIA', activity: 61 },
     }),
@@ -58,6 +60,7 @@ export const STATE_CONFIGS: Record<string, StateConfig> = {
     severity: 'ALTO',
     sync: 94.1,
     accentColor: 'red',
+    baseTime: '09:16:04',
     domains: domains({
       identidad: { status: 'ALERTA', activity: 78 },
       infraestructura: { status: 'ADVERTENCIA', activity: 72 },
@@ -80,6 +83,7 @@ export const STATE_CONFIGS: Record<string, StateConfig> = {
     severity: 'ALTO',
     sync: 93.7,
     accentColor: 'amber',
+    baseTime: '09:20:11',
     domains: domains({
       identidad: { status: 'ALERTA', activity: 74 },
       infraestructura: { status: 'ADVERTENCIA', activity: 68 },
@@ -99,6 +103,7 @@ export const STATE_CONFIGS: Record<string, StateConfig> = {
     severity: 'ALTO',
     sync: 93.2,
     accentColor: 'amber',
+    baseTime: '09:21:05',
     domains: domains({
       identidad: { status: 'ALERTA', activity: 72 },
       infraestructura: { status: 'ALERTA', activity: 70 },
@@ -118,6 +123,7 @@ export const STATE_CONFIGS: Record<string, StateConfig> = {
     severity: 'MODERADO',
     sync: 97.3,
     accentColor: 'teal',
+    baseTime: '09:22:01',
     domains: domains({
       identidad: { status: 'ESTABLE', activity: 30 },
       infraestructura: { status: 'AISLADO', activity: 5 },
@@ -142,6 +148,7 @@ export const STATE_CONFIGS: Record<string, StateConfig> = {
     severity: 'CRÍTICO',
     sync: 87.2,
     accentColor: 'red',
+    baseTime: '09:22:01',
     domains: domains({
       identidad: { status: 'ADVERTENCIA', activity: 55 },
       infraestructura: { status: 'CRÍTICO', activity: 82 },

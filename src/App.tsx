@@ -3,12 +3,9 @@ import type { NarrativeState } from './types';
 import { NARRATIVE_STATES } from './types';
 import { useNarrativeState } from './hooks/useNarrativeState';
 import { useCountdown } from './hooks/useCountdown';
-import { TopBar } from './components/TopBar';
 import { CancunTopology } from './components/CancunTopology';
-import { StatusPanel } from './components/StatusPanel';
+import { SystemOverlay } from './components/SystemOverlay';
 import { EventFeed } from './components/EventFeed';
-import { CountdownDisplay } from './components/CountdownDisplay';
-import { DomainStrip } from './components/DomainStrip';
 import { ContainmentSequence } from './components/ContainmentSequence';
 import { DevPanel } from './components/DevPanel';
 
@@ -36,14 +33,12 @@ export default function App() {
   const handleReset = useCallback(() => {
     resetNarrative();
     resetTimer();
-    document.body.classList.add('dev-mode');
   }, [resetNarrative, resetTimer]);
 
   const handleContainmentComplete = useCallback(() => {
     stop();
   }, [stop]);
 
-  // Keyboard shortcuts
   useEffect(() => {
     document.body.classList.add('dev-mode');
 
@@ -76,52 +71,48 @@ export default function App() {
     return () => window.removeEventListener('keydown', handler);
   }, [handleStateChange, handleReset, toggle]);
 
-  // Accent-based background tinting
-  const bgTint = config.accentColor === 'red'
-    ? 'radial-gradient(ellipse at center, #c0392b08 0%, transparent 70%)'
-    : config.accentColor === 'amber'
-      ? 'radial-gradient(ellipse at center, #d4913a06 0%, transparent 70%)'
-      : 'none';
-
   return (
-    <div className="h-screen w-screen flex flex-col overflow-hidden bg-vertice-bg relative"
-      style={{ backgroundImage: bgTint }}>
-      {/* Top bar */}
-      <TopBar
-        headline={config.headline}
-        subheadline={config.subheadline}
-        accentColor={config.accentColor}
+    <div className="h-screen w-screen overflow-hidden relative bg-[#060a10]">
+      {/* Atmospheric background tint */}
+      <div
+        className="absolute inset-0 transition-opacity duration-[2000ms]"
+        style={{
+          background: config.accentColor === 'red'
+            ? 'radial-gradient(ellipse at 40% 45%, rgba(192,57,43,0.06) 0%, transparent 60%)'
+            : config.accentColor === 'amber'
+              ? 'radial-gradient(ellipse at 40% 45%, rgba(212,145,58,0.04) 0%, transparent 60%)'
+              : 'radial-gradient(ellipse at 40% 45%, rgba(42,138,138,0.03) 0%, transparent 60%)',
+        }}
       />
 
-      {/* Main content */}
-      <div className="flex-1 flex overflow-hidden relative">
-        {/* Left panel */}
-        <div className="w-[260px] flex-shrink-0 p-4 flex flex-col gap-4 border-r border-vertice-border/40">
-          <StatusPanel severity={config.severity} sync={config.sync} />
-          {showCountdown && (
-            <div className="rounded-lg border border-vertice-border bg-vertice-panel p-4 flex items-center justify-center">
-              <CountdownDisplay display={display} running={running} visible={showCountdown} />
-            </div>
-          )}
-        </div>
+      {/* Territory visualization -- full bleed */}
+      <CancunTopology
+        domains={config.domains}
+        accentColor={config.accentColor}
+        narrativeState={state}
+      />
 
-        {/* Center - Topology */}
-        <div className="flex-1 p-4 relative">
-          <CancunTopology domains={config.domains} accentColor={config.accentColor} />
-        </div>
+      {/* Domain labels on territory */}
+      <TerritoryLabels domains={config.domains} />
 
-        {/* Right panel - Events */}
-        <div className="w-[300px] flex-shrink-0 p-4 border-l border-vertice-border/40">
-          <EventFeed events={allEvents} />
-        </div>
-      </div>
+      {/* Floating system information */}
+      <SystemOverlay
+        headline={config.headline}
+        subheadline={config.subheadline}
+        severity={config.severity}
+        sync={config.sync}
+        accentColor={config.accentColor}
+        baseTime={config.baseTime}
+        countdownDisplay={display}
+        countdownRunning={running}
+        countdownVisible={showCountdown}
+        domains={config.domains}
+      />
 
-      {/* Bottom strip - Domain summary */}
-      <div className="h-[72px] flex-shrink-0 px-4 py-2 border-t border-vertice-border/40">
-        <DomainStrip domains={config.domains} />
-      </div>
+      {/* Event telemetry */}
+      <EventFeed events={allEvents} />
 
-      {/* Containment overlay */}
+      {/* Containment sequence overlay */}
       {isContainment && (
         <ContainmentSequence
           narrativeState={state}
@@ -141,5 +132,65 @@ export default function App() {
         onInjectEvent={injectEvent}
       />
     </div>
+  );
+}
+
+// Domain labels positioned at their geographic locations on the territory
+const LABEL_POSITIONS: Record<string, { x: string; y: string }> = {
+  identidad:       { x: '20%', y: '24%' },
+  infraestructura: { x: '21%', y: '49%' },
+  movilidad:       { x: '33%', y: '20%' },
+  turismo:         { x: '68%', y: '30%' },
+  sensores:        { x: '13%', y: '41%' },
+  inteligencia:    { x: '30%', y: '36%' },
+};
+
+const STATUS_LABEL_COLORS: Record<string, string> = {
+  OPERATIVO:          'rgba(255,255,255,0.12)',
+  ESTABLE:            'rgba(39,174,96,0.5)',
+  ADVERTENCIA:        'rgba(212,145,58,0.5)',
+  ALERTA:             'rgba(230,126,34,0.55)',
+  'CRÍTICO':          'rgba(192,57,43,0.6)',
+  AISLANDO:           'rgba(212,145,58,0.5)',
+  AISLADO:            'rgba(80,95,110,0.4)',
+  REVOCANDO:          'rgba(212,145,58,0.5)',
+  REVOCADA:           'rgba(80,95,110,0.4)',
+  'FUERA DE SERVICIO':'rgba(192,57,43,0.5)',
+  CONTENIDO:          'rgba(39,174,96,0.5)',
+};
+
+function TerritoryLabels({ domains }: { domains: import('./types').DomainState[] }) {
+  return (
+    <>
+      {domains.map((d) => {
+        const pos = LABEL_POSITIONS[d.id];
+        if (!pos) return null;
+        const isOp = d.status === 'OPERATIVO';
+        const statusColor = STATUS_LABEL_COLORS[d.status] ?? 'rgba(255,255,255,0.12)';
+
+        return (
+          <div
+            key={d.id}
+            className="absolute z-10 pointer-events-none"
+            style={{ left: pos.x, top: pos.y }}
+          >
+            <div
+              className="text-[14px] tracking-[0.08em] transition-colors duration-700"
+              style={{ color: isOp ? 'rgba(255,255,255,0.18)' : statusColor }}
+            >
+              {d.label}
+            </div>
+            {!isOp && (
+              <div
+                className="text-[11px] font-mono tracking-wider mt-0.5"
+                style={{ color: statusColor }}
+              >
+                {d.status}
+              </div>
+            )}
+          </div>
+        );
+      })}
+    </>
   );
 }

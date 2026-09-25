@@ -36,4 +36,5 @@ export interface StateConfig {
   domains: DomainState[];
   events: SystemEvent[];
   accentColor: 'teal' | 'amber' | 'red';
+  baseTime: string;
 }

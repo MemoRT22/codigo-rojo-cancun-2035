@@ -9,7 +9,7 @@ interface ContainmentStep {
 }
 
 const DELTA_STEPS: ContainmentStep[] = [
-  { label: 'Identidad', from: 'REVOCANDO', to: 'REVOCADA', delay: 0 },
+  { label: 'Identidad comprometida', from: 'REVOCANDO', to: 'REVOCADA', delay: 0 },
   { label: 'Sesiones asociadas', from: 'INVALIDANDO', to: 'INVALIDADAS', delay: 2500 },
   { label: 'SIN-04', from: 'AISLANDO', to: 'AISLADO', delay: 5000 },
   { label: 'Propagación', from: 'CRÍTICA', to: 'CONTENIDA', delay: 8000 },
@@ -48,12 +48,10 @@ export function ContainmentSequence({ narrativeState, onSequenceComplete }: Prop
     const timers: ReturnType<typeof setTimeout>[] = [];
 
     steps.forEach((step, index) => {
-      // Show "from" state
       timers.push(setTimeout(() => {
         setActiveSteps((prev) => [...prev, { index, phase: 'from' }]);
       }, step.delay));
 
-      // Transition to "to" state
       timers.push(setTimeout(() => {
         setActiveSteps((prev) =>
           prev.map((s) => (s.index === index ? { ...s, phase: 'to' } : s))
@@ -61,13 +59,10 @@ export function ContainmentSequence({ narrativeState, onSequenceComplete }: Prop
       }, step.delay + 1500));
     });
 
-    // Final message
     const lastStep = steps[steps.length - 1];
     const finalDelay = (lastStep?.delay ?? 0) + 3000;
     timers.push(setTimeout(() => {
-      setFinalMessage(
-        isSuccess ? 'INCIDENTE CONTENIDO' : 'CONTENCIÓN INCOMPLETA'
-      );
+      setFinalMessage(isSuccess ? 'INCIDENTE CONTENIDO' : 'CONTENCIÓN INCOMPLETA');
       onSequenceComplete();
     }, finalDelay));
 
@@ -77,40 +72,46 @@ export function ContainmentSequence({ narrativeState, onSequenceComplete }: Prop
   if (!isContainment) return null;
 
   return (
-    <div className="absolute inset-0 z-20 flex items-center justify-center bg-vertice-bg/80 backdrop-blur-sm">
-      <div className="w-[600px] space-y-3">
-        <div className="text-center mb-6">
-          <div className="text-[10px] uppercase tracking-[0.2em] text-vertice-text-muted">
-            {isSuccess ? 'Ejecutando Plan Delta' : 'Ejecutando plan de contención'}
-          </div>
+    <div className="absolute inset-0 z-20 pointer-events-none">
+      {/* Semi-transparent vignette -- territory stays visible */}
+      <div className="absolute inset-0 bg-gradient-radial from-transparent via-[#0a0e14]/40 to-[#0a0e14]/70" />
+
+      {/* Containment steps -- floating in left-center area */}
+      <div className="absolute left-10 top-1/2 -translate-y-1/2 space-y-3 max-w-[500px]">
+        <div className="text-[10px] uppercase tracking-[0.25em] text-white/20 mb-4">
+          {isSuccess ? 'Ejecutando Plan Delta' : 'Ejecutando plan de contención'}
         </div>
 
         {steps.map((step, index) => {
           const active = activeSteps.find((s) => s.index === index);
-          if (!active) return (
-            <div key={index} className="flex items-center justify-between px-6 py-3 rounded-lg border border-vertice-border/30 bg-vertice-panel/30 opacity-30">
-              <span className="text-sm font-medium text-vertice-text-muted">{step.label}</span>
-              <span className="text-xs font-mono text-vertice-text-muted">—</span>
-            </div>
-          );
+          if (!active) {
+            return (
+              <div key={index} className="flex items-center gap-4 opacity-15">
+                <span className="text-[14px] text-white/40">{step.label}</span>
+                <span className="text-[11px] font-mono text-white/20">—</span>
+              </div>
+            );
+          }
 
           const isDone = active.phase === 'to';
+          const isFailure = !isSuccess && isDone &&
+            (step.to === 'FUERA DE SERVICIO' || step.to === 'ACTIVIDAD CONTINÚA' || step.to === 'NO DETENIDA');
           const color = isDone
-            ? (isSuccess ? '#27ae60' : (step.to === 'FUERA DE SERVICIO' || step.to === 'ACTIVIDAD CONTINÚA' || step.to === 'NO DETENIDA' ? '#c0392b' : '#27ae60'))
-            : '#d4913a';
+            ? (isFailure ? 'rgba(192,57,43,0.9)' : 'rgba(39,174,96,0.9)')
+            : 'rgba(212,145,58,0.8)';
 
           return (
             <div
               key={index}
-              className="flex items-center justify-between px-6 py-3 rounded-lg border transition-all duration-700 animate-fade-in-up"
-              style={{
-                borderColor: color + '60',
-                backgroundColor: color + '10',
-              }}
+              className="flex items-center gap-4 animate-fade-in-up"
             >
-              <span className="text-sm font-medium text-vertice-text-bright">{step.label}</span>
+              <div
+                className={`w-1.5 h-1.5 rounded-full ${!isDone ? 'animate-status-flash' : ''}`}
+                style={{ backgroundColor: color }}
+              />
+              <span className="text-[16px] text-white/70">{step.label}</span>
               <span
-                className={`text-xs font-mono font-medium tracking-wider transition-all duration-500 ${!isDone ? 'animate-status-flash' : ''}`}
+                className={`text-[13px] font-mono tracking-wider transition-all duration-500 ${!isDone ? 'animate-status-flash' : ''}`}
                 style={{ color }}
               >
                 {isDone ? step.to : step.from}
@@ -118,29 +119,32 @@ export function ContainmentSequence({ narrativeState, onSequenceComplete }: Prop
             </div>
           );
         })}
+      </div>
 
-        {finalMessage && (
-          <div className="mt-8 text-center animate-fade-in-up">
+      {/* Final message -- large, central */}
+      {finalMessage && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center animate-fade-in-up">
             <div
-              className={`text-2xl font-semibold tracking-[0.1em] ${
-                isSuccess ? 'text-vertice-success' : 'text-vertice-danger'
+              className={`text-[42px] font-light tracking-[0.15em] ${
+                isSuccess ? 'text-[#27ae60]' : 'text-[#c0392b]'
               }`}
             >
               {finalMessage}
             </div>
             {isSuccess && (
-              <div className="text-sm text-vertice-text-muted mt-2">
+              <div className="text-[16px] text-white/35 mt-3 tracking-wide">
                 Servicios preservados: 5/6
               </div>
             )}
             {!isSuccess && (
-              <div className="text-sm text-vertice-text-muted mt-2">
+              <div className="text-[16px] text-white/35 mt-3 tracking-wide">
                 Actividad no neutralizada en servicios afectados
               </div>
             )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }

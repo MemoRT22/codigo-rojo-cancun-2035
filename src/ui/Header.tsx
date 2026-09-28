@@ -1,4 +1,4 @@
-import { INK } from '../brand/tokens';
+import { BRAND, INK } from '../brand/tokens';
 import { VerticeBrand } from '../brand/VerticeLogo';
 import type { Metric, WorldView } from '../world/useWorld';
 import { HEADER_H } from '../map/scene';
@@ -24,7 +24,7 @@ interface KpiProps {
   bad?: 'up' | 'down';
 }
 
-function Kpi({ label, value, unit, color = INK.primary, metric, bad = 'up' }: KpiProps) {
+function Kpi({ label, value, unit, color = BRAND.navy, metric, bad = 'up' }: KpiProps) {
   return (
     <div style={{ width: 200, padding: '0 14px 0 18px', borderLeft: '1px solid #D8E0E9', height: 60 }}>
       <div style={{ fontSize: 14, fontWeight: 620, letterSpacing: '0.03em', color: INK.secondary, whiteSpace: 'nowrap' }}>{label}</div>
@@ -62,7 +62,7 @@ export function Header({ w }: { w: WorldView }) {
       </div>
 
       <div className="absolute text-right" style={{ right: 48, top: 20 }}>
-        <div style={{ fontSize: 44, fontWeight: 560, letterSpacing: '0.01em', lineHeight: 1, color: INK.primary }}>{w.time}</div>
+        <div style={{ fontSize: 44, fontWeight: 560, letterSpacing: '0.01em', lineHeight: 1, color: BRAND.navy }}>{w.time}</div>
         <div style={{ fontSize: 15, fontWeight: 600, color: INK.secondary, marginTop: 7, letterSpacing: '0.02em' }}>
           {date}
         </div>

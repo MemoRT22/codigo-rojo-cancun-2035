@@ -140,7 +140,7 @@ export const DomainLayers = memo(function DomainLayers({ status, flags, zones }:
         const ring = groundCircle(n.at[0], n.at[1], sensorRadius(n.id));
         return (
           <g key={n.id}>
-            <path d={`${polyPath(ring)}Z`} fill={c} fillOpacity={s === 'off' ? 0.03 : 0.07} stroke={c} strokeOpacity="0.55" strokeWidth="1.2" strokeDasharray={s === 'off' ? '3 5' : undefined} />
+            <path d={`${polyPath(ring)}Z`} fill={c} fillOpacity={s === 'off' ? 0.04 : 0.12} stroke={c} strokeOpacity="0.65" strokeWidth="1.4" strokeDasharray={s === 'off' ? '3 5' : undefined} />
           </g>
         );
       })}
@@ -166,7 +166,7 @@ export const DomainLayers = memo(function DomainLayers({ status, flags, zones }:
           return (
             <g key={i}>
               {faces}
-              <path d={`${polyPath(c.top)}Z`} fill={top} fillOpacity={c.ring === 0 ? 0.95 : c.ring === 1 ? 0.82 : 0.66} stroke="#fff" strokeWidth="1" />
+              <path d={`${polyPath(c.top)}Z`} fill={top} fillOpacity={c.ring === 0 ? 1 : c.ring === 1 ? 0.9 : 0.76} stroke="#fff" strokeWidth="1" />
             </g>
           );
         })}
@@ -178,7 +178,7 @@ export const DomainLayers = memo(function DomainLayers({ status, flags, zones }:
           c.paths.map((d, i) => (
             <g key={`${c.id}-${i}`}>
               <path d={d} stroke="#fff" strokeWidth={3.6 + c.load * 1.2} opacity="0.85" />
-              <path d={d} stroke={dcolor('movilidad')} strokeWidth={1.5 + c.load * 0.9} opacity={0.42 + c.load * 0.25} />
+              <path d={d} stroke={dcolor('movilidad')} strokeWidth={1.8 + c.load * 1.0} opacity={0.55 + c.load * 0.25} />
             </g>
           )),
         )}

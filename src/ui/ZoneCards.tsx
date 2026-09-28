@@ -1,4 +1,4 @@
-import { DOMAIN_MAP, INK, type DomainId } from '../brand/tokens';
+import { DOMAIN_MAP, INK, STATUS, type DomainId } from '../brand/tokens';
 import { DOMAIN_ICONS } from '../brand/DomainIcons';
 import type { ZoneSummary } from '../world/derive';
 import { ZONE_MAP, type ZoneId } from '../world/model';
@@ -43,7 +43,7 @@ export function ZoneCards({ zones }: { zones: ZoneSummary[] }) {
       {zones.map((z) => {
         const p = PLACEMENT[z.id];
         const fill = STATUS_FILL[z.worst];
-        const accent = fill ?? '#C9D4E0';
+        const accent = fill ?? STATUS.ok;
         return (
           <div
             key={z.id}

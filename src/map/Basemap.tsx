@@ -31,7 +31,7 @@ export const Basemap = memo(function Basemap() {
     <svg className="absolute inset-0" width={W} height={H} viewBox={`0 0 ${W} ${H}`} aria-hidden>
       <defs>
         <linearGradient id="sea-fill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#E1EDF5" />
+          <stop offset="0" stopColor="#D0E6F4" />
           <stop offset="0.45" stopColor={MAP.sea} />
           <stop offset="1" stopColor={MAP.seaDeep} />
         </linearGradient>
@@ -52,9 +52,9 @@ export const Basemap = memo(function Basemap() {
 
       {/* Aguas someras: bandas concéntricas a la costa */}
       <g fill="none" strokeLinejoin="round" strokeLinecap="round">
-        <path d={landAt(0)} stroke={MAP.seaShallow} strokeWidth="64" strokeOpacity="0.55" />
-        <path d={landAt(0)} stroke={MAP.seaShallow} strokeWidth="38" strokeOpacity="0.8" />
-        <path d={landAt(0)} stroke="#EEF6FB" strokeWidth="16" strokeOpacity="0.9" />
+        <path d={landAt(0)} stroke={MAP.seaShallow} strokeWidth="64" strokeOpacity="0.65" />
+        <path d={landAt(0)} stroke={MAP.seaShallow} strokeWidth="38" strokeOpacity="0.85" />
+        <path d={landAt(0)} stroke="#E4F1FA" strokeWidth="16" strokeOpacity="0.92" />
       </g>
 
       {/* Sombra proyectada de la tierra sobre el mar */}

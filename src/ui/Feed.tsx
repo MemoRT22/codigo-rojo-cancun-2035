@@ -22,7 +22,7 @@ export function Feed({ events }: { events: SystemEvent[] }) {
             <span style={{ width: 9, height: 9, borderRadius: 5, marginTop: 8, background: LEVEL_COLOR[e.level], flexShrink: 0 }} />
             <div>
               <div style={{ fontSize: 16, fontWeight: 560, color: INK.primary, lineHeight: 1.25 }}>{e.message}</div>
-              <div style={{ fontSize: 14, fontWeight: 600, color: INK.tertiary, marginTop: 1 }}>
+              <div style={{ fontSize: 14, fontWeight: 600, color: LEVEL_COLOR[e.level] ?? INK.tertiary, opacity: 0.85, marginTop: 1 }}>
                 {e.time}{zoneName(e.zone) ? ` · ${zoneName(e.zone)}` : ''}
               </div>
             </div>

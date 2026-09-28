@@ -20,7 +20,7 @@ export function StateBanner({ w }: { w: WorldView }) {
     <div className="absolute" style={{ left: 48, top: 118 }}>
       <div className="absolute pointer-events-none" style={{ left: -48, top: -30, width: 820, height: 250, background: 'radial-gradient(ellipse at 20% 40%, rgba(246,248,251,0.92) 0%, rgba(246,248,251,0.75) 45%, rgba(246,248,251,0) 75%)' }} />
       <div className="flex items-center relative" style={{ gap: 14 }}>
-        <span className={pulsing ? 'animate-status' : ''} style={{ width: 16, height: 16, borderRadius: 8, background: color, boxShadow: `0 0 0 6px ${color}26` }} />
+        <span className={pulsing ? 'animate-status' : ''} style={{ width: 18, height: 18, borderRadius: 9, background: color, boxShadow: `0 0 0 7px ${color}30, 0 0 16px ${color}20` }} />
         <span key={w.spec.headline} className="animate-fade-in-up" style={{ fontSize: 40, fontWeight: 640, color: INK.primary, letterSpacing: '-0.012em', lineHeight: 1.05 }}>
           {w.spec.headline}
         </span>

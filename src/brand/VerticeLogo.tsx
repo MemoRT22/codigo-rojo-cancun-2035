@@ -9,7 +9,7 @@ export function VerticeIsotipo({ size = 44, mono = false }: { size?: number; mon
     <svg width={size} height={size} viewBox="0 0 48 48" fill="none" aria-hidden>
       <rect width="48" height="48" rx="11" fill={mono ? INK.primary : BRAND.navy} />
       <path d="M11.5 12.5 L24 35.5 L36.5 12.5" stroke="#fff" strokeWidth="4.2" strokeLinecap="round" strokeLinejoin="round" />
-      <path d="M17.5 12.5 L24 24.5 L30.5 12.5" stroke={mono ? '#9FB4CE' : '#5B9BFF'} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M17.5 12.5 L24 24.5 L30.5 12.5" stroke={mono ? '#9FB4CE' : '#69AFFF'} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
       <circle cx="24" cy="35.5" r="2.5" fill="#fff" />
     </svg>
   );

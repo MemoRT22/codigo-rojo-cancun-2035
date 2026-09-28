@@ -13,7 +13,7 @@ html, body, #root {
 }
 
 body {
-  background: #edf1f5;
+  background: linear-gradient(135deg, #F0EDE6 0%, #EDF1F5 40%, #EDF1F5 60%, #E8EDF4 100%);
   color: #0e1d33;
   font-family: 'Inter Variable', Inter, system-ui, sans-serif;
   font-variant-numeric: tabular-nums;

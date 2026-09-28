@@ -12,7 +12,7 @@ export const INK = {
 } as const;
 
 export const SURFACE = {
-  page: '#EDF1F5',
+  page: 'transparent',
   card: '#FFFFFF',
   hairline: '#D8E0E9',
   hairlineSoft: '#E6ECF2',
@@ -24,23 +24,23 @@ export const BRAND = {
   blue: '#1B5FE4',
 } as const;
 
-/** Mapa base (claro). */
+/** Mapa base (claro, cálido). */
 export const MAP = {
-  sea: '#D3E4F0',
-  seaDeep: '#C2D9EA',
-  seaShallow: '#E3EFF7',
-  land: '#F3F1EB',
-  landEdge: '#B4C0CC',
-  slab: '#C9D1DA',
-  slabDark: '#A9B5C2',
-  fabric: '#E9E6DE',
-  fabricCommercial: '#E0DCD0',
-  lagoon: '#C9DFEB',
-  lagoonEdge: '#9FBFD3',
-  roadCasing: '#DAD6CB',
-  graticule: '#B7C6D4',
-  label: '#5E7086',
-  labelWater: '#6F91AB',
+  sea: '#B8D8EE',
+  seaDeep: '#9DC8E2',
+  seaShallow: '#D6EAFA',
+  land: '#F5F2EA',
+  landEdge: '#A8B8C8',
+  slab: '#C2CAD6',
+  slabDark: '#A0ADBC',
+  fabric: '#EBE7DC',
+  fabricCommercial: '#E2DCC8',
+  lagoon: '#B5D5E8',
+  lagoonEdge: '#88B5CE',
+  roadCasing: '#D6D2C6',
+  graticule: '#AABFCE',
+  label: '#50667C',
+  labelWater: '#5882A4',
 } as const;
 
 // ── Dominios ──

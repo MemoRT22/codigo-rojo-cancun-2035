@@ -5,42 +5,46 @@
 // respuesta correcta de un acertijo.
 
 export const INK = {
-  primary: '#0E1D33',
-  secondary: '#3F5169',
-  tertiary: '#6B7C92',
-  faint: '#93A2B5',
+  primary: '#1A2B42',
+  secondary: '#4A6180',
+  tertiary: '#7B8FA6',
+  faint: '#9CADC0',
 } as const;
 
 export const SURFACE = {
-  page: 'transparent',
+  page: '#F2F4F7',
   card: '#FFFFFF',
-  hairline: '#D8E0E9',
-  hairlineSoft: '#E6ECF2',
-  shadow: 'rgba(14,29,51,0.10)',
+  cardHover: '#F9FAFB',
+  hairline: '#E0E6EE',
+  hairlineSoft: '#EBF0F5',
+  shadow: 'rgba(26,43,66,0.08)',
+  shadowLg: 'rgba(26,43,66,0.06)',
 } as const;
 
 export const BRAND = {
-  navy: '#0E2A4D',
-  blue: '#1B5FE4',
+  navy: '#15334F',
+  blue: '#2E6FE6',
 } as const;
 
-/** Mapa base (claro, cálido). */
+/** Mapa base (claro, Caribe). */
 export const MAP = {
-  sea: '#B8D8EE',
-  seaDeep: '#9DC8E2',
-  seaShallow: '#D6EAFA',
-  land: '#F5F2EA',
-  landEdge: '#A8B8C8',
-  slab: '#C2CAD6',
-  slabDark: '#A0ADBC',
-  fabric: '#EBE7DC',
-  fabricCommercial: '#E2DCC8',
-  lagoon: '#B5D5E8',
-  lagoonEdge: '#88B5CE',
-  roadCasing: '#D6D2C6',
-  graticule: '#AABFCE',
-  label: '#50667C',
-  labelWater: '#5882A4',
+  sea: '#A8D4F0',
+  seaDeep: '#8AC2E6',
+  seaShallow: '#C8E6F8',
+  seaBright: '#D8EEF9',
+  land: '#F6F3EC',
+  landEdge: '#BCCCDB',
+  slab: '#C8D0DC',
+  slabDark: '#A8B4C4',
+  fabric: '#EDEAD8',
+  fabricCommercial: '#E4DFCC',
+  lagoon: '#9AD4D8',
+  lagoonDeep: '#82C8CE',
+  lagoonEdge: '#72B4BC',
+  roadCasing: '#D4D0C6',
+  graticule: '#B4C4D4',
+  label: '#5A6E84',
+  labelWater: '#4878A0',
 } as const;
 
 // ── Dominios ──
@@ -54,15 +58,17 @@ export interface DomainToken {
   color: string;
   /** Versión legible sobre fondo blanco (texto pequeño). */
   ink: string;
+  /** Tinte suave para fondos. */
+  tint: string;
 }
 
 export const DOMAINS: DomainToken[] = [
-  { id: 'identidad', label: 'Identidad y Accesos', short: 'Identidad', color: '#7A4FE0', ink: '#6234CC' },
-  { id: 'infraestructura', label: 'Infraestructura', short: 'Infraestructura', color: '#4B5F82', ink: '#3A4D6E' },
-  { id: 'movilidad', label: 'Movilidad', short: 'Movilidad', color: '#1F7AE0', ink: '#1462BE' },
-  { id: 'turismo', label: 'Servicios Turísticos', short: 'Turismo', color: '#0FA39A', ink: '#0A7F78' },
-  { id: 'sensores', label: 'Sensores y Monitoreo', short: 'Sensores', color: '#69A82C', ink: '#4D8420' },
-  { id: 'inteligencia', label: 'Núcleo de Inteligencia', short: 'Inteligencia', color: '#C2409B', ink: '#A12C7F' },
+  { id: 'identidad', label: 'Identidad y Accesos', short: 'Identidad', color: '#6E5CCC', ink: '#5A44B8', tint: '#F0EDFA' },
+  { id: 'infraestructura', label: 'Infraestructura', short: 'Infraestructura', color: '#546B8C', ink: '#42587A', tint: '#EDF0F5' },
+  { id: 'movilidad', label: 'Movilidad', short: 'Movilidad', color: '#2B7DE6', ink: '#1A66C8', tint: '#EBF2FC' },
+  { id: 'turismo', label: 'Servicios Turísticos', short: 'Turismo', color: '#16A89C', ink: '#0E8C82', tint: '#E8F6F5' },
+  { id: 'sensores', label: 'Sensores y Monitoreo', short: 'Sensores', color: '#5CA626', ink: '#488420', tint: '#F0F5E8' },
+  { id: 'inteligencia', label: 'Núcleo de Inteligencia', short: 'Inteligencia', color: '#B84898', ink: '#9C3680', tint: '#F8EDF5' },
 ];
 
 export const DOMAIN_MAP = new Map<DomainId, DomainToken>(DOMAINS.map((d) => [d.id, d]));
@@ -71,10 +77,10 @@ export const domainColor = (id: DomainId) => DOMAIN_MAP.get(id)!.color;
 // ── Estado (se superpone al color de dominio) ──
 
 export const STATUS = {
-  ok: '#1FA971',
-  warn: '#F0A100',
-  crit: '#E23B3B',
-  isolated: '#8F9DAE',
-  recover: '#14B8A6',
-  info: '#1B5FE4',
+  ok: '#2AAE6E',
+  warn: '#E8A020',
+  crit: '#D94040',
+  isolated: '#94A4B4',
+  recover: '#18B4A4',
+  info: '#2E6FE6',
 } as const;

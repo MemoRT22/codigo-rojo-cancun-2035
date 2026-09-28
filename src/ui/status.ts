@@ -1,18 +1,16 @@
 import { INK, STATUS } from '../brand/tokens';
 import type { NodeStatus, Phase } from '../types';
 
-/** Color de TEXTO por estado (más oscuro que el color gráfico, para leerse sobre blanco). */
 export const STATUS_TEXT: Record<NodeStatus, string> = {
   ok: INK.secondary,
-  watch: '#4B5F82',
-  warn: '#A86A00',
-  crit: '#C22B2B',
-  off: '#5E6D80',
-  isolated: '#5E6D80',
-  recovering: '#0B8F82',
+  watch: '#4B6088',
+  warn: '#B48A00',
+  crit: '#C43030',
+  off: '#6A7888',
+  isolated: '#6A7888',
+  recovering: '#0E9488',
 };
 
-/** Color gráfico (puntos, barras) por estado. */
 export const STATUS_FILL: Record<NodeStatus, string | null> = {
   ok: null,
   watch: '#8AA0BE',
@@ -23,7 +21,6 @@ export const STATUS_FILL: Record<NodeStatus, string | null> = {
   recovering: STATUS.recover,
 };
 
-/** Estado de zona en lenguaje de operación (todo visible en español). */
 export const ZONE_STATUS_LABEL: Record<NodeStatus, string> = {
   ok: 'Estable',
   watch: 'En observación',

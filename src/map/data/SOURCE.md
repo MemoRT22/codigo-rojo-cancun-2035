@@ -1,17 +1,16 @@
-# Geographic Data Sources
+# Fuentes geográficas
 
-## Origin
-All geographic polygons in `cancun-geo.json` were retrieved from **OpenStreetMap** via the Nominatim geocoding API on 2026-09-25.
+`cancun-osm.json` se genera con `npm run geo` (`scripts/build-cancun-geo.mjs`) a partir de **OpenStreetMap** vía Overpass API.
 
-## License
-Data (c) OpenStreetMap contributors, licensed under the Open Data Commons Open Database License (ODbL 1.0).
-http://osm.org/copyright
+## Licencia
+Datos © colaboradores de OpenStreetMap, licencia ODbL 1.0 — https://osm.org/copyright
 
-## Features
-- **Cancun boundary**: Administrative boundary of Cancun (relation 17611454), simplified from 1,494 to ~55 points using Douglas-Peucker (epsilon 0.0008).
-- **Laguna Nichupte**: Water body polygon (relation 13637435), simplified from 2,162 to ~152 points (epsilon 0.0005).
-- **Zona Hotelera**: Two polygons (north section + main strip) from the Zona Hotelera administrative boundary, simplified from 2,499 to ~149 points (epsilon 0.0004).
-- **Roads**: Simplified polylines for Boulevard Kukulcan, Avenida Tulum, Avenida Bonampak, Ruta Aeropuerto, and Puente Nichupte, traced from known geographic positions.
+## Contenido
+- **Tierra:** línea de costa (`natural=coastline`) ensamblada en polígonos; el continente se cierra por el oeste fuera del encuadre. Isla Mujeres como isla.
+- **Agua:** Laguna Nichupté (multipolígono con sus islas), Laguna Bojórquez, Río Inglés, Puerto Cancún, Caletilla, La Ciega.
+- **Vialidad:** `highway=trunk|primary|secondary`, unificadas por nombre y simplificadas (Douglas–Peucker, 4–6 m).
+- **Aeropuerto:** pistas, plataformas y terminales de `aeroway=*`.
+- **Trama urbana:** `landuse=residential|commercial|retail|industrial` (polígonos > 1.2 ha, simplificados a 12 m).
+- **Lugares:** `place=*` (informativo).
 
-## Usage
-These files are bundled locally and do not require internet access at runtime.
+El archivo se versiona: la LED no necesita red. Las consultas se guardan en caché en `scripts/.geo-cache/` (ignorada por git).

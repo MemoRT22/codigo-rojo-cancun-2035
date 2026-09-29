@@ -19,7 +19,7 @@
 
 - [x] Estación 03 — Infraestructura v1 (`docs/stations/infraestructura.md`); NOD-204
 - [x] Estación 04 — Inteligencia v1 (`docs/stations/inteligencia.md`); AGR-27
-- [ ] Respuesta (candado final, consola de respuesta, desenlaces, restablecimiento de una acción)
+- [x] Estación 05 — Respuesta v1 (`docs/stations/respuesta.md`): candado final, planes, confirmación y desenlaces
 - [ ] Integración completa portátil
 - [ ] Prueba con alumnos (piloto con 4–8 participantes nuevos)
 

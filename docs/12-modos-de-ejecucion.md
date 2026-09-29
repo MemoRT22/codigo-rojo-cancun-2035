@@ -8,7 +8,7 @@
 |---|---|
 | **Mínima:** 1 computadora · 1 navegador · 1 pantalla | **Soportada. Es la configuración del piloto.** |
 | **Mejorada:** 1 computadora · varias pantallas | Opcional. Solo reparte las ventanas; no cambia nada más. |
-| **Futura:** varias computadoras · red local | Modo B. No implementado. |
+| **Laboratorio:** varias computadoras · misma red local | **Modo B — soportado v1.** Es la configuración del taller en el laboratorio (`docs/lab-setup.md`). |
 
 La narrativa, el Mission Engine y las estaciones **no dependen** de cuál se use. La experiencia completa debe poder
 impartirse en el HUB, un salón, una preparatoria, una feria u otro campus con **una computadora** y, opcionalmente, una
@@ -17,7 +17,7 @@ pantalla o proyector. No se requieren switches, racks, VLAN, servidor físico, b
 La pantalla central (VÉRTICE) funciona igual en monitor, televisión, proyector o pantalla LED: es un lienzo 16:9 de
 1920×1080 que se escala a cualquier tamaño. La LED del HUB es una excelente forma de presentarlo, no un requisito.
 
-## Modo A — Portátil (actual y soportado)
+## Modo A — Portátil (soportado)
 
 - Una computadora, un navegador. Sin internet obligatorio, sin red externa.
 - Cada superficie es una pestaña o ventana del **mismo navegador**:
@@ -86,17 +86,44 @@ y en todas las estaciones (`StationShell`). Basta pulsarlo; no hace falta ningú
   sistema pide reducir movimiento). El atajo `M` en VÉRTICE hace lo mismo.
 - **Accesibilidad:** `role="switch"`, `aria-checked`, etiqueta «Modo nocturno», tooltip «Cambiar a modo nocturno / claro», área de 64×44 px.
 
-## Modo B — Distribuido (futuro, NO implementado, fuera del roadmap inmediato)
+## Modo B — Laboratorio distribuido (soportado v1)
 
-- Varias computadoras en red local.
-- `WebSocketTransport` (mismo contrato `MissionTransport`) y un Mission Server que sea el host.
-- Se activa cambiando **un solo punto**: `getMissionTransport()` en `src/mission/createTransport.ts`. Motor y estaciones no cambian.
-- No exige switch, VLAN ni rack: cualquier red local sirve. El hardware dedicado solo se contempla como opción de **instalación
-  permanente** (ver `docs/08-roadmap.md`).
+Varias computadoras en la misma red local: una principal con VÉRTICE (pantalla LED) y una por estación. **Internet no es necesario.**
+Para el alumno es invisible: todas las estaciones pertenecen a VÉRTICE y reaccionan juntas. Operación práctica en **`docs/lab-setup.md`**.
 
-## Deuda deliberada para el modo distribuido
+```text
+PC principal (LED)  →  npm run lab  →  servidor local: sirve la app (dist/) + repetidor WebSocket (/ws)
+        ▲                                   ▲        ▲        ▲        ▲
+   VÉRTICE = host                         COM       ID      INFRA     IA     (navegadores de las otras PCs = clientes)
+```
 
-- Autoridad del servidor sobre `MISSION_START`/`MISSION_RESET` y reloj de misión compartido.
-- Replay con secuencia/confirmaciones (hoy es «registro completo», suficiente para una sesión corta y un solo navegador).
-- Persistencia de sesión y reconexión tras caída del host.
-- Descubrimiento de dispositivos, identidad de estación y control de acceso.
+- `WebSocketTransport` (`src/mission/webSocketTransport.ts`) cumple el mismo contrato `MissionTransport` y el mismo protocolo que el modo portátil
+  (`event` · `sync-request` · `sync`). Motor y estaciones no saben qué transporte se usa.
+- El servidor (`scripts/lab-server.mjs`) es solo un **repetidor**: reenvía cada mensaje a los demás navegadores (nunca al que lo originó). No tiene reducer,
+  reglas ni estado; **la autoridad sigue siendo VÉRTICE (host)**, que conserva el registro de eventos de la sesión.
+- **Selección de modo, explícita** (`createTransport.ts`): `?mode=lab` → WebSocket; `?mode=portable` → BroadcastChannel; sin parámetro, lo que declare el servidor
+  (`npm run lab` inyecta `window.__VERTICE_MODE__ = 'lab'`, así una estación abierta sin el parámetro no queda aislada) y, si no hay declaración, portátil.
+  La URL del socket sale del mismo servidor que sirvió la página (`ws://host:puerto/ws`, `wss` si es https).
+- **Estación que entra tarde:** conecta → pide sincronización → el host responde con el registro → la estación queda en su estado (ACTIVE, evidencia, etc.).
+- **Reconexión automática** (1 s, 2 s, 3 s y luego cada 3 s). El servidor envía un latido cada 5 s; sin latidos durante 15 s el navegador da la conexión por
+  muerta (p. ej. Wi‑Fi caído) y reconecta.
+  - *Estación:* al reconectar envía primero los eventos que emitió sin conexión y después pide sincronización.
+  - *Host:* solo su **primera** conexión difunde `MISSION_RESET`. Una reconexión **no reinicia la sesión**: recoge de las estaciones lo que hicieron mientras estuvo
+    caído, lo incorpora y difunde el registro completo. Un reinicio del servidor se recupera igual, porque el registro vive en el navegador del host.
+- `MISSION_RESET` (VÉRTICE → «Restablecer») llega a todas las estaciones. Un `PLAN_CONFIRMED` que nace en otra computadora hace que VÉRTICE muestre el desenlace
+  (ya lo hace por `mission.outcome`).
+
+**Limitaciones del modo laboratorio v1:**
+- **Recargar el navegador de VÉRTICE reinicia la sesión** (el registro vive en su memoria); no hay persistencia de la misión. Una recarga de una estación, en cambio, se recupera sola.
+- Sin reloj de misión compartido: las estaciones usan datos estáticos y el reloj narrativo vive en VÉRTICE.
+- Sin autenticación ni TLS: pensado para la red local del taller, nunca para exponerlo a internet.
+- El chip «Sincronizado» de las estaciones no refleja el estado real de la conexión (la reconexión es automática pero no se indica en pantalla).
+- Cualquier red local sirve (switch, router, Ethernet o Wi‑Fi); solo se necesita conectividad IP entre las PCs. Ver los requisitos en `docs/lab-setup.md`.
+
+## Deuda deliberada
+
+- Reloj de misión compartido.
+- Replay con secuencia/confirmaciones (hoy es «registro completo», suficiente para una sesión corta).
+- Persistencia de la sesión del host y reconexión tras recarga del host.
+- Indicador de conexión en las estaciones, descubrimiento de dispositivos, identidad de estación y control de acceso.
+- La consola de Respuesta en la pantalla LED (hoy sigue siendo una estación más; sirve también para pruebas en modo portátil).

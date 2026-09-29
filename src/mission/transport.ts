@@ -18,7 +18,7 @@ import type { MissionEvent } from './types';
  *   - `BroadcastChannelTransport` — MODO PORTÁTIL (oficial del piloto): una computadora,
  *     pestañas/ventanas del mismo navegador, VÉRTICE = host y estaciones = clientes.
  *   - `LocalTransport` — una sola ventana (degradación mínima / pruebas).
- *   - `WebSocketTransport` — MODO DISTRIBUIDO (futuro, no implementado): varias computadoras.
+ *   - `WebSocketTransport` — MODO LABORATORIO: varias computadoras en la misma red local (repetidor `scripts/lab-server.mjs`).
  *
  * Selección en un único punto: `createTransport.ts`. Ver docs/12-modos-de-ejecucion.md.
  */

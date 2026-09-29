@@ -1,6 +1,6 @@
 # Contexto de IA — leer primero
 
-Estás trabajando en **Código Rojo: Cancún 2035**, una experiencia inmersiva tipo escape room tecnológico para aspirantes de preparatoria que visitan el HUB de Inteligencia Artificial y Ciberseguridad de la Universidad Anáhuac Cancún.
+Estás trabajando en **Código Rojo: Cancún 2035**, una experiencia inmersiva de respuesta tecnológica (misión operativa, no escape room) para aspirantes de preparatoria que visitan el HUB de Inteligencia Artificial y Ciberseguridad de la Universidad Anáhuac Cancún.
 
 Este repositorio está optimizado para **diseño de experiencia y prototipado rápido**, no para producción empresarial.
 

@@ -33,7 +33,7 @@ No reescribas silenciosamente la historia para facilitar la implementación.
 
 ## Reglas de producto
 
-- Escape room, no tutorial.
+- Misión operativa, no tutorial.
 - Ningún elemento puede decir “haz clic aquí”, “ve a la estación X” o equivalente.
 - Toda pista debe ser deducible.
 - Ningún reto debe exigir experiencia previa en ciberseguridad.

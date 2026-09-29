@@ -4,6 +4,7 @@ import { useMissionClient } from '../../mission/useMissionClient';
 import { StationShell } from '../shell/StationShell';
 import { InvestigationRail } from '../shell/InvestigationRail';
 import { StationDevPanel } from '../shell/StationDevPanel';
+import { ROLES } from '../shell/roles';
 import { WaitingScreen } from '../shell/WaitingScreen';
 import { IconShield } from '../shell/icons';
 import { spotlight } from '../shell/spotlight';
@@ -96,9 +97,9 @@ function Station() {
   ) : null;
 
   return (
-    <StationShell moduleName="Identidad y Accesos" moduleSubtitle="Consola de identidad · Sesiones y accesos" phase={phase} paused={paused} dev={devPanel}>
+    <StationShell moduleName="Identidad" moduleSubtitle="Usuarios, sesiones y accesos" roleTitle={ROLES.identidad.title} phase={phase} paused={paused} dev={devPanel}>
       {phase === 'WAITING' ? (
-        <WaitingScreen label="VÉRTICE · IDENTIDAD Y ACCESOS" />
+        <WaitingScreen label="VÉRTICE · IDENTIDAD" role={ROLES.identidad} />
       ) : (
         <div className="h-full flex flex-col" style={{ padding: '1.25rem 2rem 1.5rem', gap: '0.75rem' }}>
           {paused && (

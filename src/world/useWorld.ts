@@ -38,6 +38,8 @@ export interface WorldView {
   paused: boolean;
   setState: (s: NarrativeState) => void;
   reset: () => void;
+  /** En espera (misión sin iniciar): el reloj se mantiene en la hora de arranque hasta que la sesión comience. */
+  setStandby: (v: boolean) => void;
   setSpeed: (n: number) => void;
   setPaused: (p: boolean) => void;
   inject: (message: string, level: SystemEvent['level']) => void;
@@ -80,6 +82,8 @@ export function useWorld(): WorldView {
   const latency = useRef(series(BASE.latencyMs));
   const syncRef = useRef(BASE.sync);
   const injected = useRef(0);
+  const standby = useRef(true);
+  const setStandby = useCallback((v: boolean) => { standby.current = v; }, []);
 
   const derived = useMemo(() => derive(state, clock), [state, clock]);
   const derivedRef = useRef(derived);
@@ -116,7 +120,9 @@ export function useWorld(): WorldView {
     if (paused) return;
     const iv = setInterval(() => {
       const tick = ++tickRef.current;
-      clockRef.current += 1;
+      // Antes de iniciar la sesión el reloj espera en la hora de arranque; los indicadores siguen «respirando».
+      if (standby.current && stateRef.current === 'OPERACION_NORMAL') clockRef.current = STATE_SPECS.OPERACION_NORMAL.baseTime;
+      else clockRef.current += 1;
       const d = derive(stateRef.current, clockRef.current);
       derivedRef.current = d;
 
@@ -183,6 +189,7 @@ export function useWorld(): WorldView {
     paused,
     setState,
     reset,
+    setStandby,
     setSpeed,
     setPaused,
     inject,

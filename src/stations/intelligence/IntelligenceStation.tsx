@@ -8,6 +8,7 @@ import { spotlight } from '../shell/spotlight';
 import { StationDevPanel } from '../shell/StationDevPanel';
 import { StationShell } from '../shell/StationShell';
 import { useStationSession } from '../shell/useStationSession';
+import { ROLES } from '../shell/roles';
 import { WaitingScreen } from '../shell/WaitingScreen';
 import { INTELLIGENCE_ASSISTANT } from './assistant';
 import { GROUPS, GROUP_MAP } from './data';
@@ -72,9 +73,9 @@ function Station() {
   ) : null;
 
   return (
-    <StationShell moduleName="Inteligencia" moduleSubtitle="Análisis de patrones · Agrupaciones e hipótesis" phase={phase} paused={paused} dev={devPanel}>
+    <StationShell moduleName="Inteligencia" moduleSubtitle="Patrones, evidencia e hipótesis" roleTitle={ROLES.inteligencia.title} phase={phase} paused={paused} dev={devPanel}>
       {phase === 'WAITING' ? (
-        <WaitingScreen label="VÉRTICE · INTELIGENCIA" />
+        <WaitingScreen label="VÉRTICE · INTELIGENCIA" role={ROLES.inteligencia} />
       ) : (
         <div className="h-full flex flex-col" style={{ padding: '1.25rem 2rem 1.5rem', gap: '0.75rem' }}>
           {paused && (

@@ -8,6 +8,7 @@ import { spotlight } from '../shell/spotlight';
 import { StationDevPanel } from '../shell/StationDevPanel';
 import { StationShell } from '../shell/StationShell';
 import { useStationSession } from '../shell/useStationSession';
+import { ROLES } from '../shell/roles';
 import { WaitingScreen } from '../shell/WaitingScreen';
 import { INFRASTRUCTURE_ASSISTANT } from './assistant';
 import { NODES, NODE_MAP } from './data';
@@ -73,9 +74,9 @@ function Station() {
   ) : null;
 
   return (
-    <StationShell moduleName="Infraestructura" moduleSubtitle="Observabilidad de servicios · Actividad de nodos" phase={phase} paused={paused} dev={devPanel}>
+    <StationShell moduleName="Infraestructura" moduleSubtitle="Actividad y estado de servicios" roleTitle={ROLES.infraestructura.title} phase={phase} paused={paused} dev={devPanel}>
       {phase === 'WAITING' ? (
-        <WaitingScreen label="VÉRTICE · INFRAESTRUCTURA" />
+        <WaitingScreen label="VÉRTICE · INFRAESTRUCTURA" role={ROLES.infraestructura} />
       ) : (
         <div className="h-full flex flex-col" style={{ padding: '1.25rem 2rem 1.5rem', gap: '0.75rem' }}>
           {paused && (

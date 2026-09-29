@@ -66,6 +66,9 @@ export function useMission(
     if (next) world.setState(next);
   });
 
+  // El reloj de VÉRTICE espera en la hora de arranque mientras la misión no ha iniciado (aunque el inicio llegue de una estación).
+  useEffect(() => { world.setStandby(mission.status === 'idle'); }, [mission.status, world]);
+
   // ── Reaccionar a cambios de estado narrativo ──
   const prevNarrativeRef = useRef(world.state);
   useEffect(() => {

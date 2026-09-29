@@ -14,20 +14,28 @@ import type { MissionEvent } from './types';
  *     Un evento que llega DESDE FUERA (otra estación) se reduce localmente
  *     sin volver a difundirse, rompiendo el loop.
  *
- * Hoy `LocalTransport` no hace nada con broadcast (la única instancia ya
- * procesó el evento). Mañana `WebSocketTransport` enviará el payload por
- * la red en `broadcast` y alimentará `receive` desde el listener de mensajes.
+ * Implementaciones:
+ *   - `BroadcastChannelTransport` — MODO PORTÁTIL (oficial del piloto): una computadora,
+ *     pestañas/ventanas del mismo navegador, VÉRTICE = host y estaciones = clientes.
+ *   - `LocalTransport` — una sola ventana (degradación mínima / pruebas).
+ *   - `WebSocketTransport` — MODO DISTRIBUIDO (futuro, no implementado): varias computadoras.
+ *
+ * Selección en un único punto: `createTransport.ts`. Ver docs/12-modos-de-ejecucion.md.
  */
 export interface MissionTransport {
   /** Difundir un evento originado localmente hacia las demás instancias. */
   broadcast(event: MissionEvent): void;
-  /** Suscribirse a eventos que llegan desde instancias remotas. */
+  /**
+   * Suscribirse a eventos que llegan desde instancias remotas.
+   * Cada suscripción nueva debe poder sincronizarse con el estado actual de la sesión.
+   */
   onRemote(listener: (event: MissionEvent) => void): () => void;
+  /** Libera recursos (canales, sockets). Opcional. */
+  close?(): void;
 }
 
 /**
- * Transporte local: no-op porque solo existe una instancia.
- * Preparado para ser reemplazado por WebSocketTransport.
+ * Transporte de una sola ventana: no-op porque solo existe una instancia.
  */
 export class LocalTransport implements MissionTransport {
   broadcast(_event: MissionEvent): void {

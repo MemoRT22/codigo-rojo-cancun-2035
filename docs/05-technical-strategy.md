@@ -13,33 +13,34 @@ Ship a convincing local pilot quickly, then harden only what live use proves nec
 - static/local fixtures
 - lightweight shared state
 
-No backend is required for the first single-machine/single-browser mockups.
+No backend is required: the pilot runs entirely in one browser on one machine.
 
-## Deployment evolution
+## Execution modes
 
-### Stage 1 — independent mockups
-Each interface can run independently for visual/gameplay validation.
+Full detail: [`12-modos-de-ejecucion.md`](12-modos-de-ejecucion.md).
 
-### Stage 2 — local multi-screen experience
-Introduce a tiny shared state layer only when needed to make:
-- central LED react to station solves,
-- final console unlock,
-- reset all stations.
+**Principle: degrade gracefully toward the simplest configuration.**
 
-Possible implementation later:
-- small local Node/WebSocket service,
-- lightweight realtime mechanism on the LAN.
+- Minimum: 1 computer, 1 browser, 1 screen.
+- Improved: 1 computer, several screens.
+- Future: several computers on a local network.
 
-Do not build this until individual station interactions are validated.
+Narrative and logic must not depend on which of these is used.
 
-### Stage 3 — portable workshop
-Only after pilot feedback, consider:
-- configurable scenarios,
-- scenario packs,
-- facilitator controls,
-- remote deployment,
-- analytics,
-- school-specific variants.
+### Mode A — Portable (current, supported, default for the pilot)
+- One computer, no mandatory internet, no external network, no special hardware.
+- VÉRTICE (`/`) and each station (`/station/<name>`) run as tabs/windows of the same browser.
+- State is shared through `BroadcastChannel` behind the `MissionTransport` abstraction.
+- VÉRTICE central is the **host** (keeps the session event log); stations are **clients** (request a replay whenever they subscribe).
+
+### Mode B — Distributed (future, NOT implemented, not in the pilot roadmap)
+- Several computers, `WebSocketTransport`, a local Mission Server.
+- Swapping the transport is a single point (`getMissionTransport()` in `src/mission/createTransport.ts`); engine and stations do not change.
+- No dedicated switch, VLAN or rack is required by design; dedicated hardware is only an optional permanent-installation idea.
+
+### After the pilot
+Only with pilot feedback, consider: configurable scenarios, scenario packs, facilitator controls, remote deployment,
+analytics, school-specific variants.
 
 ## State model concept
 
@@ -87,6 +88,6 @@ For visuals and narrative content, prioritize direct manual review in the actual
 
 - smooth rendering on lab hardware,
 - no noticeable input delay,
-- no unnecessary network dependency,
+- no runtime network dependency at all (no CDN, fonts or APIs; everything is bundled),
 - assets available locally,
 - predictable full-screen behavior.

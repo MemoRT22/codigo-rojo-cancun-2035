@@ -27,7 +27,8 @@ npm run dev
 | Presentación | `CommunicationsStation.tsx`, `MessageList/Reader.tsx`, `InvestigationRail.tsx` |
 | Marco reutilizable (cabecera, estado, sincronía) | `src/stations/shell/` |
 | Cliente de misión de una estación | `src/mission/useMissionClient.ts` |
-| Transporte de desarrollo entre pestañas | `src/mission/devTransport.ts` |
+| Transporte del modo portátil (BroadcastChannel) | `src/mission/broadcastTransport.ts` |
+| Selección de transporte (único punto de cambio) | `src/mission/createTransport.ts` |
 | Rutas | `src/entry.tsx` (por `pathname`, sin React Router) |
 
 Canon usado (`docs/03-game-design.md`, Hilo A): 09:11:08 · `COR-512` · «Validación requerida — actualización de identidad» ·
@@ -54,14 +55,34 @@ Ayudas (solo sistema, sin facilitador): a los 3 min sin evidencia (o 3 intentos 
 
 `MISSION_RESET` (LED: «Restablecer»; estación con `?dev=true`) devuelve la estación a «Estación preparada» y limpia su UI local.
 
-## Multi-PC: qué falta
+## Transporte: modo portátil y modo distribuido
 
-La estación solo depende de `MissionTransport`. Hoy `devTransport.ts` (BroadcastChannel; la LED es *host*, guarda el registro de
-la sesión y lo reenvía a estaciones que se abren tarde) simula el servidor entre pestañas del mismo navegador. Para multi-PC:
+```text
+Modo portátil (actual, soportado):   BroadcastChannel   → 1 computadora, pestañas del mismo navegador, sin red
+Modo distribuido (futuro):           WebSocketTransport → varias computadoras (no implementado)
+```
 
-1. Implementar `WebSocketTransport` (mismo contrato `MissionTransport`) y devolverlo en `getMissionTransport()`.
-2. Mission Server local que sea el host: reenvía eventos y entrega el registro al conectarse una estación.
-3. (Futuro) autoridad del servidor sobre `MISSION_START/RESET` y reloj de misión compartido.
+La estación solo depende de `MissionTransport`; no sabe cuál se usa. Modelo de autoridad del modo portátil: **VÉRTICE central = host**
+(guarda el registro de eventos de la sesión) y **las estaciones = clientes** (piden sincronización cada vez que se suscriben:
+montaje, StrictMode, HMR, recarga o apertura tardía, y aplican el replay del host). Detalle en `docs/12-modos-de-ejecucion.md`.
 
-Limitaciones v1: `devTransport` no cruza navegadores/PC; si la LED se recarga, las estaciones vuelven a inicio; la estación no
-muestra hora de misión (no hay reloj compartido todavía).
+Flujo soportado hoy — una computadora, un navegador:
+
+```text
+Pestaña/Ventana 1 → VÉRTICE (/)
+Pestaña/Ventana 2 → Comunicaciones (/station/comunicaciones)
+Pestaña/Ventana 3…6 → Identidad · Infraestructura · Inteligencia · Respuesta (futuras)
+```
+
+Funciona con una sola pantalla (alternando pestañas) o con varias.
+
+### Recargas
+- **Recargar la estación:** recupera la sesión en curso desde VÉRTICE (misión, `COR-512` si ya estaba registrada). Solo se pierde su UI local
+  (mensaje abierto, leídos, búsqueda/filtro, historial de análisis, contador de ayudas).
+- **Recargar VÉRTICE (host):** reinicia la sesión (misión sin iniciar; las estaciones vuelven a «Estación preparada»).
+
+### Para el modo distribuido (no implementado)
+Implementar `WebSocketTransport` y devolverlo en `getMissionTransport()`; añadir un Mission Server que sea el host. La estación no cambia.
+Deuda deliberada: ver `docs/12-modos-de-ejecucion.md`.
+
+Limitación actual: la estación no muestra hora de misión (no hay reloj compartido todavía).

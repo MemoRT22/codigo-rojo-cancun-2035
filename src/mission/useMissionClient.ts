@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useSyncExternalStore } from 'react';
 import { MissionEngine } from './engine';
-import { getMissionTransport, type TransportRole } from './devTransport';
+import { getMissionTransport } from './createTransport';
+import type { TransportRole } from './broadcastTransport';
 import { LocalTransport } from './transport';
 import type { MissionEvent, MissionState } from './types';
 

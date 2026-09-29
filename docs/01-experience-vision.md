@@ -70,7 +70,7 @@ Planned stations:
 4. AI Anomaly Analysis
 5. Final Response Console
 
-Stations can be 2–4 computers depending on available hardware. Multiple roles may share a station.
+In the portable pilot mode every station is a tab/window of the same browser on a single computer (optionally spread across several screens); the central display can be a monitor, TV, projector or LED. Dedicated computers per station are a future option for a permanent installation (see `12-modos-de-ejecucion.md`). Multiple roles may share a station.
 
 ## Replayability
 

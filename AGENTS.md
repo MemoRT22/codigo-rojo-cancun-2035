@@ -77,6 +77,19 @@ Stack inicial preferido:
 
 No agregar backend, base de datos, autenticación real, infraestructura cloud o frameworks complejos sin una necesidad concreta de experiencia.
 
+### Modo de ejecución (obligatorio)
+
+El **modo portátil** es el modo principal del piloto: una computadora, un navegador, sin internet, sin red externa y sin
+infraestructura especial (switches, racks, VLAN, servidor físico, backend). VÉRTICE (`/`) es el host y las estaciones
+(`/station/<nombre>`) son clientes que comparten estado por `BroadcastChannel` detrás de `MissionTransport`.
+
+- Toda estación debe funcionar como pestaña/ventana del mismo navegador y sincronizarse solo mediante `MissionTransport`.
+- No depender en tiempo de ejecución de CDN, fuentes remotas ni APIs externas.
+- No implementar WebSocket, servidor de sesiones, descubrimiento de dispositivos ni multi-PC hasta después del piloto (modo distribuido, futuro).
+- Degradar hacia la configuración más simple: 1 computadora / 1 navegador / 1 pantalla. La narrativa y la lógica no dependen de la configuración.
+
+Detalle en `docs/12-modos-de-ejecucion.md`.
+
 ## Política de pruebas
 
 Las pruebas automatizadas **no son un entregable por defecto**.

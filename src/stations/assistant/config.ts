@@ -21,6 +21,12 @@ export const ASSISTANT_TIMING = {
     autoReveal: false,
     maxDeferFactor: 2,
   },
+  inteligencia: {
+    stepSeconds: [120, 60, 90, 90],
+    failedAttemptsAt: [3, 4, 5, 6],
+    autoReveal: false,
+    maxDeferFactor: 2,
+  },
   /**
    * Comunicaciones conserva su comportamiento original a través del motor común:
    * recomendación 1 a los 180 s y la 2 a los 300 s (o con 3 fallos), mostradas automáticamente.

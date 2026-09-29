@@ -126,7 +126,7 @@ export function ResponseStage({ mc, countdown, onVisibleChange }: { mc: MissionC
         <div className="grid flex-1" style={{ gridTemplateColumns: 'repeat(4, 1fr)', gap: 26, marginTop: 30, minHeight: 0 }}>
           {PLANS.map((p, i) => {
             const on = p.id === reviewing;
-            const rows: [string, string][] = [['Contiene', p.summary], ['Deja activo', p.stays], ['Interrumpe', p.interrupts], ['Riesgo residual', p.residual]];
+            const rows: [string, string][] = [['Alcance', p.summary], ['Deja activo', p.stays], ['Interrumpe', p.interrupts], ['Riesgo residual', p.residual]];
             return (
               <button
                 key={p.id}
@@ -163,13 +163,22 @@ export function ResponseStage({ mc, countdown, onVisibleChange }: { mc: MissionC
     body = (
       <div className="flex flex-col items-center justify-center text-center animate-fade-in-up" style={{ height: '100%' }}>
         <div style={{ ...label, fontSize: 30, color: T.BRAND.blue }}>Plan seleccionado</div>
-        <div style={{ fontSize: 100, fontWeight: 650, letterSpacing: '-0.015em', lineHeight: 1.05, marginTop: 14 }}>{chosen.id}</div>
-        <div style={{ fontSize: 54, fontWeight: 560, marginTop: 6 }}>{chosen.title.toUpperCase()}</div>
-        <div className="grid" style={{ gridTemplateColumns: 'repeat(2, auto)', columnGap: 70, rowGap: 8, marginTop: 34, fontSize: 30, textAlign: 'left' }}>
+        <div style={{ fontSize: 92, fontWeight: 650, letterSpacing: '-0.015em', lineHeight: 1.05, marginTop: 10 }}>{chosen.id}</div>
+        <div style={{ fontSize: 50, fontWeight: 560, marginTop: 4 }}>{chosen.title.toUpperCase()}</div>
+        <div style={{ ...label, fontSize: 18, marginTop: 30 }}>Actúa sobre</div>
+        <div className="grid" style={{ gridTemplateColumns: 'repeat(2, auto)', columnGap: 70, rowGap: 6, marginTop: 8, fontSize: 28, textAlign: 'left' }}>
           {chosen.contains.map((c) => <div key={c}>· {c}</div>)}
         </div>
-        <div style={{ fontSize: 34, color: T.INK.secondary, marginTop: 40 }}>La ejecución afectará el estado operativo de VÉRTICE.</div>
-        <div className="flex items-center" style={{ gap: 32, marginTop: 44 }}>
+        <div className="grid" style={{ gridTemplateColumns: 'repeat(3, 1fr)', gap: 44, marginTop: 30, width: 1500, textAlign: 'left' }}>
+          {([['Preserva / deja activo', chosen.stays], ['Interrumpe', chosen.interrupts], ['Riesgo residual', chosen.residual]] as [string, string][]).map(([k, v]) => (
+            <div key={k} style={{ borderTop: `2px solid ${T.SURFACE.hairline}`, paddingTop: 12 }}>
+              <div style={{ ...label, fontSize: 18 }}>{k}</div>
+              <div style={{ fontSize: 26, lineHeight: 1.3, marginTop: 4 }}>{v}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{ fontSize: 32, color: T.INK.secondary, marginTop: 30 }}>La ejecución afectará el estado operativo de VÉRTICE.</div>
+        <div className="flex items-center" style={{ gap: 32, marginTop: 34 }}>
           <Btn onClick={flow.change}>VOLVER A PLANES</Btn>
           <Btn primary disabled={paused} onClick={flow.confirm}>AUTORIZAR RESPUESTA</Btn>
         </div>

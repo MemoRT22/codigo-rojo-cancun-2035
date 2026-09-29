@@ -40,4 +40,9 @@ Es el corazón ambiental de la experiencia. Comunica que existe un sistema urban
 - El color comunica estado del sistema, no la respuesta del puzzle.
 - Movimiento solo cuando represente actividad o cambio de estado.
 
-Estética: centro de operaciones 2035, oscuro, premium, legible en LED grande, cinematográfico pero creíble.
+Estética: centro de operaciones 2035, premium, legible en LED grande, cinematográfico pero creíble.
+
+> **Dirección de arte vigente (rediseño `feat/central-command-claude-redesign`):** la LED usa **modo claro**
+> (plataforma de inteligencia territorial + gemelo digital + observabilidad + GIS), no oscuro. El incidente
+> nunca tiñe la pantalla completa: se deteriora el territorio, no el producto. Ver
+> `docs/central-command/README.md`.

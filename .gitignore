@@ -6,3 +6,5 @@ dist/
 .DS_Store
 *.log
 coverage/
+scripts/.geo-cache/
+tsconfig.tsbuildinfo

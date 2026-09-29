@@ -1,55 +1,27 @@
-import { CORP } from './tokens';
+import { useTheme } from './ThemeContext';
 
-interface LogoProps {
-  size?: number;
-  color?: string;
-}
-
-export function VerticeIsotipo({ size = 40, color = CORP.verticeBlue }: LogoProps) {
+export function VerticeIsotipo({ size = 44, mono = false }: { size?: number; mono?: boolean }) {
+  const { theme: T } = useTheme();
+  const accent = T.mode === 'midnight' ? '#4A90F0' : '#6CB2FF';
   return (
-    <svg width={size} height={size} viewBox="0 0 48 48" fill="none">
-      {/* Left convergence arm */}
-      <path d="M 8 6 L 24 38" stroke={color} strokeWidth="2.4" strokeLinecap="round" />
-      {/* Right convergence arm */}
-      <path d="M 40 6 L 24 38" stroke={color} strokeWidth="2.4" strokeLinecap="round" />
-      {/* Horizontal system link */}
-      <path d="M 14 18 L 34 18" stroke={color} strokeWidth="1.4" strokeLinecap="round" opacity="0.5" />
-      {/* Vertex point — convergence */}
-      <circle cx="24" cy="38" r="3" fill={color} />
-      {/* System nodes at arms */}
-      <circle cx="8" cy="6" r="2" fill={color} opacity="0.6" />
-      <circle cx="40" cy="6" r="2" fill={color} opacity="0.6" />
+    <svg width={size} height={size} viewBox="0 0 48 48" fill="none" aria-hidden>
+      <rect width="48" height="48" rx="12" fill={mono ? T.INK.primary : T.BRAND.navy} />
+      <path d="M11.5 12.5 L24 35.5 L36.5 12.5" stroke="#fff" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M17.5 12.5 L24 24.5 L30.5 12.5" stroke={mono ? '#9FB4CE' : accent} strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="24" cy="35.5" r="2.4" fill="#fff" />
     </svg>
   );
 }
 
-interface BrandProps {
-  compact?: boolean;
-}
-
-export function VerticeBrand({ compact = false }: BrandProps) {
+export function VerticeBrand({ size = 44 }: { size?: number }) {
+  const { theme: T } = useTheme();
   return (
-    <div className="flex items-center gap-3">
-      <VerticeIsotipo size={compact ? 28 : 38} />
-      <div>
-        <div
-          className="font-semibold tracking-[0.25em] leading-none"
-          style={{
-            fontSize: compact ? '20px' : '26px',
-            color: CORP.textPrimary,
-          }}
-        >
-          VÉRTICE
-        </div>
-        <div
-          className="tracking-[0.16em] uppercase leading-none mt-1"
-          style={{
-            fontSize: compact ? '8px' : '9.5px',
-            color: CORP.textTertiary,
-            fontWeight: 500,
-          }}
-        >
-          Sistemas Urbanos
+    <div className="flex items-center" style={{ gap: size * 0.34 }}>
+      <VerticeIsotipo size={size} />
+      <div style={{ lineHeight: 1 }}>
+        <div style={{ fontSize: size * 0.58, fontWeight: 620, letterSpacing: '0.18em', color: T.INK.primary }}>VÉRTICE</div>
+        <div style={{ fontSize: size * 0.24, fontWeight: 540, letterSpacing: '0.32em', color: T.INK.faint, marginTop: size * 0.16 }}>
+          SISTEMAS URBANOS
         </div>
       </div>
     </div>

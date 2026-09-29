@@ -1,125 +1,94 @@
-import { useEffect, useCallback } from 'react';
-import type { NarrativeState } from './types';
-import { NARRATIVE_STATES } from './types';
-import { useNarrativeState } from './hooks/useNarrativeState';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { NARRATIVE_STATES, type NarrativeState } from './types';
+import { ThemeProvider, useTheme } from './brand/ThemeContext';
+import { Basemap } from './map/Basemap';
+import { DomainLayers } from './map/DomainLayers';
+import { FlowCanvas, type LiveWorld } from './map/FlowCanvas';
+import { W, H } from './map/scene';
+import { useWorld } from './world/useWorld';
 import { useCountdown } from './hooks/useCountdown';
-import { useTelemetry } from './hooks/useTelemetry';
-import { DigitalTwinMap } from './map/DigitalTwinMap';
-import { OperationsHUD } from './components/central/OperationsHUD';
+import { useMission } from './mission/useMission';
+import { Header } from './ui/Header';
+import { StateBanner } from './ui/StateBanner';
+import { ZoneCards } from './ui/ZoneCards';
+import { Dock } from './ui/Dock';
+import { Feed } from './ui/Feed';
 import { DevPanel } from './components/DevPanel';
-import { CORP } from './brand/tokens';
 
-export default function App() {
-  const { state, config, allEvents, setNarrativeState, reset: resetNarrative, injectEvent } = useNarrativeState();
-  const { display, running, start, toggle, resetTimer, stop } = useCountdown();
-  const telemetry = useTelemetry(state, config.baseTime);
+function Stage() {
+  const { theme: T, toggle: toggleTheme } = useTheme();
+  const world = useWorld();
+  const countdown = useCountdown();
+  const mc = useMission(world, countdown);
+  const [scale, setScale] = useState(1);
+  const [devOpen, setDevOpen] = useState(false);
 
-  const showCountdown = state !== 'OPERACION_NORMAL';
-  const isEscalating = state !== 'OPERACION_NORMAL';
+  const d = world.derived;
+  const live = useRef<LiveWorld>({ status: d.status, flags: d.flags, flashNodes: d.flashNodes, latencyMs: world.latency.value });
+  live.current = { status: d.status, flags: d.flags, flashNodes: d.flashNodes, latencyMs: world.latency.value };
 
-  const handleStateChange = useCallback((next: NarrativeState) => {
-    setNarrativeState(next);
-    if (next === 'ANOMALIA_DETECTADA') {
-      resetTimer();
-      setTimeout(start, 300);
-    }
-    if (next === 'CONTENCION_EXITOSA' || next === 'CONTENCION_INCOMPLETA') {
-      stop();
-    }
-    if (next === 'OPERACION_NORMAL') {
-      resetTimer();
-    }
-  }, [setNarrativeState, resetTimer, start, stop]);
+  const manualOverride = useCallback((next: NarrativeState) => {
+    mc.dispatch({ type: 'MANUAL_OVERRIDE', narrativeState: next });
+    world.setState(next);
+  }, [mc, world]);
 
-  const handleReset = useCallback(() => {
-    resetNarrative();
-    resetTimer();
-  }, [resetNarrative, resetTimer]);
+  const reset = useCallback(() => {
+    mc.resetMission();
+  }, [mc]);
+
+  useEffect(() => {
+    const fit = () => setScale(Math.min(window.innerWidth / W, window.innerHeight / H));
+    fit();
+    window.addEventListener('resize', fit);
+    return () => window.removeEventListener('resize', fit);
+  }, []);
 
   useEffect(() => {
     document.body.classList.add('dev-mode');
-
-    const handler = (e: KeyboardEvent) => {
+    const onKey = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
-
-      const keyNum = parseInt(e.key);
-      if (keyNum >= 1 && keyNum <= 7) {
-        const targetState = NARRATIVE_STATES[keyNum - 1];
-        if (targetState) handleStateChange(targetState);
-        return;
-      }
-
+      const n = parseInt(e.key);
+      if (n >= 1 && n <= 7) { manualOverride(NARRATIVE_STATES[n - 1]!); return; }
       switch (e.key.toLowerCase()) {
-        case 'r':
-          handleReset();
-          break;
-        case 'f':
-          if (document.fullscreenElement) document.exitFullscreen();
-          else document.documentElement.requestFullscreen().catch(() => {});
-          break;
-        case ' ':
-          e.preventDefault();
-          toggle();
-          break;
+        case 'r': reset(); break;
+        case 'd': setDevOpen((v) => !v); break;
+        case 'm': toggleTheme(); break;
+        case 'f': if (document.fullscreenElement) void document.exitFullscreen(); else void document.documentElement.requestFullscreen().catch(() => {}); break;
+        case ' ': e.preventDefault(); countdown.toggle(); break;
       }
     };
-
-    window.addEventListener('keydown', handler);
-    return () => window.removeEventListener('keydown', handler);
-  }, [handleStateChange, handleReset, toggle]);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [manualOverride, reset, countdown, toggleTheme]);
 
   return (
-    <div className="h-screen w-screen overflow-hidden relative" style={{ background: CORP.bgBase }}>
-      {/* Territory container with subtle perspective tilt — only the map is tilted */}
-      <div
-        className="absolute inset-0"
-        style={{
-          perspective: '2400px',
-          perspectiveOrigin: '50% 40%',
-        }}
-      >
-        <div
-          className="absolute inset-0"
-          style={{
-            transform: 'rotateX(6deg)',
-            transformOrigin: '50% 55%',
-          }}
-        >
-          <DigitalTwinMap
-            domains={config.domains}
-            isEscalating={isEscalating}
-            telemetry={telemetry}
-          />
-        </div>
+    <div className="absolute inset-0 overflow-hidden" style={{ background: T.SURFACE.page, transition: 'background 0.6s ease' }}>
+      <div className="stage-frame" style={{ transform: `translate(-50%, -50%) scale(${scale})` }}>
+        <Basemap />
+        <DomainLayers status={d.status} flags={d.flags} zones={d.zones} version={d.version} />
+        <FlowCanvas live={live} pixelRatio={Math.min(2, (window.devicePixelRatio || 1) * scale)} theme={T} />
+        <ZoneCards zones={d.zones} />
+        <Header w={world} />
+        <StateBanner w={world} />
+        <Feed events={world.feed} />
+        <Dock w={world} countdown={world.spec.showCountdown ? countdown.display : null} countdownRunning={countdown.running} />
       </div>
-
-      {/* HUD overlays — perfectly flat, outside perspective container */}
-      <OperationsHUD
-        headline={config.headline}
-        subheadline={config.subheadline}
-        severity={config.severity}
-        sync={config.sync}
-        baseTime={config.baseTime}
-        domains={config.domains}
-        events={allEvents}
-        countdownDisplay={display}
-        countdownRunning={running}
-        countdownVisible={showCountdown}
-        telemetry={telemetry}
-        isEscalating={isEscalating}
-      />
-
-      {/* Dev panel */}
       <DevPanel
-        currentState={state}
-        timerRunning={running}
-        timerDisplay={display}
-        onStateChange={handleStateChange}
-        onReset={handleReset}
-        onTimerToggle={toggle}
-        onTimerReset={resetTimer}
-        onInjectEvent={injectEvent}
+        visible={devOpen}
+        onClose={() => setDevOpen(false)}
+        world={world}
+        mc={mc}
+        countdown={countdown}
+        onManualOverride={manualOverride}
       />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <Stage />
+    </ThemeProvider>
   );
 }

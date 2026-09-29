@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -10,10 +8,15 @@
   box-sizing: border-box;
 }
 
+html, body, #root {
+  height: 100%;
+}
+
 body {
-  background: #F5F8FB;
-  color: #132238;
-  font-family: 'Inter', system-ui, sans-serif;
+  background: linear-gradient(145deg, #F4F1EC 0%, #F2F4F7 35%, #EFF3F8 65%, #F0F1F4 100%);
+  color: #1a2b42;
+  font-family: 'Inter Variable', Inter, system-ui, sans-serif;
+  font-variant-numeric: tabular-nums;
   overflow: hidden;
   cursor: none;
   -webkit-font-smoothing: antialiased;
@@ -24,45 +27,32 @@ body.dev-mode {
   cursor: default;
 }
 
-/* ── Animations ── */
+/* Lienzo de diseño fijo 1920×1080, escalado para llenar la pantalla. */
+.stage-frame {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1920px;
+  height: 1080px;
+  transform-origin: center center;
+  overflow: hidden;
+}
 
 @keyframes fade-in-up {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-@keyframes status-flash {
+@keyframes status-breathe {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
+  50% { opacity: 0.5; }
 }
 
-@keyframes pulse-slow {
-  0%, 100% { opacity: 0.5; }
-  50% { opacity: 1; }
+@keyframes gentle-pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.08); opacity: 0.85; }
 }
 
-@keyframes pulse-dot {
-  0%, 100% { transform: scale(1); opacity: 0.7; }
-  50% { transform: scale(1.3); opacity: 1; }
-}
-
-@keyframes node-breathe {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 0.9; }
-}
-
-.animate-fade-in-up {
-  animation: fade-in-up 0.6s ease-out both;
-}
-
-.animate-status-flash {
-  animation: status-flash 1.5s ease-in-out infinite;
-}
-
-.animate-pulse-slow {
-  animation: pulse-slow 4s ease-in-out infinite;
-}
-
-.animate-pulse-dot {
-  animation: pulse-dot 2s ease-in-out infinite;
-}
+.animate-fade-in-up { animation: fade-in-up 0.45s ease-out both; }
+.animate-status { animation: status-breathe 2.8s ease-in-out infinite; }
+.animate-gentle-pulse { animation: gentle-pulse 3.5s ease-in-out infinite; }

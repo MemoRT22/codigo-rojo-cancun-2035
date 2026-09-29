@@ -13,10 +13,10 @@
 - [x] Modo portátil: `BroadcastChannel` (VÉRTICE = host, estaciones = clientes, late join con replay)
 - [x] Station Shell + Mission Client
 - [x] Estación 01 — Comunicaciones v1 (`docs/stations/comunicaciones.md`)
+- [x] Estación 02 — Identidad y Accesos v1 (`docs/stations/identidad.md`); primera convergencia COR-512 + ACC-417
 
 ## Siguiente — hacia el piloto
 
-- [ ] Identidad y Accesos
 - [ ] Infraestructura
 - [ ] Inteligencia
 - [ ] Respuesta (candado final, consola de respuesta, desenlaces, restablecimiento de una acción)
@@ -51,8 +51,8 @@
 
 ### Fase 2 — Cadena causal
 - [x] Estación Comunicaciones.
-- [ ] Estación Identidad y accesos.
-- [ ] Validar correlación sin facilitador.
+- [x] Estación Identidad y accesos.
+- [ ] Validar correlación sin facilitador (con alumnos; el motor ya la resuelve).
 
 ### Fase 3 — Análisis
 - [ ] Estación Infraestructura.

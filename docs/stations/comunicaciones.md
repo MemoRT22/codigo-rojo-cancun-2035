@@ -31,8 +31,9 @@ para iniciar la misión sin VÉRTICE, marcar `COR-512`, volver a ACTIVE, reinici
 |---|---|
 | Contenido canónico (10 correos, incluido `COR-512`) | `src/stations/communications/data.ts` |
 | Lógica de descubrimiento, fases, filtros, ayudas | `src/stations/communications/logic.ts` |
-| Presentación | `CommunicationsStation.tsx`, `MessageList/Reader.tsx`, `InvestigationRail.tsx` |
-| Marco reutilizable (cabecera, estado, sincronía) | `src/stations/shell/` |
+| Presentación | `CommunicationsStation.tsx`, `MessageList.tsx`, `MessageReader.tsx` |
+| Compartido con las demás estaciones (marco, fase y acción de descubrimiento, ciclo de vida, panel de investigación, espera, dev) | `src/stations/shell/` |
+| Ayudas (Analysis Assistant común, con su calibración original) | `src/stations/assistant/`, `src/stations/communications/assistant.ts` — ver `docs/stations/identidad.md` |
 | Cliente de misión de una estación | `src/mission/useMissionClient.ts` |
 | Transporte del modo portátil (BroadcastChannel) | `src/mission/broadcastTransport.ts` |
 | Selección de transporte (único punto de cambio) | `src/mission/createTransport.ts` |
@@ -55,7 +56,7 @@ distractor urgente legítimo (`COR-513`). Los `COR-506…515` restantes son iden
    Reenviar `COR-512` no emite nada. La fase se **deriva** de la misión (`WAITING → ACTIVE → EVIDENCE_FOUND → MISSION_FINISHED`);
    no hay estado global paralelo.
 
-Ayudas (solo sistema, sin facilitador): a los 3 min sin evidencia (o 3 intentos fallidos) aparece una nota general; a los 5 min,
+Ayudas (solo sistema, sin facilitador; motor común Analysis Assistant, ver `identidad.md`): a los 3 min sin evidencia (o 3 intentos fallidos) aparece una nota general; a los 5 min,
 «compara remitente, dominio y horario» (tomado de la tarjeta de rol del Analista de Comunicaciones). No se señala ningún mensaje.
 
 ## Reset

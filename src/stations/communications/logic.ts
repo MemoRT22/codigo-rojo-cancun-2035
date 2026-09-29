@@ -4,7 +4,10 @@
 // probarla y para que otras estaciones reutilicen el patrón: derivar fase desde la misión,
 // evaluar una acción humana explícita y emitir UN evento de misión.
 
-import type { MissionEvent, MissionState } from '../../mission/types';
+import type { MissionEvent } from '../../mission/types';
+import {
+  deriveStationPhase as derivePhase, evaluateEvidence, submitEvidence, type MissionView, type SubmitResult as GenericResult,
+} from '../shell/discovery';
 import type { StationPhase } from '../shell/types';
 import { MESSAGES } from './data';
 import type { Feedback, FilterId, Message, UiAction, UiState } from './types';
@@ -13,47 +16,27 @@ import type { Feedback, FilterId, Message, UiAction, UiState } from './types';
 export const STATION_EVIDENCE = 'COR-512' as const;
 export const STATION_SOURCE = 'comunicaciones' as const;
 
-type MissionView = Pick<MissionState, 'status' | 'discoveredEvidence'>;
-
 // ── Fase de la estación (derivada del estado de misión) ──
 
-export function deriveStationPhase(m: MissionView): StationPhase {
-  if (m.status === 'idle') return 'WAITING';
-  if (m.status === 'finished') return 'MISSION_FINISHED';
-  return m.discoveredEvidence.includes(STATION_EVIDENCE) ? 'EVIDENCE_FOUND' : 'ACTIVE';
-}
+export const deriveStationPhase = (m: MissionView): StationPhase => derivePhase(m, STATION_EVIDENCE);
 
 // ── Acción de descubrimiento: «Agregar a la investigación» ──
 
-export type SubmitResult =
-  | { kind: 'registered'; evidenceId: typeof STATION_EVIDENCE }
-  | { kind: 'already' }
-  | { kind: 'no-match' }
-  | { kind: 'inactive' };
+export type SubmitResult = GenericResult<typeof STATION_EVIDENCE>;
 
 /** Decide qué ocurre al agregar una comunicación a la investigación. No tiene efectos. */
-export function evaluateSubmission(message: Message | undefined, mission: MissionView): SubmitResult {
-  if (mission.status !== 'running') return { kind: 'inactive' };
-  if (!message || message.evidence !== STATION_EVIDENCE) return { kind: 'no-match' };
-  if (mission.discoveredEvidence.includes(STATION_EVIDENCE)) return { kind: 'already' };
-  return { kind: 'registered', evidenceId: STATION_EVIDENCE };
-}
+export const evaluateSubmission = (message: Message | undefined, mission: MissionView): SubmitResult =>
+  evaluateEvidence(message?.evidence, STATION_EVIDENCE, mission);
 
 /**
  * Acción humana explícita → como máximo UN `EVIDENCE_DISCOVERED`. Reenviar la evidencia ya
  * registrada, o una comunicación sin coincidencia, no emite nada.
  */
-export function submitToInvestigation(
+export const submitToInvestigation = (
   message: Message | undefined,
   mission: MissionView,
   dispatch: (event: MissionEvent) => void,
-): SubmitResult {
-  const result = evaluateSubmission(message, mission);
-  if (result.kind === 'registered') {
-    dispatch({ type: 'EVIDENCE_DISCOVERED', evidenceId: result.evidenceId, source: STATION_SOURCE });
-  }
-  return result;
-}
+): SubmitResult => submitEvidence(message?.evidence, STATION_EVIDENCE, STATION_SOURCE, mission, dispatch);
 
 export function feedbackFor(result: SubmitResult, messageId: string): Feedback | null {
   switch (result.kind) {
@@ -89,19 +72,6 @@ export function filterMessages(
     if (!q) return true;
     return norm([m.senderName, m.senderAddress, m.subject, ...m.body].join(' ')).includes(q);
   });
-}
-
-// ── Ayudas progresivas (suenan a sistema, no a profesor) ──
-
-/** Segundos de sesión activa sin evidencia a partir de los cuales aparece cada nivel. */
-export const HELP_AT = [180, 300] as const;
-
-export type HelpLevel = 0 | 1 | 2;
-
-export function helpLevel(activeSeconds: number, misses: number): HelpLevel {
-  if (activeSeconds >= HELP_AT[1] || misses >= 3) return 2;
-  if (activeSeconds >= HELP_AT[0]) return 1;
-  return 0;
 }
 
 // ── Estado de interfaz ──

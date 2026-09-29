@@ -26,7 +26,8 @@ La pantalla central (VÉRTICE) funciona igual en monitor, televisión, proyector
   |---|---|---|
   | VÉRTICE (pantalla central) | `/` | implementada |
   | Comunicaciones | `/station/comunicaciones` | implementada (v1) |
-  | Identidad · Infraestructura · Inteligencia · Respuesta | `/station/identidad`, `/infraestructura`, `/inteligencia`, `/respuesta` | futuras |
+  | Identidad y Accesos | `/station/identidad` | implementada (v1) |
+  | Infraestructura · Inteligencia · Respuesta | `/station/infraestructura`, `/inteligencia`, `/respuesta` | futuras |
 
 - Todas comparten el estado de misión mediante **BroadcastChannel** (`src/mission/broadcastTransport.ts`), detrás de la
   abstracción `MissionTransport`. Añadir una estación nueva es añadir una ruta en `src/entry.tsx`; el sistema de misión no cambia.

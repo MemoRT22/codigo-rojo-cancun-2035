@@ -1,7 +1,8 @@
-import { useCallback, useEffect, useReducer } from 'react';
+import { useCallback, useEffect } from 'react';
 import { ThemeProvider, useTheme } from '../../brand/ThemeContext';
 import { useMissionClient } from '../../mission/useMissionClient';
 import type { ResponsePlan } from '../../mission/types';
+import { useResponseFlow } from './useResponseFlow';
 import { AnalysisAssistantCard } from '../assistant/AnalysisAssistantCard';
 import type { AssistantAction } from '../assistant/types';
 import { spotlight } from '../shell/spotlight';
@@ -11,26 +12,12 @@ import { useStationSession } from '../shell/useStationSession';
 import { WaitingScreen } from '../shell/WaitingScreen';
 import { RESPONSE_ASSISTANT } from './assistant';
 import { CorrelationLock } from './CorrelationLock';
-import { deriveStage, deriveStationPhase, PLAN_MAP, type LockKey, type Stage } from './logic';
+import { deriveStationPhase, PLAN_MAP, type Stage } from './logic';
 import { OutcomePanel } from './OutcomePanel';
 import { PlanDetail, PlanGrid, planName } from './ResponsePlans';
 
 const isDev = () => new URLSearchParams(location.search).get('dev') === 'true';
 const EVIDENCE = ['COR-512', 'ACC-417', 'NOD-204', 'AGR-27'] as const;
-
-// UI local: plan que se está revisando, si se volvió a la lista y el intento de correlación en curso. Se reinicia con la misión.
-interface Ui { reviewing: ResponsePlan | null; changing: boolean; attemptBase: number | null }
-type UiAct = { type: 'RESET' } | { type: 'REVIEW'; plan: ResponsePlan } | { type: 'SELECTED' } | { type: 'CHANGE' } | { type: 'ATTEMPT'; base: number };
-const initialUi = (): Ui => ({ reviewing: null, changing: false, attemptBase: null });
-function uiReducer(s: Ui, a: UiAct): Ui {
-  switch (a.type) {
-    case 'RESET': return initialUi();
-    case 'REVIEW': return { ...s, reviewing: a.plan };
-    case 'SELECTED': return { ...s, changing: false };
-    case 'CHANGE': return { ...s, changing: true };
-    case 'ATTEMPT': return { ...s, attemptBase: a.base };
-  }
-}
 
 const STEPS: { stage: Stage[]; label: string }[] = [
   { stage: ['lock'], label: 'Correlación' },
@@ -43,25 +30,18 @@ const STEPS: { stage: Stage[]; label: string }[] = [
 function Station() {
   const { theme: T } = useTheme();
   const { mission, dispatch } = useMissionClient('client');
-  const [ui, act] = useReducer(uiReducer, undefined, initialUi);
+  const flow = useResponseFlow(mission, dispatch);
+  const { stage, rejected } = flow;
 
   const phase = deriveStationPhase(mission);
-  const { paused, assistant } = useStationSession({ mission, phase, onRestart: () => act({ type: 'RESET' }), assistant: RESPONSE_ASSISTANT });
-  const stage = deriveStage(mission, ui.changing);
+  const { paused, assistant } = useStationSession({ mission, phase, onRestart: flow.reset, assistant: RESPONSE_ASSISTANT });
   const inDecision = stage === 'plans' || stage === 'confirm';
 
   // La orientación de Respuesta solo cuenta desde que se autoriza la respuesta.
   const { reset: resetAssistant, progress } = assistant;
   useEffect(() => { if (inDecision) resetAssistant(); }, [inDecision, resetAssistant]);
 
-  const rejected = ui.attemptBase !== null && mission.failedCorrelationAttempts > ui.attemptBase && !mission.finalCorrelationValidated;
-  const submitLock = useCallback((ids: Record<LockKey, string>) => {
-    act({ type: 'ATTEMPT', base: mission.failedCorrelationAttempts });
-    dispatch({ type: 'FINAL_CORRELATION_SUBMITTED', ...ids });
-  }, [mission.failedCorrelationAttempts, dispatch]);
-
-  const review = useCallback((plan: ResponsePlan) => { act({ type: 'REVIEW', plan }); progress(`plan:${plan}`); }, [progress]);
-  const selectPlan = (plan: ResponsePlan) => { dispatch({ type: 'PLAN_SELECTED', plan }); act({ type: 'SELECTED' }); };
+  const review = useCallback((plan: ResponsePlan) => { flow.review(plan); progress(`plan:${plan}`); }, [flow, progress]);
 
   const runAssistantAction = useCallback((a: AssistantAction) => {
     if (a.id === 'focus-plans') spotlight('resp-plans', T.BRAND.blue);
@@ -79,7 +59,7 @@ function Station() {
     />
   ) : null;
 
-  const reviewed = ui.reviewing ? PLAN_MAP.get(ui.reviewing) : undefined;
+  const reviewed = flow.reviewing ? PLAN_MAP.get(flow.reviewing) : undefined;
   const chosen = mission.selectedPlan ? PLAN_MAP.get(mission.selectedPlan) : undefined;
   const btn = (primary: boolean, enabled = true): React.CSSProperties => ({
     padding: '0.8rem 1.5rem', borderRadius: '0.7rem', fontSize: '0.9375rem', fontWeight: 660, cursor: enabled ? 'pointer' : 'default', letterSpacing: '0.01em',
@@ -121,7 +101,7 @@ function Station() {
           </ol>
 
           {stage === 'lock' && (
-            <CorrelationLock paused={paused} evidenceCount={mission.discoveredEvidence.length} rejected={rejected} onSubmit={submitLock} />
+            <CorrelationLock paused={paused} evidenceCount={mission.discoveredEvidence.length} rejected={rejected} onSubmit={flow.submitLock} />
           )}
 
           {stage === 'pending' && (
@@ -136,12 +116,12 @@ function Station() {
                 {banner('CORRELACIÓN VERIFICADA', stage === 'plans' ? 'Autorización de respuesta concedida. Revisa los planes disponibles.' : 'Autorización de respuesta concedida.')}
                 {stage === 'plans' && (
                   <>
-                    <PlanGrid reviewing={ui.reviewing} disabled={paused} onReview={review} />
+                    <PlanGrid reviewing={flow.reviewing} disabled={paused} onReview={review} />
                     {reviewed && (
                       <PlanDetail plan={reviewed}>
                         <div className="flex items-center justify-between" style={{ gap: '1rem' }}>
                           <div style={{ fontSize: '1.15rem', fontWeight: 650 }}>Plan {planName(reviewed.id)}</div>
-                          <button style={btn(true, !paused)} disabled={paused} onClick={() => selectPlan(reviewed.id)}>Seleccionar plan</button>
+                          <button style={btn(true, !paused)} disabled={paused} onClick={() => flow.selectPlan(reviewed.id)}>Seleccionar plan</button>
                         </div>
                       </PlanDetail>
                     )}
@@ -153,8 +133,8 @@ function Station() {
                     <div style={{ fontSize: '1.4rem', fontWeight: 650, marginTop: '0.2rem' }}>{planName(chosen.id)}</div>
                     <div style={{ fontSize: '0.9375rem', color: T.INK.secondary, marginTop: '0.3rem' }}>Revisa las consecuencias antes de autorizar.</div>
                     <div className="flex items-center" style={{ gap: '0.75rem', marginTop: '1rem' }}>
-                      <button style={btn(true, !paused)} disabled={paused} onClick={() => dispatch({ type: 'PLAN_CONFIRMED' })}>AUTORIZAR RESPUESTA</button>
-                      <button style={btn(false)} onClick={() => act({ type: 'CHANGE' })}>Volver a los planes</button>
+                      <button style={btn(true, !paused)} disabled={paused} onClick={flow.confirm}>AUTORIZAR RESPUESTA</button>
+                      <button style={btn(false)} onClick={flow.change}>Volver a los planes</button>
                     </div>
                   </PlanDetail>
                 )}

@@ -14,6 +14,7 @@ import { ZoneCards } from './ui/ZoneCards';
 import { Dock } from './ui/Dock';
 import { Feed } from './ui/Feed';
 import { DevPanel } from './components/DevPanel';
+import { ResponseStage } from './ui/ResponseStage';
 
 function Stage() {
   const { theme: T, toggle: toggleTheme } = useTheme();
@@ -22,6 +23,9 @@ function Stage() {
   const mc = useMission(world, countdown);
   const [scale, setScale] = useState(1);
   const [devOpen, setDevOpen] = useState(false);
+  // La consola de respuesta (pantalla LED) está a la vista: se desactivan los atajos de facilitación que un toque accidental podría disparar.
+  const responseStageRef = useRef(false);
+  const onResponseStage = useCallback((v: boolean) => { responseStageRef.current = v; }, []);
 
   const d = world.derived;
   const live = useRef<LiveWorld>({ status: d.status, flags: d.flags, flashNodes: d.flashNodes, latencyMs: world.latency.value });
@@ -48,6 +52,7 @@ function Stage() {
     const onKey = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
       const n = parseInt(e.key);
+      if (responseStageRef.current && ((n >= 1 && n <= 7) || e.key.toLowerCase() === 'r' || e.key === ' ')) return;
       if (n >= 1 && n <= 7) { manualOverride(NARRATIVE_STATES[n - 1]!); return; }
       switch (e.key.toLowerCase()) {
         case 'r': reset(); break;
@@ -72,6 +77,7 @@ function Stage() {
         <StateBanner w={world} />
         <Feed events={world.feed} />
         <Dock w={world} countdown={world.spec.showCountdown ? countdown.display : null} countdownRunning={countdown.running} />
+        <ResponseStage mc={mc} countdown={world.spec.showCountdown ? countdown.display : null} onVisibleChange={onResponseStage} />
       </div>
       <DevPanel
         visible={devOpen}

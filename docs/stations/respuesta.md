@@ -72,9 +72,31 @@ continuidad, riesgo residual y servicios saludables; **nunca nombra un plan como
 `MISSION_RESET` deja `selectedPlan`, `outcome`, `finalCorrelationValidated` y `responseUnlocked` en su estado inicial (reducer), Respuesta vuelve a «Estación preparada» con el candado vacío, y VÉRTICE a operación normal
 (tanto si el reset se hace en VÉRTICE como desde una estación con `?dev=true`).
 
+## Respuesta en la pantalla LED (modo laboratorio)
+
+En el laboratorio no hay una quinta computadora: son **4 estaciones físicas** (Comunicaciones, Identidad, Infraestructura, Inteligencia) y **la fase final ocurre en VÉRTICE (LED)**.
+Es una **segunda presentación del mismo flujo**: misma lógica (`useResponseFlow`, `deriveStage`), mismos eventos (`FINAL_CORRELATION_SUBMITTED`, `PLAN_SELECTED`, `PLAN_CONFIRMED`),
+mismos contenidos (`PLANS`, `OUTCOMES`, `normalizeId`). El Mission Engine no cambia. Componente: `src/ui/ResponseStage.tsx`.
+
+| Transición | Candado | Planes | Confirmación | Consecuencia |
+|---|---|---|---|---|
+| ![](respuesta-led-transicion.png) | ![](respuesta-led-candado.png) | ![](respuesta-led-planes.png) | ![](respuesta-led-confirmacion.png) | ![](respuesta-led-consecuencia.png) |
+
+- **Detección:** VÉRTICE observa `mission.discoveredEvidence` y comprueba los cuatro identificadores canónicos (`EVIDENCE_IDS.every(...)`). Con menos de cuatro, el mapa se ve exactamente como antes.
+- **Transición grupal (~3 s):** «INVESTIGACIÓN CONSOLIDADA · Cuatro evidencias vinculadas al incidente» y «CÉLULA DE RESPUESTA REQUERIDA · Reúnan al equipo frente a VÉRTICE». Es la señal para que todos se reúnan frente a la LED.
+- **Después, la consola** se dibuja sobre el mapa (atenuado), en el lienzo 1920×1080, con campos y botones grandes para operar con mouse y teclado desde la computadora de la LED:
+  1. **Candado:** cadena ORIGEN → IDENTIDAD → PROPAGACIÓN → CORRELACIÓN, sin autocompletar; mismo rechazo neutral («Revisen origen, identidad, propagación y correlación»).
+  2. **Autorización operativa en curso** mientras `finalCorrelationValidated && !responseUnlocked` (no vuelve al mapa; no adelanta el reloj ni dispara `RESPONSE_UNLOCKED`).
+  3. **Respuesta autorizada:** los cuatro planes en columnas de igual peso visual (contiene · deja activo · interrumpe · riesgo residual), luego «SELECCIONAR PLAN» → confirmación → «AUTORIZAR RESPUESTA».
+  4. **Consecuencia** del plan ejecutado en grande (mismo contenido que `OutcomePanel`) y, cuando el grupo termina de leer, el botón **VER ESTADO DE VÉRTICE**, que regresa al mapa en `CONTENCION_EXITOSA` o `CONTENCION_INCOMPLETA`.
+- **Derivado de la misión:** la etapa sale de `MissionState` (candado / pendiente / planes / confirmación / consecuencia). Solo la introducción de 3 s y el «ya lo leímos» del desenlace son estado local de presentación. Recargar VÉRTICE sigue reiniciando la misión.
+- **Reset:** «Restablecer» limpia la consola (plan abierto, campos, desenlace reconocido) y VÉRTICE vuelve a operación normal.
+- **Atajos de facilitación:** mientras la consola está a la vista se desactivan `1`–`7`, `R` y espacio (no se puede reiniciar o mover el reloj por un toque accidental); `D` (panel de facilitación), `M` y `F` siguen activos.
+- **Portátil:** la ruta `/station/respuesta` sigue disponible y funciona igual. Si se usa junto con VÉRTICE (misma misión), ambas vistas se mantienen coherentes: un plan confirmado en la estación aparece como consecuencia en la LED.
+
 ## Limitaciones conocidas
 
-- VÉRTICE tiene un solo desenlace «Contención incompleta» para ALFA, BETA y GAMMA; la consecuencia específica de cada uno solo se ve en la estación Respuesta.
+- El mapa de VÉRTICE tiene un solo desenlace «Contención incompleta» para ALFA, BETA y GAMMA; la consecuencia específica de cada uno se ve en la consola de respuesta (estación o LED) antes de volver al mapa.
 - Las horas de la autorización dependen del reloj simulado de VÉRTICE (sin reloj compartido). Con velocidad normal, la autorización llega ~9 min después de iniciar; en pruebas se usa `?speed=`.
 - Tras `PLAN_CONFIRMED` el motor marca la misión como `finished`: las demás estaciones muestran «Sesión finalizada».
 - No hay debrief, estadísticas ni puntuación (fuera del alcance). Sin tests automáticos propios (fase piloto); validado manualmente en el navegador.

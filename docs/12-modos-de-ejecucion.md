@@ -113,6 +113,10 @@ PC principal (LED)  →  npm run lab  →  servidor local: sirve la app (dist/) 
 - `MISSION_RESET` (VÉRTICE → «Restablecer») llega a todas las estaciones. Un `PLAN_CONFIRMED` que nace en otra computadora hace que VÉRTICE muestre el desenlace
   (ya lo hace por `mission.outcome`).
 
+**Laboratorio: 4 estaciones físicas + Respuesta integrada en VÉRTICE.** En el laboratorio real hay cuatro puestos de análisis (Comunicaciones, Identidad, Infraestructura,
+Inteligencia) y la pantalla LED con VÉRTICE. Cuando las cuatro evidencias están reunidas, VÉRTICE convierte la LED en el punto de reunión de la célula de respuesta
+(candado, planes, autorización y consecuencia; `docs/stations/respuesta.md`). **Portátil:** la ruta `/station/respuesta` sigue disponible (una computadora, pruebas, contingencia).
+
 **Limitaciones del modo laboratorio v1:**
 - **Recargar el navegador de VÉRTICE reinicia la sesión** (el registro vive en su memoria); no hay persistencia de la misión. Una recarga de una estación, en cambio, se recupera sola.
 - Sin reloj de misión compartido: las estaciones usan datos estáticos y el reloj narrativo vive en VÉRTICE.

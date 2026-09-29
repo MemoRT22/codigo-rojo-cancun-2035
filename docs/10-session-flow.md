@@ -120,6 +120,8 @@ Este es el momento conceptual más importante de IA.
 
 ## 8. Correlación final
 
+> **En el laboratorio (4 estaciones físicas):** no hay estación de Respuesta. Al reunirse la cuarta evidencia, VÉRTICE (LED) muestra «Célula de respuesta requerida — Reúnan al equipo frente a VÉRTICE» y **la correlación final, los planes, la autorización y la consecuencia ocurren en la LED**. Ver `docs/stations/respuesta.md`.
+
 El equipo llega a la consola final e introduce:
 
 - ORIGEN → `COR-512`

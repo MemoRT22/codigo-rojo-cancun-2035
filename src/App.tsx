@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { NARRATIVE_STATES, type NarrativeState } from './types';
+import { ThemeProvider, useTheme } from './brand/ThemeContext';
 import { Basemap } from './map/Basemap';
 import { DomainLayers } from './map/DomainLayers';
 import { FlowCanvas, type LiveWorld } from './map/FlowCanvas';
@@ -12,9 +13,9 @@ import { ZoneCards } from './ui/ZoneCards';
 import { Dock } from './ui/Dock';
 import { Feed } from './ui/Feed';
 import { DevPanel } from './components/DevPanel';
-import { SURFACE } from './brand/tokens';
 
-export default function App() {
+function Stage() {
+  const { theme: T, toggle: toggleTheme } = useTheme();
   const world = useWorld();
   const { display, running, start, toggle, resetTimer, stop } = useCountdown();
   const [scale, setScale] = useState(1);
@@ -49,20 +50,21 @@ export default function App() {
       switch (e.key.toLowerCase()) {
         case 'r': reset(); break;
         case 'd': setDevOpen((v) => !v); break;
+        case 'm': toggleTheme(); break;
         case 'f': if (document.fullscreenElement) void document.exitFullscreen(); else void document.documentElement.requestFullscreen().catch(() => {}); break;
         case ' ': e.preventDefault(); toggle(); break;
       }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [changeState, reset, toggle]);
+  }, [changeState, reset, toggle, toggleTheme]);
 
   return (
-    <div className="absolute inset-0 overflow-hidden" style={{ background: SURFACE.page }}>
+    <div className="absolute inset-0 overflow-hidden" style={{ background: T.SURFACE.page, transition: 'background 0.6s ease' }}>
       <div className="stage-frame" style={{ transform: `translate(-50%, -50%) scale(${scale})` }}>
         <Basemap />
         <DomainLayers status={d.status} flags={d.flags} zones={d.zones} version={d.version} />
-        <FlowCanvas live={live} pixelRatio={Math.min(2, (window.devicePixelRatio || 1) * scale)} />
+        <FlowCanvas live={live} pixelRatio={Math.min(2, (window.devicePixelRatio || 1) * scale)} theme={T} />
         <ZoneCards zones={d.zones} />
         <Header w={world} />
         <StateBanner w={world} />
@@ -84,5 +86,13 @@ export default function App() {
         onInjectEvent={world.inject}
       />
     </div>
+  );
+}
+
+export default function App() {
+  return (
+    <ThemeProvider>
+      <Stage />
+    </ThemeProvider>
   );
 }

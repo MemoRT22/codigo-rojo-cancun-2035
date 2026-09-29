@@ -1,5 +1,5 @@
 import { useEffect, useRef, type MutableRefObject } from 'react';
-import { DOMAIN_MAP, STATUS } from '../brand/tokens';
+import type { Theme } from '../brand/themes';
 import type { NodeStatus } from '../types';
 import type { Flags } from '../world/scenario';
 import { NODES } from '../world/model';
@@ -18,6 +18,7 @@ export interface LiveWorld {
 interface Props {
   live: MutableRefObject<LiveWorld>;
   pixelRatio: number;
+  theme: Theme;
 }
 
 const ELL = (() => {
@@ -28,13 +29,6 @@ const ELL = (() => {
 })();
 const PX_M = STAGE.pxPerMeter;
 
-const col = (id: string) => DOMAIN_MAP.get(id as never)!.color;
-const BLUE = col('movilidad');
-const VIOLET = col('identidad');
-const GREEN = col('sensores');
-const SLATE = col('infraestructura');
-const MAGENTA = col('inteligencia');
-
 interface Mover { poly: Poly; d: number; v: number; kind: 'veh' | 'pkt' | 'ses' | 'cor' | 'anom'; from: string; to: string; phase: number }
 
 function rgba(hex: string, a: number) {
@@ -42,7 +36,7 @@ function rgba(hex: string, a: number) {
   return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`;
 }
 
-export function FlowCanvas({ live, pixelRatio }: Props) {
+export function FlowCanvas({ live, pixelRatio, theme: T }: Props) {
   const ref = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -50,6 +44,15 @@ export function FlowCanvas({ live, pixelRatio }: Props) {
     const ctx = canvas.getContext('2d')!;
     canvas.width = W * pixelRatio;
     canvas.height = H * pixelRatio;
+
+    const col = (id: string) => T.DOMAIN_MAP.get(id as never)!.color;
+    const BLUE = col('movilidad');
+    const VIOLET = col('identidad');
+    const GREEN = col('sensores');
+    const SLATE = col('infraestructura');
+    const MAGENTA = col('inteligencia');
+    const dark = T.mode === 'midnight';
+    const haloColor = T.ui.particleHalo;
 
     const movers: Mover[] = [];
     for (const c of CORRIDOR_GEO) {
@@ -98,39 +101,36 @@ export function FlowCanvas({ live, pixelRatio }: Props) {
       ctx.setTransform(pixelRatio, 0, 0, pixelRatio, 0, 0);
       ctx.clearRect(0, 0, W, H);
 
-      // ── Sensores: pings suaves ──
       for (const n of sensors) {
         const s = status[n.id]!;
         const [x, y] = NODE_POS[n.id]!;
         const R = sensorRadius(n.id) * PX_M;
         if (s === 'off') {
           const blink = Math.sin(t * 4 + n.id.length) > 0.7;
-          if (blink) { ellipse(x, y, R * 0.35); ctx.strokeStyle = rgba(STATUS.isolated, 0.5); ctx.lineWidth = 1.2; ctx.setLineDash([3, 5]); ctx.stroke(); ctx.setLineDash([]); }
+          if (blink) { ellipse(x, y, R * 0.35); ctx.strokeStyle = rgba(T.STATUS.isolated, 0.5); ctx.lineWidth = 1.2; ctx.setLineDash([3, 5]); ctx.stroke(); ctx.setLineDash([]); }
           continue;
         }
         const k = (t / 5.5 + (pingOffset.get(n.id) ?? 0)) % 1;
         ellipse(x, y, R * k);
-        ctx.strokeStyle = rgba(GREEN, (1 - k) * 0.55);
+        ctx.strokeStyle = rgba(GREEN, (1 - k) * (dark ? 0.65 : 0.55));
         ctx.lineWidth = 1.4;
         ctx.stroke();
       }
 
-      // ── Sincronización: ondas azules suaves ──
       for (const id of flashNodes) {
         const [x, y] = NODE_POS[id]!;
         const k = (t * 0.7 + id.length * 0.13) % 1;
         ellipse(x, y, 14 + k * 42);
-        ctx.strokeStyle = rgba(STATUS.info, (1 - k) * 0.65);
+        ctx.strokeStyle = rgba(T.STATUS.info, (1 - k) * 0.65);
         ctx.lineWidth = 1.8;
         ctx.stroke();
       }
 
-      // ── Nodos con incidente: emanaciones ──
       for (const n of NODES) {
         const s = status[n.id]!;
         if (s !== 'warn' && s !== 'crit' && s !== 'recovering') continue;
         const [x, y] = NODE_POS[n.id]!;
-        const c = s === 'crit' ? STATUS.crit : s === 'warn' ? STATUS.warn : STATUS.recover;
+        const c = s === 'crit' ? T.STATUS.crit : s === 'warn' ? T.STATUS.warn : T.STATUS.recover;
         const period = s === 'crit' ? 1.8 : 2.8;
         const maxR = (s === 'crit' ? 65 : 42) * 1;
         for (let w = 0; w < 2; w++) {
@@ -142,12 +142,11 @@ export function FlowCanvas({ live, pixelRatio }: Props) {
         }
       }
 
-      // ── Partículas ──
       for (const m of movers) {
         const fromS = m.from ? status[m.from] : undefined;
         const toS = m.to ? status[m.to] : undefined;
         let speed = m.v;
-        let color = SLATE, size = 2.8, alpha = 0.85;
+        let color = SLATE, size = 2.8, alpha = dark ? 0.9 : 0.85;
 
         if (m.kind === 'veh') {
           speed *= slow;
@@ -155,11 +154,11 @@ export function FlowCanvas({ live, pixelRatio }: Props) {
         } else if (m.kind === 'pkt') {
           const bad = fromS === 'crit' || toS === 'crit' ? 'crit' : fromS === 'warn' || toS === 'warn' ? 'warn' : null;
           if (fromS === 'off' || toS === 'off' || fromS === 'isolated' || toS === 'isolated') continue;
-          if (bad) { color = bad === 'crit' ? STATUS.crit : STATUS.warn; speed *= bad === 'crit' ? 2.2 : 1.6; size = 3.4; }
+          if (bad) { color = bad === 'crit' ? T.STATUS.crit : T.STATUS.warn; speed *= bad === 'crit' ? 2.2 : 1.6; size = 3.4; }
         } else if (m.kind === 'ses') {
           if (fromS === 'off' || toS === 'off') continue;
-          color = VIOLET; size = 2.4; alpha = 0.8;
-          if (fromS === 'warn' || toS === 'warn') color = STATUS.warn;
+          color = VIOLET; size = 2.4; alpha = dark ? 0.85 : 0.8;
+          if (fromS === 'warn' || toS === 'warn') color = T.STATUS.warn;
         } else if (m.kind === 'cor') {
           if (status[m.from] === 'off' || status[m.to] === 'off') continue;
           color = MAGENTA; size = 2.8; speed *= flags.correlated ? 1.8 : 1;
@@ -172,7 +171,7 @@ export function FlowCanvas({ live, pixelRatio }: Props) {
 
         ctx.beginPath();
         ctx.arc(x, y, size + 1.6, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(255,255,255,0.75)';
+        ctx.fillStyle = haloColor;
         ctx.fill();
         ctx.beginPath();
         ctx.arc(x, y, size, 0, Math.PI * 2);
@@ -180,14 +179,13 @@ export function FlowCanvas({ live, pixelRatio }: Props) {
         ctx.fill();
       }
 
-      // ── Sesión remota ──
       if (flags.remoteSession === 'active') {
         for (const m of remote) {
           m.d += m.v * dt;
           if (m.d > m.poly.len) m.d -= m.poly.len;
           const [x, y] = pointAt(m.poly, m.d);
-          ctx.beginPath(); ctx.arc(x, y, 4.4, 0, Math.PI * 2); ctx.fillStyle = 'rgba(255,255,255,0.85)'; ctx.fill();
-          ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fillStyle = rgba(STATUS.crit, 0.9); ctx.fill();
+          ctx.beginPath(); ctx.arc(x, y, 4.4, 0, Math.PI * 2); ctx.fillStyle = dark ? 'rgba(0,0,0,0.4)' : 'rgba(255,255,255,0.85)'; ctx.fill();
+          ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fillStyle = rgba(T.STATUS.crit, 0.9); ctx.fill();
         }
       }
 
@@ -195,7 +193,7 @@ export function FlowCanvas({ live, pixelRatio }: Props) {
     };
     raf = requestAnimationFrame(frame);
     return () => cancelAnimationFrame(raf);
-  }, [live, pixelRatio]);
+  }, [live, pixelRatio, T]);
 
   return <canvas ref={ref} className="absolute inset-0 pointer-events-none" style={{ width: W, height: H }} />;
 }

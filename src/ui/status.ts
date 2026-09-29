@@ -1,25 +1,5 @@
-import { INK, STATUS } from '../brand/tokens';
+import type { Theme } from '../brand/themes';
 import type { NodeStatus, Phase } from '../types';
-
-export const STATUS_TEXT: Record<NodeStatus, string> = {
-  ok: INK.secondary,
-  watch: '#4B6088',
-  warn: '#B48A00',
-  crit: '#C43030',
-  off: '#6A7888',
-  isolated: '#6A7888',
-  recovering: '#0E9488',
-};
-
-export const STATUS_FILL: Record<NodeStatus, string | null> = {
-  ok: null,
-  watch: '#8AA0BE',
-  warn: STATUS.warn,
-  crit: STATUS.crit,
-  off: STATUS.isolated,
-  isolated: STATUS.isolated,
-  recovering: STATUS.recover,
-};
 
 export const ZONE_STATUS_LABEL: Record<NodeStatus, string> = {
   ok: 'Estable',
@@ -33,16 +13,16 @@ export const ZONE_STATUS_LABEL: Record<NodeStatus, string> = {
 
 export interface Severity { label: string; color: string }
 
-export function severityOf(phase: Phase): Severity {
+export function severityOf(phase: Phase, T: Theme): Severity {
   switch (phase) {
-    case 'normal': return { label: 'Normal', color: STATUS.ok };
-    case 'observacion': return { label: 'Baja', color: '#6E8FC9' };
-    case 'investigacion': return { label: 'Moderada', color: STATUS.warn };
+    case 'normal': return { label: 'Normal', color: T.STATUS.ok };
+    case 'observacion': return { label: 'Baja', color: T.mode === 'midnight' ? '#7090B8' : '#6E8FC9' };
+    case 'investigacion': return { label: 'Moderada', color: T.STATUS.warn };
     case 'escalamiento':
     case 'correlacion':
-    case 'respuesta': return { label: 'Alta', color: STATUS.crit };
-    case 'recuperacion': return { label: 'Moderada', color: STATUS.recover };
-    case 'contencion_exitosa': return { label: 'Controlada', color: STATUS.ok };
-    case 'contencion_incompleta': return { label: 'Crítica', color: STATUS.crit };
+    case 'respuesta': return { label: 'Alta', color: T.STATUS.crit };
+    case 'recuperacion': return { label: 'Moderada', color: T.STATUS.recover };
+    case 'contencion_exitosa': return { label: 'Controlada', color: T.STATUS.ok };
+    case 'contencion_incompleta': return { label: 'Crítica', color: T.STATUS.crit };
   }
 }

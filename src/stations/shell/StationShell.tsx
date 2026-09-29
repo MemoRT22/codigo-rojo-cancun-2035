@@ -1,6 +1,7 @@
 import { useEffect, type ReactNode } from 'react';
 import { useTheme } from '../../brand/ThemeContext';
 import { VerticeIsotipo } from '../../brand/VerticeLogo';
+import { ThemeToggle } from '../../brand/ThemeToggle';
 import type { StationPhase } from './types';
 
 interface Props {
@@ -81,6 +82,7 @@ export function StationShell({ moduleName, moduleSubtitle, phase, paused, toolba
             <SyncIcon color={syncColor} />
             {sync.label}
           </span>
+          <ThemeToggle />
         </div>
       </header>
 

@@ -1,4 +1,5 @@
 import { useTheme } from '../brand/ThemeContext';
+import { ThemeToggle } from '../brand/ThemeToggle';
 import { VerticeBrand } from '../brand/VerticeLogo';
 import type { Metric, WorldView } from '../world/useWorld';
 import { HEADER_H } from '../map/scene';
@@ -30,9 +31,11 @@ export function Header({ w }: { w: WorldView }) {
   const servicesColor = d.servicesUp === d.servicesTotal ? T.BRAND.navy : d.servicesUp <= 4 ? T.STATUS_TEXT.crit : T.STATUS_TEXT.warn;
   const nodesColor = d.nodesLinked === d.nodesTotal ? T.BRAND.navy : T.STATUS_TEXT.warn;
   const latColor = w.latency.value >= 60 ? T.STATUS_TEXT.crit : w.latency.value >= 30 ? T.STATUS_TEXT.warn : T.BRAND.navy;
-  const date = new Intl.DateTimeFormat('es-MX', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
-    .format(new Date(Date.UTC(2035, 8, 25)))
-    .replace(/^./, (c) => c.toUpperCase());
+  // Fecha de la ficción (25 de septiembre de 2035), en formato compacto para no competir con el selector de tema.
+  const dp = new Intl.DateTimeFormat('es-MX', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric', timeZone: 'UTC' })
+    .formatToParts(new Date(Date.UTC(2035, 8, 25)));
+  const part = (t: string) => (dp.find((x) => x.type === t)?.value ?? '').replace('.', '');
+  const date = `${part('weekday').replace(/^./, (c) => c.toUpperCase())} ${part('day')} ${part('month')} ${part('year')}`;
 
   function Kpi({ label, value, unit, color = T.BRAND.navy, metric, bad = 'up' }: KpiProps) {
     return (
@@ -60,7 +63,10 @@ export function Header({ w }: { w: WorldView }) {
         <Kpi label="Eventos por minuto" value={w.events.value.toLocaleString('es-MX')} metric={w.events} bad="up" />
         <Kpi label="Latencia" value={String(w.latency.value)} unit="ms" color={latColor} metric={w.latency} bad="up" />
       </div>
-      <div className="absolute text-right" style={{ right: 48, top: 20 }}>
+      <div className="absolute" style={{ right: 40, top: 26 }}>
+        <ThemeToggle />
+      </div>
+      <div className="absolute text-right" style={{ right: 120, top: 20 }}>
         <div style={{ fontSize: 42, fontWeight: 520, letterSpacing: '0.01em', lineHeight: 1, color: T.BRAND.navy }}>{w.time}</div>
         <div style={{ fontSize: 14, fontWeight: 560, color: T.INK.tertiary, marginTop: 8, letterSpacing: '0.03em' }}>
           {date}

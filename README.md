@@ -51,6 +51,9 @@ http://localhost:5173/station/comunicaciones  Estación 01 — Comunicaciones
 Se pueden mostrar en una sola pantalla (cambiando de pestaña) o repartir en varias. La pantalla central sirve en monitor, TV,
 proyector o LED. Configuración mínima: 1 computadora, 1 navegador, 1 pantalla.
 
+El interruptor de **modo claro / nocturno** (sol/luna, arriba a la derecha) está en VÉRTICE y en cada estación: se recuerda y
+cambia todas las pestañas a la vez.
+
 ## Principios no negociables
 
 1. Escape room, no tutorial.

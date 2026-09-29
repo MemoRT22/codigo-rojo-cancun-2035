@@ -18,7 +18,7 @@ interface Props {
  * Los reinicios usan eventos de misión reales: si la LED está abierta, se reinicia también.
  */
 export function CommunicationsDevPanel({ mission, dispatch, phase, help, onHelp }: Props) {
-  const { theme: T, toggle, mode } = useTheme();
+  const { theme: T } = useTheme();
   const [open, setOpen] = useState(false);
   const btn: React.CSSProperties = { padding: '0.4rem 0.6rem', fontSize: '0.8125rem', borderRadius: 6, border: `1px solid ${T.SURFACE.hairline}`, background: T.SURFACE.card, color: T.INK.primary, cursor: 'pointer', textAlign: 'left' };
 
@@ -52,7 +52,6 @@ export function CommunicationsDevPanel({ mission, dispatch, phase, help, onHelp 
             ))}
           </div>
           <button style={btn} onClick={() => onHelp(null)}>Ayuda automática</button>
-          <button style={btn} onClick={toggle}>Tema: {mode === 'day' ? 'DAY' : 'MIDNIGHT'} → alternar</button>
         </div>
       )}
     </div>

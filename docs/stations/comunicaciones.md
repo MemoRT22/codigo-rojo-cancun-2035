@@ -13,10 +13,17 @@ Cliente corporativo de correo + análisis de comunicaciones dentro de VÉRTICE. 
 npm run dev
 ```
 
-- `http://localhost:5173/` → LED central · `http://localhost:5173/station/comunicaciones` → Comunicaciones (otra pestaña).
-- Con `?dev=true` aparece un botón `dev` (abajo a la izquierda): iniciar misión sin LED, marcar `COR-512`, volver a ACTIVE,
-  reiniciar, forzar ayudas y alternar tema. `?theme=midnight` abre en MIDNIGHT. Sin `?dev=true` no hay controles ocultos.
-- La LED (`D` → «Abrir estación Comunicaciones») abre la ruta. La sección «Forzar evidencia» de la LED es un atajo de pruebas.
+```text
+http://localhost:5173/                        → VÉRTICE central
+http://localhost:5173/station/comunicaciones  → Comunicaciones
+```
+
+Nada más para la operación cotidiana. El **interruptor de modo claro/nocturno** (arriba a la derecha) es un control normal de
+la estación: recuerda la preferencia y se sincroniza con las demás pestañas VÉRTICE (`docs/12-modos-de-ejecucion.md`).
+
+**Controles técnicos (solo desarrollo, no para el facilitador):** con `?dev=true` aparece un botón `dev` (abajo a la izquierda)
+para iniciar la misión sin VÉRTICE, marcar `COR-512`, volver a ACTIVE, reiniciar y forzar ayudas. En VÉRTICE, la sección
+«Forzar evidencia» del panel `D` es un atajo de pruebas.
 
 ## Dónde está cada cosa
 

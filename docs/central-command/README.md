@@ -85,11 +85,12 @@ Estados 2, 4, 5, 6 y 7 (funcionales, sin pulir); rutas que cambian en Movilidad;
 ## Operación
 
 ```bash
-npm run dev          # http://localhost:5173  ·  ?speed=6 acelera el reloj simulado
+npm run dev          # http://localhost:5173  (uso normal; sin parámetros)
 npm run build        # typecheck + build
 npm run geo          # regenera src/map/data/cancun-osm.json desde OpenStreetMap
 ```
 
-Teclas: `1–7` estado · `R` restablecer · `D` panel de facilitación · `F` pantalla completa · `Espacio` cuenta regresiva.
+Solo desarrollo: `?speed=6` acelera el reloj simulado.
+Teclas: `1–7` estado · `R` restablecer · `D` panel de facilitación · `F` pantalla completa · `M` tema · `Espacio` cuenta regresiva.
 
 Datos © colaboradores de OpenStreetMap (ODbL 1.0), ver `src/map/data/SOURCE.md`.

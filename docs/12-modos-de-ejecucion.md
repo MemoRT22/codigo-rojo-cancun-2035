@@ -70,6 +70,19 @@ npm run dev
 Abrir `http://localhost:5173/` y `http://localhost:5173/station/comunicaciones`. Sin dependencias externas en tiempo de ejecución:
 las fuentes están empaquetadas (`@fontsource-variable/inter`) y la geografía está versionada en el repositorio.
 
+## Tema DAY / MIDNIGHT
+
+Es una característica normal del producto, no de desarrollo: un **interruptor sol/luna arriba a la derecha**, idéntico en VÉRTICE
+y en todas las estaciones (`StationShell`). Basta pulsarlo; no hace falta ningún parámetro de URL ni el panel de desarrollo.
+
+- **Persistencia:** se guarda en `localStorage` (`vertice-theme`); al recargar o abrir otra vista se mantiene la elección.
+- **Sincronización:** al cambiarlo en cualquier módulo, todas las pestañas VÉRTICE del mismo navegador cambian solas (canal
+  `BroadcastChannel` propio del tema, con el evento `storage` como respaldo). Es independiente del Mission Engine.
+- **Solo presentación:** no reinicia ni altera misión, estación, selección, evidencia, temporizador ni mundo simulado.
+- **Transición:** fundido de iluminación de toda la pantalla (View Transitions; respaldo con transiciones CSS; inmediato si el
+  sistema pide reducir movimiento). El atajo `M` en VÉRTICE hace lo mismo.
+- **Accesibilidad:** `role="switch"`, `aria-checked`, etiqueta «Modo nocturno», tooltip «Cambiar a modo nocturno / claro», área de 64×44 px.
+
 ## Modo B — Distribuido (futuro, NO implementado, fuera del roadmap inmediato)
 
 - Varias computadoras en red local.

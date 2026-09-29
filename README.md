@@ -58,6 +58,18 @@ proyector o LED. Configuración mínima: 1 computadora, 1 navegador, 1 pantalla.
 El interruptor de **modo claro / nocturno** (sol/luna, arriba a la derecha) está en VÉRTICE y en cada estación: se recuerda y
 cambia todas las pestañas a la vez.
 
+
+## Modo laboratorio (varias computadoras)
+
+Para el taller real: una computadora con la LED (VÉRTICE) y una por estación, en la misma red local, sin internet. En la principal:
+
+```bash
+npm install
+npm run lab
+```
+
+Imprime las direcciones de VÉRTICE y de cada estación para abrirlas en las otras computadoras. Guía breve: `docs/lab-setup.md`. El modo portátil sigue igual.
+
 ## Principios no negociables
 
 1. Escape room, no tutorial.

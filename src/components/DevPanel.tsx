@@ -140,6 +140,12 @@ export function DevPanel({ visible, onClose, world, mc, countdown, onManualOverr
           >
             Abrir estación Inteligencia (nueva pestaña) ↗
           </button>
+          <button
+            style={{ ...btn, width: '100%', marginTop: 4, textAlign: 'left' }}
+            onClick={() => window.open('/station/respuesta', '_blank')}
+          >
+            Abrir estación Respuesta (nueva pestaña) ↗
+          </button>
         </div>
 
         {/* ── Evidencias ── */}

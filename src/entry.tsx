@@ -7,13 +7,14 @@ import App from './App';
 //   /station/identidad       → Estación 02 — Identidad y Accesos
 //   /station/infraestructura → Estación 03 — Infraestructura
 //   /station/inteligencia    → Estación 04 — Inteligencia
-// La estación restante (respuesta) se añaden aquí.
+//   /station/respuesta       → Estación 05 — Respuesta se añaden aquí.
 const CommunicationsStation = lazy(() => import('./stations/communications/CommunicationsStation'));
 const IdentityStation = lazy(() => import('./stations/identity/IdentityStation'));
 const InfrastructureStation = lazy(() => import('./stations/infrastructure/InfrastructureStation'));
 const IntelligenceStation = lazy(() => import('./stations/intelligence/IntelligenceStation'));
+const ResponseStation = lazy(() => import('./stations/response/ResponseStation'));
 
-export type EntryId = 'led' | 'comunicaciones' | 'identidad' | 'infraestructura' | 'inteligencia';
+export type EntryId = 'led' | 'comunicaciones' | 'identidad' | 'infraestructura' | 'inteligencia' | 'respuesta';
 
 export function resolveEntry(pathname: string): EntryId {
   const p = pathname.replace(/\/+$/, '');
@@ -21,6 +22,7 @@ export function resolveEntry(pathname: string): EntryId {
   if (p === '/station/identidad') return 'identidad';
   if (p === '/station/infraestructura') return 'infraestructura';
   if (p === '/station/inteligencia') return 'inteligencia';
+  if (p === '/station/respuesta') return 'respuesta';
   return 'led';
 }
 
@@ -48,6 +50,12 @@ export function Entry() {
       return (
         <Suspense fallback={null}>
           <IntelligenceStation />
+        </Suspense>
+      );
+    case 'respuesta':
+      return (
+        <Suspense fallback={null}>
+          <ResponseStation />
         </Suspense>
       );
     default:

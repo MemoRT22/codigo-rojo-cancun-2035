@@ -94,6 +94,23 @@ export function useMission(
     }
   });
 
+  // ── Desenlace: VÉRTICE observa `mission.outcome`, venga el PLAN_CONFIRMED de esta pantalla o de la estación Respuesta ──
+  // También cubre un MISSION_RESET remoto (p. ej. desde una estación): si el mundo seguía en un desenlace, vuelve a operación normal.
+  const prevOutcomeRef = useRef(mission.outcome);
+  useEffect(() => {
+    const prev = prevOutcomeRef.current;
+    prevOutcomeRef.current = mission.outcome;
+    if (prev === mission.outcome) return;
+    if (mission.outcome === 'contained') world.setState('CONTENCION_EXITOSA');
+    else if (mission.outcome === 'incomplete') world.setState('CONTENCION_INCOMPLETA');
+    else if (world.state === 'CONTENCION_EXITOSA' || world.state === 'CONTENCION_INCOMPLETA') {
+      clearAnomalyTimer();
+      world.reset();
+      countdown.resetTimer();
+      world.setPaused(false);
+    }
+  });
+
   // ── Timeout del countdown ──
   useEffect(() => {
     if (countdown.seconds === 0 && mission.status === 'running' && !mission.timedOut) {
@@ -156,12 +173,10 @@ export function useMission(
     engine.dispatch({ type: 'PLAN_SELECTED', plan });
   }, [engine]);
 
+  // El desenlace visual lo decide `mission.outcome` (efecto de arriba), no quién confirmó el plan.
   const confirmPlan = useCallback(() => {
     engine.dispatch({ type: 'PLAN_CONFIRMED' });
-    const ms = engine.getState();
-    if (ms.outcome === 'contained') world.setState('CONTENCION_EXITOSA');
-    else if (ms.outcome === 'incomplete') world.setState('CONTENCION_INCOMPLETA');
-  }, [engine, world]);
+  }, [engine]);
 
   const dispatch = useCallback((event: MissionEvent) => {
     engine.dispatch(event);

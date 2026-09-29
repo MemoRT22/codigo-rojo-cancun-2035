@@ -23,7 +23,8 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-body.dev-mode {
+body.dev-mode,
+body.station-mode {
   cursor: default;
 }
 
@@ -56,3 +57,21 @@ body.dev-mode {
 .animate-fade-in-up { animation: fade-in-up 0.45s ease-out both; }
 .animate-status { animation: status-breathe 2.8s ease-in-out infinite; }
 .animate-gentle-pulse { animation: gentle-pulse 3.5s ease-in-out infinite; }
+
+/* Transición de iluminación DAY ↔ MIDNIGHT: fundido de toda la pantalla (View Transitions). */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.55s;
+  animation-timing-function: ease-in-out;
+}
+
+/* Respaldo sin View Transitions: transiciones CSS por propiedad (las activa ThemeContext unos instantes). */
+html.theme-transition *,
+html.theme-transition *::before,
+html.theme-transition *::after {
+  transition:
+    background-color .6s ease, color .6s ease, border-color .6s ease, box-shadow .6s ease,
+    fill .6s ease, stroke .6s ease, stop-color .6s ease !important;
+}
+
+button:focus-visible { outline: 2px solid #2E6FE6; outline-offset: 2px; }

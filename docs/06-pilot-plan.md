@@ -36,7 +36,7 @@ Do not ask only “did you like it?”. Observe:
 4. Build Infrastructure.
 5. Build AI analysis.
 6. Build final response console and outcome.
-7. Connect state only after each station works as an independent experience.
+7. Connect state only after each station works as an independent experience (portable mode: `BroadcastChannel`, one computer).
 8. Conduct pilot.
 9. Modify puzzles based on observation.
 
@@ -50,4 +50,5 @@ Do not ask only “did you like it?”. Observe:
 - procedural puzzle generation,
 - multiple scenarios,
 - remote multiplayer,
+- dedicated network hardware (switches, VLANs, racks), several mandatory computers, WebSocket / Mission Server (future distributed mode),
 - production-grade security architecture.

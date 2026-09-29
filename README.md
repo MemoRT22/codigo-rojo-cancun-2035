@@ -32,6 +32,28 @@ Identificadores canónicos del piloto:
 
 Estos identificadores autorizan la consola final. Después, el equipo debe elegir un plan de respuesta con consecuencias visibles.
 
+## Ejecución portátil
+
+El piloto se ejecuta en **una computadora**, sin internet ni infraestructura de red (`docs/12-modos-de-ejecucion.md`).
+
+```bash
+npm install
+npm run dev
+```
+
+Abrir en el mismo navegador:
+
+```text
+http://localhost:5173/                        VÉRTICE (pantalla central, host)
+http://localhost:5173/station/comunicaciones  Estación 01 — Comunicaciones
+```
+
+Se pueden mostrar en una sola pantalla (cambiando de pestaña) o repartir en varias. La pantalla central sirve en monitor, TV,
+proyector o LED. Configuración mínima: 1 computadora, 1 navegador, 1 pantalla.
+
+El interruptor de **modo claro / nocturno** (sol/luna, arriba a la derecha) está en VÉRTICE y en cada estación: se recuerda y
+cambia todas las pestañas a la vez.
+
 ## Principios no negociables
 
 1. Escape room, no tutorial.
@@ -59,4 +81,4 @@ Estos identificadores autorizan la consola final. Después, el equipo debe elegi
 
 **Piloto v1: canon base congelado para implementación.**
 
-La siguiente fase es completar los datos simulados de cada estación y construir el primer prototipo visual.
+Implementado: VÉRTICE central, Mission Engine, modo portátil (BroadcastChannel) y Estación 01 — Comunicaciones. La siguiente fase es la estación de Identidad y Accesos (ver `docs/08-roadmap.md`).

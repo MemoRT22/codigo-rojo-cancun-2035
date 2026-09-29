@@ -33,12 +33,13 @@ No:
 - 20–25 minutos.
 - 4–10 participantes; óptimo 6–8.
 - Un solo equipo de respuesta.
-- Una LED central funciona como estado vivo del incidente.
+- Una pantalla central (monitor, televisión, proyector o LED) funciona como estado vivo del incidente.
 - Varias estaciones contienen evidencia parcial.
 - El equipo debe correlacionar información entre estaciones.
 - El avance principal se basa en identificadores/candados derivados de evidencia.
 - El sistema no guía explícitamente el siguiente paso.
 - La resolución termina en una decisión profesional con consecuencias.
+- **Modo portátil (principal del piloto):** una computadora, un navegador y, opcionalmente, una pantalla o proyector. VÉRTICE y las estaciones son pestañas/ventanas que comparten estado por `BroadcastChannel`; no se requiere red, internet ni infraestructura especial. El modo distribuido (varias computadoras) es futuro y no está implementado. Ver `docs/12-modos-de-ejecucion.md`.
 
 ## Incidente canónico
 

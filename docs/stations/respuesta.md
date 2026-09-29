@@ -87,7 +87,7 @@ mismos contenidos (`PLANS`, `OUTCOMES`, `normalizeId`). El Mission Engine no cam
 - **Después, la consola** se dibuja sobre el mapa (atenuado), en el lienzo 1920×1080, con campos y botones grandes para operar con mouse y teclado desde la computadora de la LED:
   1. **Candado:** cadena ORIGEN → IDENTIDAD → PROPAGACIÓN → CORRELACIÓN, sin autocompletar; mismo rechazo neutral («Revisen origen, identidad, propagación y correlación»).
   2. **Autorización operativa en curso** mientras `finalCorrelationValidated && !responseUnlocked` (no vuelve al mapa; no adelanta el reloj ni dispara `RESPONSE_UNLOCKED`).
-  3. **Respuesta autorizada:** los cuatro planes en columnas de igual peso visual (contiene · deja activo · interrumpe · riesgo residual), luego «SELECCIONAR PLAN» → confirmación → «AUTORIZAR RESPUESTA».
+  3. **Respuesta autorizada:** los cuatro planes en columnas de igual peso visual (alcance · deja activo · interrumpe · riesgo residual), luego «SELECCIONAR PLAN» → confirmación → «AUTORIZAR RESPUESTA». La confirmación repite de forma compacta *actúa sobre · preserva / deja activo · interrumpe · riesgo residual* justo antes de autorizar.
   4. **Consecuencia** del plan ejecutado en grande (mismo contenido que `OutcomePanel`) y, cuando el grupo termina de leer, el botón **VER ESTADO DE VÉRTICE**, que regresa al mapa en `CONTENCION_EXITOSA` o `CONTENCION_INCOMPLETA`.
 - **Derivado de la misión:** la etapa sale de `MissionState` (candado / pendiente / planes / confirmación / consecuencia). Solo la introducción de 3 s y el «ya lo leímos» del desenlace son estado local de presentación. Recargar VÉRTICE sigue reiniciando la misión.
 - **Reset:** «Restablecer» limpia la consola (plan abierto, campos, desenlace reconocido) y VÉRTICE vuelve a operación normal.

@@ -1,6 +1,6 @@
 import type { MissionState, MissionEvent } from './types';
 import { INITIAL_MISSION } from './types';
-import { validateCorrelation, checkIdentityCorrelation } from './rules';
+import { validateCorrelation, checkIdentityCorrelation, isValidSource } from './rules';
 
 /**
  * Función pura: `(estado, evento) → nuevo estado`.
@@ -26,6 +26,7 @@ export function missionReducer(state: MissionState, event: MissionEvent): Missio
     case 'EVIDENCE_DISCOVERED': {
       if (state.status !== 'running') return state;
       if (state.discoveredEvidence.includes(event.evidenceId)) return state;
+      if (!isValidSource(event.evidenceId, event.source)) return state;
       const evidence = [...state.discoveredEvidence, event.evidenceId];
       return {
         ...state,
@@ -46,8 +47,12 @@ export function missionReducer(state: MissionState, event: MissionEvent): Missio
       if (!valid) {
         return { ...state, failedCorrelationAttempts: state.failedCorrelationAttempts + 1 };
       }
-      return { ...state, finalCorrelationValidated: true, responseUnlocked: true };
+      return { ...state, finalCorrelationValidated: true };
     }
+
+    case 'RESPONSE_UNLOCKED':
+      if (state.status !== 'running' || !state.finalCorrelationValidated) return state;
+      return { ...state, responseUnlocked: true };
 
     case 'PLAN_SELECTED':
       if (state.status !== 'running' || !state.responseUnlocked) return state;

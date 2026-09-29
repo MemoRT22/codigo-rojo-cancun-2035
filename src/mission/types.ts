@@ -49,6 +49,7 @@ export type MissionEvent =
   | { type: 'MISSION_RESET' }
   | { type: 'EVIDENCE_DISCOVERED'; evidenceId: EvidenceId; source: TerminalId }
   | { type: 'FINAL_CORRELATION_SUBMITTED'; origin: string; identity: string; propagation: string; correlation: string }
+  | { type: 'RESPONSE_UNLOCKED' }
   | { type: 'PLAN_SELECTED'; plan: ResponsePlan }
   | { type: 'PLAN_CONFIRMED' }
   | { type: 'MISSION_TIMEOUT' }

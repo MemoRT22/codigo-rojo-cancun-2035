@@ -1,6 +1,6 @@
 import type { NarrativeState } from '../types';
 import { hms } from '../world/scenario';
-import type { EvidenceId, MissionState } from './types';
+import type { EvidenceId, MissionState, TerminalId } from './types';
 
 // ── Correlación canónica ──
 
@@ -29,11 +29,21 @@ export function checkIdentityCorrelation(evidence: readonly EvidenceId[]): boole
   return evidence.includes('COR-512') && evidence.includes('ACC-417');
 }
 
+// ── Validación fuente/evidencia ──
+
+const CANONICAL_SOURCE: Record<EvidenceId, TerminalId> = {
+  'COR-512': 'comunicaciones',
+  'ACC-417': 'identidad',
+  'NOD-204': 'infraestructura',
+  'AGR-27': 'inteligencia',
+};
+
+/** `true` si la fuente corresponde a la estación canónica o es el panel de control. */
+export function isValidSource(evidenceId: EvidenceId, source: TerminalId): boolean {
+  return source === 'control' || source === CANONICAL_SOURCE[evidenceId];
+}
+
 // ── Reglas de línea de tiempo ──
-//
-// Transiciones automáticas controladas por el reloj simulado.
-// Cada regla dispara cuando el estado narrativo coincide con `from`,
-// el reloj alcanza `atClock` y la condición opcional se cumple.
 
 interface TimelineRule {
   from: NarrativeState;
@@ -58,6 +68,12 @@ const TIMELINE_RULES: TimelineRule[] = [
     to: 'CORRELACION_ESTABLECIDA',
     atClock: hms('09:20:11'),
     condition: (m) => m.identityCorrelationEstablished,
+  },
+  {
+    from: 'CORRELACION_ESTABLECIDA',
+    to: 'RESPUESTA_AUTORIZADA',
+    atClock: hms('09:21:05'),
+    condition: (m) => m.finalCorrelationValidated,
   },
 ];
 

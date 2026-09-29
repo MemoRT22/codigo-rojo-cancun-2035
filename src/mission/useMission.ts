@@ -25,11 +25,23 @@ export interface MissionControls {
  */
 export function useMission(
   world: WorldView,
-  countdown: { seconds: number; start: () => void; stop: () => void; resetTimer: () => void },
+  countdown: { seconds: number; running: boolean; start: () => void; stop: () => void; resetTimer: () => void },
 ): MissionControls {
   const engineRef = useRef<MissionEngine | null>(null);
   if (!engineRef.current) engineRef.current = new MissionEngine();
   const engine = engineRef.current;
+
+  // Track whether countdown was running before pause, so resume restores it.
+  const countdownWasRunning = useRef(false);
+  // Cancel the anomaly-start timeout to prevent race conditions.
+  const anomalyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const clearAnomalyTimer = useCallback(() => {
+    if (anomalyTimerRef.current !== null) {
+      clearTimeout(anomalyTimerRef.current);
+      anomalyTimerRef.current = null;
+    }
+  }, []);
 
   // ── Suscripción al estado de misión ──
   const mission = useSyncExternalStore(
@@ -52,14 +64,24 @@ export function useMission(
     const prev = prevNarrativeRef.current;
     prevNarrativeRef.current = world.state;
     if (prev === world.state) return;
+
     if (world.state === 'ANOMALIA_DETECTADA') {
       countdown.resetTimer();
-      setTimeout(countdown.start, 300);
+      clearAnomalyTimer();
+      anomalyTimerRef.current = setTimeout(() => {
+        anomalyTimerRef.current = null;
+        countdown.start();
+      }, 300);
+    }
+    if (world.state === 'RESPUESTA_AUTORIZADA') {
+      engine.dispatch({ type: 'RESPONSE_UNLOCKED' });
     }
     if (world.state === 'CONTENCION_EXITOSA' || world.state === 'CONTENCION_INCOMPLETA') {
+      clearAnomalyTimer();
       countdown.stop();
     }
     if (world.state === 'OPERACION_NORMAL') {
+      clearAnomalyTimer();
       countdown.resetTimer();
     }
   });
@@ -71,32 +93,45 @@ export function useMission(
     }
   }, [countdown.seconds, mission.status, mission.timedOut, engine]);
 
+  // Clean up anomaly timer on unmount.
+  useEffect(() => clearAnomalyTimer, [clearAnomalyTimer]);
+
   // ── Acciones ──
 
   const startMission = useCallback(() => {
+    clearAnomalyTimer();
     world.reset();
     countdown.resetTimer();
     engine.dispatch({ type: 'MISSION_START' });
     world.setPaused(false);
-  }, [world, countdown, engine]);
+  }, [world, countdown, engine, clearAnomalyTimer]);
 
   const pauseMission = useCallback(() => {
+    countdownWasRunning.current = countdown.running;
+    clearAnomalyTimer();
     engine.dispatch({ type: 'MISSION_PAUSE' });
     world.setPaused(true);
     countdown.stop();
-  }, [engine, world, countdown]);
+  }, [engine, world, countdown, clearAnomalyTimer]);
 
   const resumeMission = useCallback(() => {
+    const ms = engine.getState();
+    if (ms.status !== 'paused') return;
     engine.dispatch({ type: 'MISSION_RESUME' });
     world.setPaused(false);
-  }, [engine, world]);
+    if (countdownWasRunning.current && countdown.seconds > 0) {
+      countdown.start();
+    }
+    countdownWasRunning.current = false;
+  }, [engine, world, countdown]);
 
   const resetMission = useCallback(() => {
+    clearAnomalyTimer();
     engine.dispatch({ type: 'MISSION_RESET' });
     world.reset();
     countdown.resetTimer();
     world.setPaused(false);
-  }, [engine, world, countdown]);
+  }, [engine, world, countdown, clearAnomalyTimer]);
 
   const discoverEvidence = useCallback((id: EvidenceId, source: TerminalId) => {
     engine.dispatch({ type: 'EVIDENCE_DISCOVERED', evidenceId: id, source });
@@ -106,12 +141,8 @@ export function useMission(
     const before = engine.getState();
     engine.dispatch({ type: 'FINAL_CORRELATION_SUBMITTED', origin, identity, propagation, correlation });
     const after = engine.getState();
-    if (after.finalCorrelationValidated && !before.finalCorrelationValidated) {
-      world.setState('RESPUESTA_AUTORIZADA');
-      return true;
-    }
-    return false;
-  }, [engine, world]);
+    return after.finalCorrelationValidated && !before.finalCorrelationValidated;
+  }, [engine]);
 
   const selectPlan = useCallback((plan: ResponsePlan) => {
     engine.dispatch({ type: 'PLAN_SELECTED', plan });

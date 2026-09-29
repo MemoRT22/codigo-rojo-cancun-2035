@@ -25,11 +25,11 @@ const STATE_LABELS: Record<NarrativeState, string> = {
   CONTENCION_INCOMPLETA: '7 · Contención incompleta',
 };
 
-const EVIDENCE_SOURCES: Record<EvidenceId, { source: 'comunicaciones' | 'identidad' | 'infraestructura' | 'inteligencia'; label: string }> = {
-  'COR-512': { source: 'comunicaciones', label: 'COR-512 (Comunicaciones)' },
-  'ACC-417': { source: 'identidad', label: 'ACC-417 (Identidad)' },
-  'NOD-204': { source: 'infraestructura', label: 'NOD-204 (Infraestructura)' },
-  'AGR-27': { source: 'inteligencia', label: 'AGR-27 (Inteligencia)' },
+const EVIDENCE_SOURCES: Record<EvidenceId, { label: string }> = {
+  'COR-512': { label: 'COR-512 (Comunicaciones)' },
+  'ACC-417': { label: 'ACC-417 (Identidad)' },
+  'NOD-204': { label: 'NOD-204 (Infraestructura)' },
+  'AGR-27': { label: 'AGR-27 (Inteligencia)' },
 };
 
 const PLAN_LABELS: Record<ResponsePlan, string> = {
@@ -129,7 +129,7 @@ export function DevPanel({ visible, onClose, world, mc, countdown, onManualOverr
                 <div key={id} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   <button
                     style={found ? { ...btnGreen, flex: 1, textAlign: 'left' } : { ...btn, flex: 1, textAlign: 'left' }}
-                    onClick={() => !found && mc.discoverEvidence(id, info.source)}
+                    onClick={() => !found && mc.discoverEvidence(id, 'control')}
                     disabled={found}
                   >
                     {found ? '\u2713 ' : ''}{info.label}

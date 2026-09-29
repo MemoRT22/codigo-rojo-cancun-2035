@@ -61,7 +61,7 @@ Si `COR-512` ya estaba registrada al abrir la estación, esta recupera la sesió
 | Presentación | `IdentityStation.tsx`, `IdentityEventList.tsx`, `IdentityEventReader.tsx`, `IdentityProfile.tsx`, `ActivityTimeline.tsx` |
 | Recomendaciones del asistente | `src/stations/identity/assistant.ts` |
 | Tests | `src/stations/identity/__tests__/logic.test.ts`, `src/stations/assistant/__tests__/assistant.test.ts` |
-| Compartido con Comunicaciones | `src/stations/shell/` (`discovery.ts`, `useStationSession.ts`, `spotlight.ts`, `InvestigationRail.tsx`, `WaitingScreen.tsx`, `StationDevPanel.tsx`, `icons.tsx`, `StationShell.tsx`) |
+| Compartido con Comunicaciones | `src/stations/shell/` (`discovery.ts`, `useStationSession.ts`, `spotlight.ts`, `InvestigationRail.tsx`, `WaitingScreen.tsx`, `icons.tsx`, `StationShell.tsx`) |
 | Analysis Assistant (motor común) | `src/stations/assistant/` (`config.ts`, `assistantState.ts`, `useAnalysisAssistant.ts`, `AnalysisAssistantCard.tsx`, `types.ts`) |
 | Ruta | `src/entry.tsx` |
 
@@ -145,10 +145,8 @@ sus recomendaciones intermedias en `communications/assistant.ts` y reportar señ
 
 ## Reset y desarrollo
 
-- Reset: `MISSION_RESET` (VÉRTICE → «Restablecer») devuelve la estación a «Estación preparada» y limpia su UI local y el asistente.
-- `?dev=true` (solo desarrollo): botón `dev` para iniciar la misión sin VÉRTICE, marcar `ACC-417`, volver a ACTIVE, reiniciar, e
-  inspeccionar el asistente (nivel mostrado/disponible, segundos sin progreso, intentos, solicitudes) con «Forzar siguiente nivel»,
-  «Simular +60 s sin progreso» y «Resetear asistente». El tema DAY / MIDNIGHT **no** es de desarrollo: es el selector normal de la cabecera.
+- Reset: `MISSION_RESET` (Consola de facilitación → «Restablecer sesión») devuelve la estación a «Estación preparada» y limpia su UI local y el asistente.
+- Sin controles de desarrollo en la estación: la sesión se inicia, se reinicia y se ensaya desde la Consola de facilitación de VÉRTICE (`docs/pilot/facilitator-console.md`). El tema DAY / MIDNIGHT es el selector normal de la cabecera.
 
 ## Límites conocidos
 
@@ -161,5 +159,5 @@ sus recomendaciones intermedias en `communications/assistant.ts` y reportar señ
 ## Apertura del puesto (Mission Opening v1)
 
 Antes de iniciar la sesión, cada estación muestra su puesto (`src/stations/shell/roles.ts`, `WaitingScreen`): rol, responsabilidad, qué observa, pregunta de inicio y regla, sin respuestas. Al iniciar,
-`StationActivationSplash` muestra «Sesión operativa activada» + el rol unos 2 s (estado local de presentación: se dispara al pasar de WAITING a activa; una estación que entra con la misión ya en curso no lo reproduce).
+`StationActivationSplash` muestra «Sesión operativa activada» + el rol unos 2 s (estado local de presentación: se dispara cuando la estación estaba en WAITING y la fase pasa a activa por un evento en vivo; si el estado activo llega como replay del registro del host —late join o reconexión— no se reproduce; sin heurísticas de tiempo).
 La LED arranca en 09:15:58: la anomalía aparece a los ~8 s y con ella empieza el tiempo de respuesta de 20:00. Guion del facilitador: `docs/pilot/briefing.md`.

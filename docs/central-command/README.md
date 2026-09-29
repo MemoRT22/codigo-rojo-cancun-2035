@@ -90,7 +90,7 @@ npm run build        # typecheck + build
 npm run geo          # regenera src/map/data/cancun-osm.json desde OpenStreetMap
 ```
 
-Solo desarrollo: `?speed=6` acelera el reloj simulado.
-Teclas: `1–7` estado · `R` restablecer · `D` panel de facilitación · `F` pantalla completa · `M` tema · `Espacio` cuenta regresiva.
+La velocidad del reloj simulado, el estado del escenario, la cuenta regresiva y el restablecimiento se controlan desde la Consola de facilitación (`docs/pilot/facilitator-console.md`).
+Teclas: `D` Consola de facilitación · `F` pantalla completa · `M` tema.
 
 Datos © colaboradores de OpenStreetMap (ODbL 1.0), ver `src/map/data/SOURCE.md`.

@@ -1,5 +1,5 @@
 import type { MissionEvent } from './types';
-import type { MissionTransport } from './transport';
+import type { MissionTransport, RemoteInfo } from './transport';
 import type { TransportRole } from './broadcastTransport';
 
 /**
@@ -38,7 +38,7 @@ export interface WebSocketTransportOptions {
 
 export class WebSocketTransport implements MissionTransport {
   private readonly id = Math.random().toString(36).slice(2);
-  private readonly listeners = new Set<(e: MissionEvent) => void>();
+  private readonly listeners = new Set<(e: MissionEvent, info?: RemoteInfo) => void>();
   private log: MissionEvent[] = [];
   private outbox: Wire[] = [];
   private ws: WebSocket | null = null;
@@ -62,7 +62,7 @@ export class WebSocketTransport implements MissionTransport {
     this.send({ t: 'event', event });
   }
 
-  onRemote(listener: (event: MissionEvent) => void): () => void {
+  onRemote(listener: (event: MissionEvent, info?: RemoteInfo) => void): () => void {
     this.listeners.add(listener);
     if (this.role === 'client') this.send({ t: 'sync-request', from: this.id });
     return () => { this.listeners.delete(listener); };
@@ -177,7 +177,7 @@ export class WebSocketTransport implements MissionTransport {
       case 'sync':
         if (this.role === 'host' && w.to === this.id) this.merge(w.events);
         else if (this.role === 'client' && (w.to === this.id || w.to === ALL)) {
-          w.events.forEach((e) => { this.record(e); this.listeners.forEach((l) => l(e)); });
+          w.events.forEach((e) => { this.record(e); this.listeners.forEach((l) => l(e, { replay: true })); });
         }
         break;
     }

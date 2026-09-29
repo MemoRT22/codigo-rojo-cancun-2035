@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useSyncExternalStore } from 'react';
-import { MissionEngine } from './engine';
+import { MissionEngine, type EventSource } from './engine';
 import { getMissionTransport } from './createTransport';
 import type { TransportRole } from './broadcastTransport';
 import { LocalTransport } from './transport';
@@ -8,6 +8,8 @@ import type { MissionEvent, MissionState } from './types';
 export interface MissionClient {
   mission: Readonly<MissionState>;
   dispatch: (event: MissionEvent) => void;
+  /** Origen del último evento aplicado: permite distinguir un inicio en vivo de un late join (solo presentación). */
+  source: EventSource;
 }
 
 /**
@@ -32,5 +34,5 @@ export function useMissionClient(role: TransportRole = 'client'): MissionClient 
   );
 
   const dispatch = useCallback((e: MissionEvent) => engine.dispatch(e), [engine]);
-  return { mission, dispatch };
+  return { mission, dispatch, source: engine.getSource() };
 }

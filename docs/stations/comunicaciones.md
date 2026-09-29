@@ -21,9 +21,7 @@ http://localhost:5173/station/comunicaciones  → Comunicaciones
 Nada más para la operación cotidiana. El **interruptor de modo claro/nocturno** (arriba a la derecha) es un control normal de
 la estación: recuerda la preferencia y se sincroniza con las demás pestañas VÉRTICE (`docs/12-modos-de-ejecucion.md`).
 
-**Controles técnicos (solo desarrollo, no para el facilitador):** con `?dev=true` aparece un botón `dev` (abajo a la izquierda)
-para iniciar la misión sin VÉRTICE, marcar `COR-512`, volver a ACTIVE, reiniciar y forzar ayudas. En VÉRTICE, la sección
-«Forzar evidencia» del panel `D` es un atajo de pruebas.
+**Sin controles técnicos en la estación:** las estaciones de los participantes no tienen botones de desarrollo ni parámetros de URL. El facilitador usa la Consola de facilitación de VÉRTICE (tecla `D`; `docs/pilot/facilitator-console.md`).
 
 ## Dónde está cada cosa
 
@@ -61,7 +59,7 @@ Ayudas (solo sistema, sin facilitador; motor común Analysis Assistant, ver `ide
 
 ## Reset
 
-`MISSION_RESET` (LED: «Restablecer»; estación con `?dev=true`) devuelve la estación a «Estación preparada» y limpia su UI local.
+`MISSION_RESET` (Consola de facilitación: «Restablecer sesión») devuelve la estación a «Estación preparada» y limpia su UI local.
 
 ## Transporte: modo portátil y modo distribuido
 

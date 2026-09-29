@@ -64,7 +64,7 @@ abrir un nodo, Detalles, filtro/orden nuevos; un vínculo fallido cuenta como in
 
 La estación no contiene ninguna regla de correlación: solo emite `NOD-204`. Con `COR-512` y `ACC-417` el motor guarda las tres evidencias, en
 cualquier orden (late join incluido: la estación abre en ACTIVE y recupera la sesión por el replay del host). `MISSION_RESET` la devuelve a
-«Estación preparada» y limpia su UI y el asistente. `?dev=true` reutiliza `StationDevPanel` (iniciar, marcar `NOD-204`, reiniciar, asistente).
+«Estación preparada» y limpia su UI y el asistente. Sin controles de desarrollo en la estación; el ensayo se hace desde la Consola de facilitación (`docs/pilot/facilitator-console.md`).
 
 ## Limitaciones conocidas
 

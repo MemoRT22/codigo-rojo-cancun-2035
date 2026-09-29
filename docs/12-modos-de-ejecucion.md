@@ -101,8 +101,7 @@ PC principal (LED)  →  npm run lab  →  servidor local: sirve la app (dist/) 
   (`event` · `sync-request` · `sync`). Motor y estaciones no saben qué transporte se usa.
 - El servidor (`scripts/lab-server.mjs`) es solo un **repetidor**: reenvía cada mensaje a los demás navegadores (nunca al que lo originó). No tiene reducer,
   reglas ni estado; **la autoridad sigue siendo VÉRTICE (host)**, que conserva el registro de eventos de la sesión.
-- **Selección de modo, explícita** (`createTransport.ts`): `?mode=lab` → WebSocket; `?mode=portable` → BroadcastChannel; sin parámetro, lo que declare el servidor
-  (`npm run lab` inyecta `window.__VERTICE_MODE__ = 'lab'`, así una estación abierta sin el parámetro no queda aislada) y, si no hay declaración, portátil.
+- **Selección de modo, por entorno (nunca por URL):** `npm run lab` hace que el servidor declare `window.__VERTICE_MODE__ = 'lab'` → WebSocket; `npm run dev` (o un build servido normalmente) no declara nada → BroadcastChannel (portátil). Ningún parámetro de la barra de direcciones cambia el comportamiento del producto: las URLs solo identifican la superficie (`/`, `/station/...`).
   La URL del socket sale del mismo servidor que sirvió la página (`ws://host:puerto/ws`, `wss` si es https).
 - **Estación que entra tarde:** conecta → pide sincronización → el host responde con el registro → la estación queda en su estado (ACTIVE, evidencia, etc.).
 - **Reconexión automática** (1 s, 2 s, 3 s y luego cada 3 s). El servidor envía un latido cada 5 s; sin latidos durante 15 s el navegador da la conexión por

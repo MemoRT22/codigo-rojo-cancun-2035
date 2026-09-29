@@ -5,17 +5,11 @@ import { WebSocketTransport } from './webSocketTransport';
 const singletons = new Map<TransportRole, MissionTransport>();
 
 /**
- * Modo explícito (nunca por heurística de host o IP):
- *   ?mode=lab       → laboratorio (WebSocket)
- *   ?mode=portable  → portátil (BroadcastChannel)
- *   sin parámetro   → lo que declare el servidor (`npm run lab` inyecta `window.__VERTICE_MODE__ = 'lab'`),
- *                     y si no hay declaración, portátil.
+ * El modo depende del ENTORNO que se levantó, nunca de la barra de direcciones:
+ *   npm run lab   → el servidor declara `window.__VERTICE_MODE__ = 'lab'` → WebSocket (varias computadoras)
+ *   npm run dev / build servido normalmente → sin declaración → BroadcastChannel (portátil, una computadora)
  */
-function labMode(): boolean {
-  if (typeof location === 'undefined') return false;
-  const q = new URLSearchParams(location.search).get('mode');
-  if (q === 'lab') return true;
-  if (q === 'portable') return false;
+function serverDeclaredLabMode(): boolean {
   return (globalThis as { __VERTICE_MODE__?: string }).__VERTICE_MODE__ === 'lab';
 }
 
@@ -35,7 +29,7 @@ function lanSocketUrl(): string {
 export function getMissionTransport(role: TransportRole): MissionTransport {
   let t = singletons.get(role);
   if (!t) {
-    if (labMode()) t = typeof WebSocket === 'undefined' ? new LocalTransport() : new WebSocketTransport(role, lanSocketUrl());
+    if (serverDeclaredLabMode()) t = typeof WebSocket === 'undefined' ? new LocalTransport() : new WebSocketTransport(role, lanSocketUrl());
     else t = typeof BroadcastChannel === 'undefined' ? new LocalTransport() : new BroadcastChannelTransport(role);
     singletons.set(role, t);
   }

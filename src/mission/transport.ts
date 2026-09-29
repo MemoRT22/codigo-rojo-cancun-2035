@@ -22,6 +22,9 @@ import type { MissionEvent } from './types';
  *
  * Selección en un único punto: `createTransport.ts`. Ver docs/12-modos-de-ejecucion.md.
  */
+/** Metadatos de un evento remoto: `replay` = viene del registro que el host reenvía a quien se une o reconecta (no es un hecho «en vivo»). */
+export interface RemoteInfo { replay: boolean }
+
 export interface MissionTransport {
   /** Difundir un evento originado localmente hacia las demás instancias. */
   broadcast(event: MissionEvent): void;
@@ -29,7 +32,7 @@ export interface MissionTransport {
    * Suscribirse a eventos que llegan desde instancias remotas.
    * Cada suscripción nueva debe poder sincronizarse con el estado actual de la sesión.
    */
-  onRemote(listener: (event: MissionEvent) => void): () => void;
+  onRemote(listener: (event: MissionEvent, info?: RemoteInfo) => void): () => void;
   /** Libera recursos (canales, sockets). Opcional. */
   close?(): void;
 }
@@ -42,7 +45,7 @@ export class LocalTransport implements MissionTransport {
     // En modo local no hay peers. Nada que difundir.
   }
 
-  onRemote(_listener: (event: MissionEvent) => void): () => void {
+  onRemote(_listener: (event: MissionEvent, info?: RemoteInfo) => void): () => void {
     // En modo local no llegan eventos remotos.
     return () => {};
   }

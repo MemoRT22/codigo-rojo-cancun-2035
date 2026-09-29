@@ -58,7 +58,7 @@ comportamiento del Núcleo). No dice qué agrupación es correcta o equivocada. 
 
 La estación solo emite `AGR-27`; no hay reglas de correlación, autorización ni progresión aquí. Con `COR-512`, `ACC-417` y `NOD-204` el motor guarda las cuatro evidencias, en cualquier
 orden (late join incluido: la estación abre en ACTIVE y recupera la sesión por el replay del host). `MISSION_RESET` la devuelve a «Estación preparada» y limpia UI y asistente.
-`?dev=true` reutiliza `StationDevPanel` (iniciar, marcar `AGR-27`, reiniciar, asistente).
+Sin controles de desarrollo en la estación; el ensayo se hace desde la Consola de facilitación (`docs/pilot/facilitator-console.md`).
 
 ## Limitaciones conocidas
 

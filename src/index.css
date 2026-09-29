@@ -23,7 +23,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-body.dev-mode,
+body.host-mode,
 body.station-mode {
   cursor: default;
 }

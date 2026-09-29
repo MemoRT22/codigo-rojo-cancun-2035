@@ -5,7 +5,6 @@ import type { AssistantAction } from '../assistant/types';
 import { IconTrace } from '../shell/icons';
 import { InvestigationRail } from '../shell/InvestigationRail';
 import { spotlight } from '../shell/spotlight';
-import { StationDevPanel } from '../shell/StationDevPanel';
 import { StationShell } from '../shell/StationShell';
 import { useStationSession } from '../shell/useStationSession';
 import { ROLES } from '../shell/roles';
@@ -14,14 +13,13 @@ import { INTELLIGENCE_ASSISTANT } from './assistant';
 import { GROUPS, GROUP_MAP } from './data';
 import { GroupList } from './GroupList';
 import { GroupReader } from './GroupReader';
-import { STATION_EVIDENCE, deriveStationPhase, feedbackFor, initialUi, submitToInvestigation, uiReducer } from './logic';
+import { deriveStationPhase, feedbackFor, initialUi, submitToInvestigation, uiReducer } from './logic';
 import { Timeline } from './Timeline';
 
-const isDev = () => new URLSearchParams(location.search).get('dev') === 'true';
 
 function Station() {
   const { theme: T } = useTheme();
-  const { mission, dispatch } = useMissionClient('client');
+  const { mission, dispatch, source } = useMissionClient('client');
   const [ui, act] = useReducer(uiReducer, undefined, initialUi);
 
   const phase = deriveStationPhase(mission);
@@ -60,20 +58,8 @@ function Station() {
     act({ type: 'TRACE', entry: 'Solicitó una recomendación a VÉRTICE' });
   }, [assistant.request]);
 
-  const devPanel = isDev() ? (
-    <StationDevPanel
-      title="Inteligencia"
-      evidenceId={STATION_EVIDENCE}
-      mission={mission}
-      dispatch={dispatch}
-      phase={phase}
-      assistant={assistant}
-      onForceEvidence={() => submitToInvestigation(GROUP_MAP.get('AGR-27'), mission, dispatch)}
-    />
-  ) : null;
-
   return (
-    <StationShell moduleName="Inteligencia" moduleSubtitle="Patrones, evidencia e hipótesis" roleTitle={ROLES.inteligencia.title} phase={phase} paused={paused} dev={devPanel}>
+    <StationShell moduleName="Inteligencia" moduleSubtitle="Patrones, evidencia e hipótesis" roleTitle={ROLES.inteligencia.title} phase={phase} paused={paused} source={source}>
       {phase === 'WAITING' ? (
         <WaitingScreen label="VÉRTICE · INTELIGENCIA" role={ROLES.inteligencia} />
       ) : (

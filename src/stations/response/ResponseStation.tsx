@@ -6,7 +6,6 @@ import { useResponseFlow } from './useResponseFlow';
 import { AnalysisAssistantCard } from '../assistant/AnalysisAssistantCard';
 import type { AssistantAction } from '../assistant/types';
 import { spotlight } from '../shell/spotlight';
-import { StationDevPanel } from '../shell/StationDevPanel';
 import { StationShell } from '../shell/StationShell';
 import { useStationSession } from '../shell/useStationSession';
 import { WaitingScreen } from '../shell/WaitingScreen';
@@ -16,8 +15,6 @@ import { deriveStationPhase, PLAN_MAP, type Stage } from './logic';
 import { OutcomePanel } from './OutcomePanel';
 import { PlanDetail, PlanGrid, planName } from './ResponsePlans';
 
-const isDev = () => new URLSearchParams(location.search).get('dev') === 'true';
-const EVIDENCE = ['COR-512', 'ACC-417', 'NOD-204', 'AGR-27'] as const;
 
 const STEPS: { stage: Stage[]; label: string }[] = [
   { stage: ['lock'], label: 'Correlación' },
@@ -47,18 +44,6 @@ function Station() {
     if (a.id === 'focus-plans') spotlight('resp-plans', T.BRAND.blue);
   }, [T.BRAND.blue]);
 
-  const devPanel = isDev() ? (
-    <StationDevPanel
-      title="Respuesta"
-      evidenceId={EVIDENCE.join(', ')}
-      mission={mission}
-      dispatch={dispatch}
-      phase={phase === 'MISSION_FINISHED' ? 'ACTIVE' : phase}
-      assistant={assistant}
-      onForceEvidence={() => EVIDENCE.forEach((evidenceId) => dispatch({ type: 'EVIDENCE_DISCOVERED', evidenceId, source: 'control' }))}
-    />
-  ) : null;
-
   const reviewed = flow.reviewing ? PLAN_MAP.get(flow.reviewing) : undefined;
   const chosen = mission.selectedPlan ? PLAN_MAP.get(mission.selectedPlan) : undefined;
   const btn = (primary: boolean, enabled = true): React.CSSProperties => ({
@@ -77,7 +62,7 @@ function Station() {
   );
 
   return (
-    <StationShell moduleName="Respuesta" moduleSubtitle="Consola de autorización operativa" phase={phase} paused={paused} dev={devPanel}>
+    <StationShell moduleName="Respuesta" moduleSubtitle="Consola de autorización operativa" phase={phase} paused={paused}>
       {phase === 'WAITING' ? (
         <WaitingScreen label="VÉRTICE · RESPUESTA" />
       ) : (

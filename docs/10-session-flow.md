@@ -45,7 +45,7 @@ No explicar qué pista existe en cada estación.
 
 El facilitador da el briefing de 45–60 s (`docs/pilot/briefing.md`; editable) y termina con «Activamos VÉRTICE».
 
-Entonces pulsa `D` → **INICIAR EXPERIENCIA** y ocurre, sin más intervención:
+Entonces pulsa **INICIAR EXPERIENCIA** en la Consola de facilitación (`D` en VÉRTICE abre esa ventana aparte; `docs/pilot/facilitator-console.md`) y ocurre, sin más intervención:
 
 1. **Las cuatro estaciones** muestran «Sesión operativa activada» + el título de su puesto (~2 s) y pasan casi a la vez a su interfaz.
 2. **La LED** (reloj central desde 09:15:58): «Operación normal» → «Monitoreo activo» → «Variación detectada · Verificando identidad» → en unos **8 s**:

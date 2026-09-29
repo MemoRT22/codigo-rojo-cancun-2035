@@ -26,12 +26,6 @@ function readStored(): ThemeMode | null {
   }
 }
 
-/** Override técnico (solo pruebas/capturas): `?theme=midnight`. No se guarda y no es el flujo normal. */
-function readOverride(): ThemeMode | null {
-  const v = typeof location === 'undefined' ? null : new URLSearchParams(location.search).get('theme');
-  return isMode(v) ? v : null;
-}
-
 /**
  * Transición de iluminación. Preferente: View Transitions API (fundido de toda la pantalla, incluidos
  * gradientes, SVG y canvas). Respaldo: transiciones CSS por propiedad durante unos instantes.
@@ -59,7 +53,7 @@ function withLightingTransition(update: () => void) {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [mode, setModeState] = useState<ThemeMode>(() => readOverride() ?? readStored() ?? 'day');
+  const [mode, setModeState] = useState<ThemeMode>(() => readStored() ?? 'day');
   const modeRef = useRef(mode);
   const channelRef = useRef<BroadcastChannel | null>(null);
 

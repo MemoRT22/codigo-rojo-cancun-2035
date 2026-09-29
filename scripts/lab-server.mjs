@@ -23,7 +23,7 @@ const TYPES = {
   '.jpg': 'image/jpeg', '.ico': 'image/x-icon', '.woff': 'font/woff', '.woff2': 'font/woff2', '.ttf': 'font/ttf', '.map': 'application/json',
 };
 
-// El servidor declara el modo: así una estación abierta sin «?mode=lab» sigue conectada al laboratorio.
+// El servidor declara el modo: toda página que sirve usa el WebSocket del laboratorio, sin parámetros en la URL.
 const INDEX = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8')
   .replace('<head>', '<head><script>window.__VERTICE_MODE__="lab"</script>');
 
@@ -77,13 +77,13 @@ function lanAddresses() {
 server.listen(PORT, '0.0.0.0', () => {
   const STATIONS = ['comunicaciones', 'identidad', 'infraestructura', 'inteligencia', 'respuesta'];
   console.log('\nVÉRTICE · LAB MODE\n\nServidor listo en:\n');
-  console.log(`Local:\n  http://localhost:${PORT}/?mode=lab\n`);
+  console.log(`Local:\n  http://localhost:${PORT}/\n`);
   const ips = lanAddresses();
   if (ips.length === 0) console.log('Red:\n  (no se detectó ninguna interfaz de red; revisa la conexión)\n');
+  const NAMES = { comunicaciones: 'COMUNICACIONES', identidad: 'IDENTIDAD', infraestructura: 'INFRAESTRUCTURA', inteligencia: 'INTELIGENCIA', respuesta: 'RESPUESTA (solo pruebas)' };
   for (const ip of ips) {
-    console.log(`Red (${ip}):\n  VÉRTICE:  http://${ip}:${PORT}/?mode=lab\n  Estaciones:`);
-    for (const s of STATIONS) console.log(`    http://${ip}:${PORT}/station/${s}?mode=lab`);
-    console.log('');
+    console.log(`Red (${ip}):\n\nVÉRTICE (pantalla LED)\n  http://${ip}:${PORT}/\n`);
+    for (const s of STATIONS) console.log(`${NAMES[s]}\n  http://${ip}:${PORT}/station/${s}\n`);
   }
   console.log('Detener: Ctrl+C\n');
 });

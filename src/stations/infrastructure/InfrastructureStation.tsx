@@ -5,23 +5,21 @@ import type { AssistantAction } from '../assistant/types';
 import { IconPulse } from '../shell/icons';
 import { InvestigationRail } from '../shell/InvestigationRail';
 import { spotlight } from '../shell/spotlight';
-import { StationDevPanel } from '../shell/StationDevPanel';
 import { StationShell } from '../shell/StationShell';
 import { useStationSession } from '../shell/useStationSession';
 import { ROLES } from '../shell/roles';
 import { WaitingScreen } from '../shell/WaitingScreen';
 import { INFRASTRUCTURE_ASSISTANT } from './assistant';
 import { NODES, NODE_MAP } from './data';
-import { STATION_EVIDENCE, deriveStationPhase, feedbackFor, initialUi, submitToInvestigation, uiReducer, visibleNodes } from './logic';
+import { deriveStationPhase, feedbackFor, initialUi, submitToInvestigation, uiReducer, visibleNodes } from './logic';
 import { NodeList } from './NodeList';
 import { NodeReader } from './NodeReader';
 import type { InfraNode } from './types';
 
-const isDev = () => new URLSearchParams(location.search).get('dev') === 'true';
 
 function Station() {
   const { theme: T } = useTheme();
-  const { mission, dispatch } = useMissionClient('client');
+  const { mission, dispatch, source } = useMissionClient('client');
   const [ui, act] = useReducer(uiReducer, undefined, initialUi);
 
   const phase = deriveStationPhase(mission);
@@ -61,20 +59,8 @@ function Station() {
     act({ type: 'TRACE', entry: 'Solicitó una recomendación a VÉRTICE' });
   }, [assistant.request]);
 
-  const devPanel = isDev() ? (
-    <StationDevPanel
-      title="Infraestructura"
-      evidenceId={STATION_EVIDENCE}
-      mission={mission}
-      dispatch={dispatch}
-      phase={phase}
-      assistant={assistant}
-      onForceEvidence={() => submitToInvestigation(NODE_MAP.get('SIN-04'), mission, dispatch)}
-    />
-  ) : null;
-
   return (
-    <StationShell moduleName="Infraestructura" moduleSubtitle="Actividad y estado de servicios" roleTitle={ROLES.infraestructura.title} phase={phase} paused={paused} dev={devPanel}>
+    <StationShell moduleName="Infraestructura" moduleSubtitle="Actividad y estado de servicios" roleTitle={ROLES.infraestructura.title} phase={phase} paused={paused} source={source}>
       {phase === 'WAITING' ? (
         <WaitingScreen label="VÉRTICE · INFRAESTRUCTURA" role={ROLES.infraestructura} />
       ) : (

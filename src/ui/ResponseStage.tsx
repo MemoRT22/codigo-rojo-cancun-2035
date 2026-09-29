@@ -24,7 +24,7 @@ const STEPS: { stage: Stage[]; label: string }[] = [
   { stage: ['outcome'], label: 'Consecuencia' },
 ];
 
-export function ResponseStage({ mc, countdown, onVisibleChange }: { mc: MissionControls; countdown: string | null; onVisibleChange: (v: boolean) => void }) {
+export function ResponseStage({ mc, countdown }: { mc: MissionControls; countdown: string | null }) {
   const { theme: T } = useTheme();
   const { mission, dispatch } = mc;
   const flow = useResponseFlow(mission, dispatch);
@@ -56,7 +56,6 @@ export function ResponseStage({ mc, countdown, onVisibleChange }: { mc: MissionC
 
   const engaged = mission.status !== 'idle' && (allEvidence || mission.finalCorrelationValidated || !!mission.selectedPlan || !!mission.outcome);
   const visible = engaged && !(mission.outcome && acknowledged);
-  useEffect(() => { onVisibleChange(visible); }, [visible, onVisibleChange]);
   if (!visible) return null;
 
   const paused = mission.status === 'paused';

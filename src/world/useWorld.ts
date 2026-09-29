@@ -58,15 +58,12 @@ const metric = (s: Series): Metric => ({
   spark: [...s.hist],
 });
 
-function initialSpeed(): number {
-  const q = new URLSearchParams(typeof location === 'undefined' ? '' : location.search);
-  const v = Number(q.get('speed'));
-  return v > 0 ? v : 1;
-}
+// La velocidad del reloj simulado siempre arranca en ×1; solo se cambia desde la Consola de Facilitación.
+const INITIAL_SPEED = 1;
 
 export function useWorld(): WorldView {
   const [state, setStateRaw] = useState<NarrativeState>('OPERACION_NORMAL');
-  const [speed, setSpeed] = useState(initialSpeed);
+  const [speed, setSpeed] = useState(INITIAL_SPEED);
   const [clock, setClock] = useState(STATE_SPECS.OPERACION_NORMAL.baseTime);
   const [extra, setExtra] = useState<SystemEvent[]>([]);
   const [paused, setPaused] = useState(false);

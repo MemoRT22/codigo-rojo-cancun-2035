@@ -4,7 +4,6 @@ import { useMissionClient } from '../../mission/useMissionClient';
 import { StationShell } from '../shell/StationShell';
 import { InvestigationRail } from '../shell/InvestigationRail';
 import { IconMail } from '../shell/icons';
-import { StationDevPanel } from '../shell/StationDevPanel';
 import { ROLES } from '../shell/roles';
 import { WaitingScreen } from '../shell/WaitingScreen';
 import { useStationSession } from '../shell/useStationSession';
@@ -13,14 +12,13 @@ import { MessageList } from './MessageList';
 import { MessageReader } from './MessageReader';
 import { INBOX, MESSAGES, MESSAGE_MAP } from './data';
 import {
-  STATION_EVIDENCE, deriveStationPhase, feedbackFor, filterMessages, initialUi, submitToInvestigation, uiReducer,
+  deriveStationPhase, feedbackFor, filterMessages, initialUi, submitToInvestigation, uiReducer,
 } from './logic';
 
-const isDev = () => new URLSearchParams(location.search).get('dev') === 'true';
 
 function Station() {
   const { theme: T } = useTheme();
-  const { mission, dispatch } = useMissionClient('client');
+  const { mission, dispatch, source } = useMissionClient('client');
   const [ui, act] = useReducer(uiReducer, undefined, initialUi);
 
   const phase = deriveStationPhase(mission);
@@ -48,21 +46,8 @@ function Station() {
     if (result.kind === 'registered') act({ type: 'TRACE', entry: `Agregó a la investigación · ${selected.subject}` });
   }, [selected, mission, dispatch, assistant.failedAttempt]);
 
-  const dev = isDev();
-  const devPanel = dev ? (
-    <StationDevPanel
-      title="Comunicaciones"
-      evidenceId={STATION_EVIDENCE}
-      mission={mission}
-      dispatch={dispatch}
-      phase={phase}
-      assistant={assistant}
-      onForceEvidence={() => submitToInvestigation(MESSAGE_MAP.get(STATION_EVIDENCE), mission, dispatch)}
-    />
-  ) : null;
-
   return (
-    <StationShell moduleName="Comunicaciones" moduleSubtitle="Buzón corporativo · Revisión de mensajes" roleTitle={ROLES.comunicaciones.title} phase={phase} paused={paused} dev={devPanel}>
+    <StationShell moduleName="Comunicaciones" moduleSubtitle="Buzón corporativo · Revisión de mensajes" roleTitle={ROLES.comunicaciones.title} phase={phase} paused={paused} source={source}>
       {phase === 'WAITING' ? (
         <WaitingScreen label="VÉRTICE · COMUNICACIONES" role={ROLES.comunicaciones} />
       ) : (

@@ -52,6 +52,9 @@ http://localhost:5173/station/inteligencia    Estación 04 — Inteligencia
 http://localhost:5173/station/respuesta       Estación 05 — Respuesta
 ```
 
+**Ningún parámetro de URL configura el sistema**: las direcciones solo identifican la superficie. `npm run dev` usa el modo portátil; `npm run lab`, el laboratorio.
+En VÉRTICE, la tecla **`D`** abre la **Consola de facilitación** en una ventana aparte (`docs/pilot/facilitator-console.md`).
+
 Se pueden mostrar en una sola pantalla (cambiando de pestaña) o repartir en varias. La pantalla central sirve en monitor, TV,
 proyector o LED. Configuración mínima: 1 computadora, 1 navegador, 1 pantalla.
 
@@ -68,7 +71,7 @@ npm install
 npm run lab
 ```
 
-Imprime las direcciones de VÉRTICE y de cada estación para abrirlas en las otras computadoras. Guía breve: `docs/lab-setup.md`. El modo portátil sigue igual.
+Imprime las direcciones limpias de VÉRTICE y de cada estación para abrirlas en las otras computadoras (sin parámetros). Guía breve: `docs/lab-setup.md`. El modo portátil sigue igual.
 
 ## Principios no negociables
 

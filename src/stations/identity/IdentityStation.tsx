@@ -3,7 +3,6 @@ import { ThemeProvider, useTheme } from '../../brand/ThemeContext';
 import { useMissionClient } from '../../mission/useMissionClient';
 import { StationShell } from '../shell/StationShell';
 import { InvestigationRail } from '../shell/InvestigationRail';
-import { StationDevPanel } from '../shell/StationDevPanel';
 import { ROLES } from '../shell/roles';
 import { WaitingScreen } from '../shell/WaitingScreen';
 import { IconShield } from '../shell/icons';
@@ -16,14 +15,13 @@ import { IdentityEventReader } from './IdentityEventReader';
 import { IdentityProfile } from './IdentityProfile';
 import { EVENTS, EVENT_MAP, FEED, USER_MAP } from './data';
 import {
-  STATION_EVIDENCE, deriveStationPhase, feedbackFor, filterEvents, initialUi, submitToInvestigation, uiReducer,
+  deriveStationPhase, feedbackFor, filterEvents, initialUi, submitToInvestigation, uiReducer,
 } from './logic';
 
-const isDev = () => new URLSearchParams(location.search).get('dev') === 'true';
 
 function Station() {
   const { theme: T } = useTheme();
-  const { mission, dispatch } = useMissionClient('client');
+  const { mission, dispatch, source } = useMissionClient('client');
   const [ui, act] = useReducer(uiReducer, undefined, initialUi);
 
   const phase = deriveStationPhase(mission);
@@ -84,20 +82,8 @@ function Station() {
     act({ type: 'TRACE', entry: 'Solicitó una recomendación a VÉRTICE' });
   }, [assistant.request]);
 
-  const devPanel = isDev() ? (
-    <StationDevPanel
-      title="Identidad y Accesos"
-      evidenceId={STATION_EVIDENCE}
-      mission={mission}
-      dispatch={dispatch}
-      phase={phase}
-      assistant={assistant}
-      onForceEvidence={() => submitToInvestigation(EVENT_MAP.get(STATION_EVIDENCE), mission, dispatch)}
-    />
-  ) : null;
-
   return (
-    <StationShell moduleName="Identidad" moduleSubtitle="Usuarios, sesiones y accesos" roleTitle={ROLES.identidad.title} phase={phase} paused={paused} dev={devPanel}>
+    <StationShell moduleName="Identidad" moduleSubtitle="Usuarios, sesiones y accesos" roleTitle={ROLES.identidad.title} phase={phase} paused={paused} source={source}>
       {phase === 'WAITING' ? (
         <WaitingScreen label="VÉRTICE · IDENTIDAD" role={ROLES.identidad} />
       ) : (

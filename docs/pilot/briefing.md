@@ -38,7 +38,7 @@ Guion base para abrir la sesión. Es editable: cambia palabras, no la estructura
 
 ## Al decir «Activamos VÉRTICE»
 
-En la computadora de la LED: `D` → **INICIAR EXPERIENCIA** (y `D` de nuevo o «Cerrar» para ocultar el panel de facilitación).
+En la Consola de facilitación (ventana aparte, abierta con `D` en VÉRTICE): **INICIAR EXPERIENCIA**. La LED no muestra ningún control.
 
 Lo que ocurre solo:
 1. Las cuatro estaciones muestran «Sesión operativa activada» (~2 s) y pasan a su interfaz.
@@ -50,4 +50,4 @@ Lo que ocurre solo:
 - No nombres personas, identificadores ni estaciones que «tengan la pista». No expliques la solución.
 - Si preguntan «¿qué hago?»: repite la pregunta de inicio de su puesto o «hablen con otra estación».
 - Si el equipo se atasca, el asistente de cada puesto ofrece orientación; no la sustituyas.
-- Reset entre grupos: `D` → **Restablecer**. Las estaciones vuelven a mostrar su puesto.
+- Reset entre grupos: Consola de facilitación → **RESTABLECER SESIÓN** (confirmar). Las estaciones vuelven a mostrar su puesto.

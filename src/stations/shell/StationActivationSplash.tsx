@@ -1,29 +1,29 @@
 import { useEffect, useRef, useState } from 'react';
 import { useTheme } from '../../brand/ThemeContext';
 import { VerticeIsotipo } from '../../brand/VerticeLogo';
+import type { EventSource } from '../../mission/engine';
 import type { StationPhase } from './types';
 
 const SHOW_MS = 1900;
 const FADE_MS = 500;
-/** Un WAITING → ACTIVE en los primeros instantes tras abrir la estación es el replay de una sesión que ya corría (late join), no un inicio en vivo. */
-const LATE_JOIN_WINDOW_MS = 2500;
 
 /**
- * Micro-momento de activación (~2 s): cuando VÉRTICE inicia la sesión, los puestos cambian juntos.
- * Es solo presentación local: se dispara al pasar la fase de WAITING a activa; no es MissionState ni un evento.
- * Una estación que entra tarde a una misión ya en curso no lo reproduce.
+ * Micro-momento de activación (~2 s): cuando VÉRTICE inicia la sesión EN VIVO, los puestos cambian juntos.
+ * Es solo presentación local (ni MissionState ni un evento): se dispara cuando esta instancia estaba en WAITING y la
+ * fase pasa a activa por un evento en vivo. Si el estado activo llega como replay del registro del host (la estación
+ * se abrió o reconectó con la misión ya en curso), no se reproduce. Sin heurísticas de tiempo.
  */
-export function useActivationSplash(phase: StationPhase, enabled: boolean): boolean {
+export function useActivationSplash(phase: StationPhase, enabled: boolean, source: EventSource): boolean {
   const [show, setShow] = useState(false);
   const prev = useRef(phase);
-  const mountedAt = useRef(Date.now());
+  const sourceRef = useRef(source);
+  sourceRef.current = source;
 
   useEffect(() => {
     const was = prev.current;
     prev.current = phase;
     if (!enabled || was !== 'WAITING' || (phase !== 'ACTIVE' && phase !== 'EVIDENCE_FOUND')) return;
-    if (Date.now() - mountedAt.current < LATE_JOIN_WINDOW_MS) return;
-    setShow(true);
+    if (sourceRef.current === 'live') setShow(true);
   }, [phase, enabled]);
 
   useEffect(() => {

@@ -24,24 +24,28 @@ Al arrancar imprime las direcciones, por ejemplo:
 
 ```text
 Red (192.168.50.10):
-  VÉRTICE:  http://192.168.50.10:8080/?mode=lab
+  VÉRTICE:  http://192.168.50.10:8080/
   Estaciones:
-    http://192.168.50.10:8080/station/comunicaciones?mode=lab
-    http://192.168.50.10:8080/station/identidad?mode=lab
-    http://192.168.50.10:8080/station/infraestructura?mode=lab
-    http://192.168.50.10:8080/station/inteligencia?mode=lab
-    http://192.168.50.10:8080/station/respuesta?mode=lab
+    http://192.168.50.10:8080/station/comunicaciones
+    http://192.168.50.10:8080/station/identidad
+    http://192.168.50.10:8080/station/infraestructura
+    http://192.168.50.10:8080/station/inteligencia
+    http://192.168.50.10:8080/station/respuesta
 ```
 Cada vez que una computadora se conecta o se desconecta, el servidor lo anota en su terminal (`+ conectado … total: N`).
 
-## 2. Abrir VÉRTICE
+## 2. Abrir VÉRTICE (sin parámetros)
 
-En la computadora de la LED: la dirección **VÉRTICE** (`/?mode=lab`) en pantalla completa. Esa ventana es el host: **no la recargues durante la sesión**.
+En la computadora de la LED: la dirección **VÉRTICE** (`/`) en pantalla completa. Esa ventana es el host: **no la recargues durante la sesión**.
 
-## 3. Abrir cada estación
+## 3. Abrir la Consola de facilitación
 
-En cada computadora de análisis, en un navegador, la dirección de su estación (arriba). Si se escribe sin `?mode=lab`, el servidor ya la conecta al laboratorio.
-Nadie configura IPs ni instala nada.
+En la ventana de VÉRTICE pulsa **`D`**: se abre la **Consola de facilitación** en una ventana aparte (arrástrala al monitor del facilitador; la LED nunca muestra controles). Guía en `docs/pilot/facilitator-console.md`.
+Si el navegador bloquea la ventana, permite las ventanas emergentes para este sitio.
+
+## 4. Abrir cada estación
+
+En cada computadora de análisis, en un navegador, la dirección de su estación (arriba). Nadie configura IPs ni instala nada.
 
 > **IMPORTANTE:** en modo laboratorio **solo la computadora de la LED** abre la ruta `/`. Las demás computadoras deben usar siempre `/station/*`.
 > Una segunda ventana en `/` se comportaría como otro VÉRTICE (host) y reiniciaría la sesión al conectarse.
@@ -73,5 +77,5 @@ Diseñado para una **red local confiable y presencial**. Sin autenticación ni T
 
 ## Modo portátil (una sola computadora)
 
-Sigue disponible sin cambios: `npm run dev` (o un build servido con `npm run preview`) y todas las pestañas en el mismo navegador; usa `BroadcastChannel`. `?mode=portable` lo fuerza aunque la página venga del servidor del laboratorio.
+Sigue disponible sin cambios: `npm run dev` (o un build servido con `npm run preview`) y todas las pestañas en el mismo navegador; usa `BroadcastChannel`. El modo lo decide el entorno (`npm run dev` → portátil; `npm run lab` → laboratorio), nunca la barra de direcciones.
 Ver `docs/12-modos-de-ejecucion.md`.

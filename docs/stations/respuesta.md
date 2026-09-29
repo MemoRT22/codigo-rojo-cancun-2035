@@ -70,7 +70,7 @@ continuidad, riesgo residual y servicios saludables; **nunca nombra un plan como
 ## Reset
 
 `MISSION_RESET` deja `selectedPlan`, `outcome`, `finalCorrelationValidated` y `responseUnlocked` en su estado inicial (reducer), Respuesta vuelve a «Estación preparada» con el candado vacío, y VÉRTICE a operación normal
-(tanto si el reset se hace en VÉRTICE como desde una estación con `?dev=true`).
+(desde la Consola de facilitación de VÉRTICE).
 
 ## Respuesta en la pantalla LED (modo laboratorio)
 
@@ -91,12 +91,12 @@ mismos contenidos (`PLANS`, `OUTCOMES`, `normalizeId`). El Mission Engine no cam
   4. **Consecuencia** del plan ejecutado en grande (mismo contenido que `OutcomePanel`) y, cuando el grupo termina de leer, el botón **VER ESTADO DE VÉRTICE**, que regresa al mapa en `CONTENCION_EXITOSA` o `CONTENCION_INCOMPLETA`.
 - **Derivado de la misión:** la etapa sale de `MissionState` (candado / pendiente / planes / confirmación / consecuencia). Solo la introducción de 3 s y el «ya lo leímos» del desenlace son estado local de presentación. Recargar VÉRTICE sigue reiniciando la misión.
 - **Reset:** «Restablecer» limpia la consola (plan abierto, campos, desenlace reconocido) y VÉRTICE vuelve a operación normal.
-- **Atajos de facilitación:** mientras la consola está a la vista se desactivan `1`–`7`, `R` y espacio (no se puede reiniciar o mover el reloj por un toque accidental); `D` (panel de facilitación), `M` y `F` siguen activos.
+- **Atajos:** en VÉRTICE solo quedan `D` (Consola de facilitación, también durante la consola de respuesta), `M` (tema) y `F` (pantalla completa); reiniciar, cambiar de estado o mover el reloj ya no tienen tecla.
 - **Portátil:** la ruta `/station/respuesta` sigue disponible y funciona igual. Si se usa junto con VÉRTICE (misma misión), ambas vistas se mantienen coherentes: un plan confirmado en la estación aparece como consecuencia en la LED.
 
 ## Limitaciones conocidas
 
 - El mapa de VÉRTICE tiene un solo desenlace «Contención incompleta» para ALFA, BETA y GAMMA; la consecuencia específica de cada uno se ve en la consola de respuesta (estación o LED) antes de volver al mapa.
-- Las horas de la autorización dependen del reloj simulado de VÉRTICE (sin reloj compartido). Con velocidad normal, la autorización llega ~5 min después de iniciar (VÉRTICE arranca en 09:15:58 y autoriza a las 09:21:05); en pruebas se usa `?speed=`.
+- Las horas de la autorización dependen del reloj simulado de VÉRTICE (sin reloj compartido). Con velocidad normal, la autorización llega ~5 min después de iniciar (VÉRTICE arranca en 09:15:58 y autoriza a las 09:21:05); en ensayos se acelera con la velocidad de la Consola de facilitación.
 - Tras `PLAN_CONFIRMED` el motor marca la misión como `finished`: las demás estaciones muestran «Sesión finalizada».
 - No hay debrief, estadísticas ni puntuación (fuera del alcance). Sin tests automáticos propios (fase piloto); validado manualmente en el navegador.

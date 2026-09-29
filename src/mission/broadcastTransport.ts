@@ -1,5 +1,5 @@
 import type { MissionEvent } from './types';
-import type { MissionTransport } from './transport';
+import type { MissionTransport, RemoteInfo } from './transport';
 
 /**
  * Transporte del MODO PORTÁTIL: sincroniza VÉRTICE y las estaciones abiertas como pestañas/ventanas
@@ -36,7 +36,7 @@ export interface BroadcastTransportOptions {
 export class BroadcastChannelTransport implements MissionTransport {
   private readonly channel: BroadcastChannel;
   private readonly id = Math.random().toString(36).slice(2);
-  private readonly listeners = new Set<(e: MissionEvent) => void>();
+  private readonly listeners = new Set<(e: MissionEvent, info?: RemoteInfo) => void>();
   private log: MissionEvent[] = [];
 
   constructor(private readonly role: TransportRole, opts: BroadcastTransportOptions = {}) {
@@ -55,7 +55,7 @@ export class BroadcastChannelTransport implements MissionTransport {
    * Cada suscripción nueva (también tras un unsubscribe) pide sincronización al host.
    * Así una desmontada/remontada, o un replay que llegó cuando no había oyentes, se recupera solo.
    */
-  onRemote(listener: (event: MissionEvent) => void): () => void {
+  onRemote(listener: (event: MissionEvent, info?: RemoteInfo) => void): () => void {
     this.listeners.add(listener);
     if (this.role === 'client') this.send({ t: 'sync-request', from: this.id });
     return () => { this.listeners.delete(listener); };
@@ -81,7 +81,7 @@ export class BroadcastChannelTransport implements MissionTransport {
         if (this.role === 'host') this.send({ t: 'sync', to: w.from, events: [...this.log] });
         break;
       case 'sync':
-        if (w.to === this.id) w.events.forEach((e) => this.listeners.forEach((l) => l(e)));
+        if (w.to === this.id) w.events.forEach((e) => this.listeners.forEach((l) => l(e, { replay: true })));
         break;
     }
   }

@@ -14,7 +14,7 @@ export function IdentityProfile({ userId, onShowActivity }: { userId: string | n
 
   if (!user) {
     return (
-      <section style={card} aria-label="Perfil de identidad">
+      <section id="identity-profile" style={card} aria-label="Perfil de identidad">
         <span style={label}>Perfil de identidad</span>
         <div style={{ marginTop: '0.9rem', fontSize: '0.9375rem', color: T.INK.secondary, lineHeight: 1.5 }}>
           Selecciona un evento para consultar el perfil de la identidad asociada.
@@ -33,7 +33,7 @@ export function IdentityProfile({ userId, onShowActivity }: { userId: string | n
   );
 
   return (
-    <section style={card} aria-label="Perfil de identidad" key={user.id} className="animate-fade-in-up">
+    <section id="identity-profile" style={card} aria-label="Perfil de identidad" key={user.id} className="animate-fade-in-up">
       <div className="flex items-center justify-between">
         <span style={label}>Perfil de identidad</span>
         <IconUser size={16} color={T.INK.secondary} />

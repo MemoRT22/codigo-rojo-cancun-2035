@@ -27,7 +27,7 @@ export function IdentityEventReader({ event, phase, paused, detailsOpen, feedbac
 
   if (!event) {
     return (
-      <section className="flex flex-col items-center justify-center text-center min-h-0" style={{ ...card, padding: '2rem' }} aria-label="Evento abierto">
+      <section className="flex flex-col items-center justify-center text-center min-h-0" style={{ ...card, padding: '2rem' }} id="identity-reader" aria-label="Evento abierto">
         <IconShield size={44} color={T.INK.faint} />
         <div style={{ fontSize: '1.15rem', fontWeight: 620, marginTop: '1rem' }}>Selecciona un evento</div>
         <div style={{ fontSize: '0.9375rem', color: T.INK.secondary, marginTop: '0.4rem', maxWidth: '26rem', lineHeight: 1.5 }}>
@@ -48,7 +48,7 @@ export function IdentityEventReader({ event, phase, paused, detailsOpen, feedbac
   ];
 
   return (
-    <section className="flex flex-col min-h-0" style={card} aria-label="Evento abierto">
+    <section id="identity-reader" className="flex flex-col min-h-0" style={card} aria-label="Evento abierto">
       <div className="flex-1 overflow-y-auto" key={event.id}>
         <div className="animate-fade-in-up" style={{ padding: '1.5rem 2rem 1.25rem' }}>
           <div style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.12em', color: T.INK.secondary }}>EVENTO DE IDENTIDAD</div>
@@ -77,7 +77,7 @@ export function IdentityEventReader({ event, phase, paused, detailsOpen, feedbac
             <div style={{ fontSize: '0.9375rem', fontWeight: 650 }}>Sesiones de {event.userId} hoy</div>
             <div style={{ fontSize: '0.8125rem', color: T.INK.secondary }}>08:40 – 09:20</div>
           </div>
-          <ActivityTimeline userId={event.userId} selectedId={event.id} />
+          <div id="identity-timeline"><ActivityTimeline userId={event.userId} selectedId={event.id} /></div>
 
           <div style={{ marginTop: '1.5rem', border: `1px solid ${T.SURFACE.hairline}`, borderRadius: '0.75rem', overflow: 'hidden' }}>
             <button

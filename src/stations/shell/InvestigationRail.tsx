@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { useTheme } from '../../brand/ThemeContext';
-import { IconCheck, IconSpark, IconTrace } from './icons';
-import type { HelpLevel } from './help';
+import { AnalysisAssistantCard, type AssistantCardProps } from '../assistant/AnalysisAssistantCard';
+import { IconCheck, IconTrace } from './icons';
 import type { StationPhase } from './types';
 
 export interface InvestigationItem {
@@ -15,19 +15,17 @@ export interface InvestigationItem {
 interface Props {
   phase: StationPhase;
   items: InvestigationItem[];
-  help: HelpLevel;
-  /** Texto de la ayuda de nivel 1 y 2 (lenguaje de sistema, sin señalar la respuesta). */
-  helpLines: [string, string];
-  /** Con el nivel 2 se antepone «Sugerencia de análisis:» a la segunda línea. */
+  /** Analysis Assistant de la estación (recomendaciones curadas, aviso y acciones). */
+  assistant: AssistantCardProps;
   trace: string[];
   nouns: { singular: string; plural: string; empty: string };
 }
 
 /**
  * Panel lateral común de investigación: elementos vinculados, estado de la evidencia registrada,
- * asistente de análisis (ayudas progresivas) e historial de análisis.
+ * Analysis Assistant e historial de análisis.
  */
-export function InvestigationRail({ phase, items, help, helpLines, trace, nouns }: Props) {
+export function InvestigationRail({ phase, items, assistant, trace, nouns }: Props) {
   const { theme: T } = useTheme();
   const card: React.CSSProperties = {
     background: T.SURFACE.card, border: `1px solid ${T.SURFACE.hairline}`, borderRadius: '0.875rem', boxShadow: `0 6px 24px ${T.SURFACE.shadow}`, padding: '1.1rem 1.2rem',
@@ -75,20 +73,7 @@ export function InvestigationRail({ phase, items, help, helpLines, trace, nouns 
         )}
       </section>
 
-      {help > 0 && phase === 'ACTIVE' && (
-        <section className="animate-fade-in-up" style={{ ...card, borderColor: `${T.BRAND.blue}44` }}>
-          <div className="flex items-center" style={{ gap: '0.5rem' }}>
-            <IconSpark size={17} color={T.BRAND.blue} />
-            <span style={{ ...label, color: T.BRAND.blue }}>VÉRTICE · Asistente de análisis</span>
-          </div>
-          <div style={{ marginTop: '0.7rem', fontSize: '0.9375rem', lineHeight: 1.55 }}>{helpLines[0]}</div>
-          {help > 1 && (
-            <div className="animate-fade-in-up" style={{ marginTop: '0.7rem', fontSize: '0.9375rem', lineHeight: 1.55, color: T.INK.secondary }}>
-              <span style={{ fontWeight: 650, color: T.INK.primary }}>Sugerencia de análisis:</span> {helpLines[1]}
-            </div>
-          )}
-        </section>
-      )}
+      {phase === 'ACTIVE' && <AnalysisAssistantCard {...assistant} />}
 
       <section className="flex flex-col min-h-0 flex-1" style={{ ...card, minHeight: '8rem' }}>
         <div className="flex items-center" style={{ gap: '0.5rem' }}>

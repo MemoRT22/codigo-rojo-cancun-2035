@@ -74,10 +74,6 @@ export function filterMessages(
   });
 }
 
-// ── Ayudas progresivas (comunes: ../shell/help) ──
-
-export { HELP_AT, helpLevel, type HelpLevel } from '../shell/help';
-
 // ── Estado de interfaz ──
 
 export function initialUi(): UiState {

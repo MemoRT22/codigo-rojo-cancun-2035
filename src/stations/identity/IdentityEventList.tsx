@@ -102,6 +102,7 @@ export function IdentityEventList({ events, total, selectedId, linkedIds, query,
         <label className="flex items-center" style={{ gap: '0.5rem', marginTop: '0.75rem', fontSize: '0.8125rem', fontWeight: 600, color: T.INK.secondary }}>
           Zona
           <select
+            id="identity-zone-filter"
             value={zone}
             onChange={(e) => onZone(e.target.value)}
             aria-label="Filtrar por zona"

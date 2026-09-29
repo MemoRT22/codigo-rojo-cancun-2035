@@ -7,6 +7,7 @@ import { IconMail } from '../shell/icons';
 import { StationDevPanel } from '../shell/StationDevPanel';
 import { WaitingScreen } from '../shell/WaitingScreen';
 import { useStationSession } from '../shell/useStationSession';
+import { COMMUNICATIONS_ASSISTANT } from './assistant';
 import { MessageList } from './MessageList';
 import { MessageReader } from './MessageReader';
 import { INBOX, MESSAGES, MESSAGE_MAP } from './data';
@@ -22,7 +23,7 @@ function Station() {
   const [ui, act] = useReducer(uiReducer, undefined, initialUi);
 
   const phase = deriveStationPhase(mission);
-  const { paused, help, setHelpOverride } = useStationSession(mission, phase, ui.misses, () => act({ type: 'RESET' }));
+  const { paused, assistant } = useStationSession({ mission, phase, onRestart: () => act({ type: 'RESET' }), assistant: COMMUNICATIONS_ASSISTANT });
 
   // ── Datos derivados ──
   const visible = useMemo(() => filterMessages(INBOX, { query: ui.query, filter: ui.filter, readIds: ui.readIds }), [ui.query, ui.filter, ui.readIds]);
@@ -39,9 +40,12 @@ function Station() {
     const result = submitToInvestigation(selected, mission, dispatch);
     const feedback = feedbackFor(result, selected.id);
     if (feedback) act({ type: 'FEEDBACK', feedback });
-    if (result.kind === 'no-match') act({ type: 'MISS' });
+    if (result.kind === 'no-match') {
+      act({ type: 'MISS' });
+      assistant.failedAttempt(`attempt:${selected.id}`);
+    }
     if (result.kind === 'registered') act({ type: 'TRACE', entry: `Agregó a la investigación · ${selected.subject}` });
-  }, [selected, mission, dispatch]);
+  }, [selected, mission, dispatch, assistant.failedAttempt]);
 
   const dev = isDev();
   const devPanel = dev ? (
@@ -51,8 +55,7 @@ function Station() {
       mission={mission}
       dispatch={dispatch}
       phase={phase}
-      help={help}
-      onHelp={setHelpOverride}
+      assistant={assistant}
       onForceEvidence={() => submitToInvestigation(MESSAGE_MAP.get(STATION_EVIDENCE), mission, dispatch)}
     />
   ) : null;
@@ -104,11 +107,7 @@ function Station() {
                 evidenceId: m.evidence ?? m.id,
                 icon: <IconMail size={18} color={T.STATUS.info} />,
               }))}
-              help={help}
-              helpLines={[
-                'VÉRTICE detecta comunicaciones recientes con metadatos que conviene revisar.',
-                'compara remitente, dominio y horario. Un mensaje urgente no necesariamente es malicioso.',
-              ]}
+              assistant={{ shown: assistant.shown, pending: assistant.pending, onRequest: assistant.request }}
               trace={ui.trace}
               nouns={{
                 singular: 'comunicación',

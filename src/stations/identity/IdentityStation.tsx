@@ -6,7 +6,10 @@ import { InvestigationRail } from '../shell/InvestigationRail';
 import { StationDevPanel } from '../shell/StationDevPanel';
 import { WaitingScreen } from '../shell/WaitingScreen';
 import { IconShield } from '../shell/icons';
+import { spotlight } from '../shell/spotlight';
+import type { AssistantAction } from '../assistant/types';
 import { useStationSession } from '../shell/useStationSession';
+import { IDENTITY_ASSISTANT } from './assistant';
 import { IdentityEventList } from './IdentityEventList';
 import { IdentityEventReader } from './IdentityEventReader';
 import { IdentityProfile } from './IdentityProfile';
@@ -23,7 +26,8 @@ function Station() {
   const [ui, act] = useReducer(uiReducer, undefined, initialUi);
 
   const phase = deriveStationPhase(mission);
-  const { paused, help, setHelpOverride } = useStationSession(mission, phase, ui.misses, () => act({ type: 'RESET' }));
+  const { paused, assistant } = useStationSession({ mission, phase, onRestart: () => act({ type: 'RESET' }), assistant: IDENTITY_ASSISTANT });
+  const { progress, failedAttempt } = assistant;
 
   const visible = useMemo(
     () => filterEvents(FEED, { query: ui.query, result: ui.result, zone: ui.zone, nameOf: (id) => USER_MAP.get(id)?.name ?? id }),
@@ -42,9 +46,42 @@ function Station() {
     const result = submitToInvestigation(selected, mission, dispatch);
     const feedback = feedbackFor(result, selected.id);
     if (feedback) act({ type: 'FEEDBACK', feedback });
-    if (result.kind === 'no-match') act({ type: 'MISS' });
+    if (result.kind === 'no-match') {
+      act({ type: 'MISS' });
+      failedAttempt(`attempt:${selected.id}`);
+    }
     if (result.kind === 'registered') act({ type: 'TRACE', entry: `Agregó a la investigación · ${selected.userId} · ${selected.time}` });
-  }, [selected, mission, dispatch]);
+  }, [selected, mission, dispatch, failedAttempt]);
+
+  // ── Actividad significativa para el asistente: solo lo nuevo cuenta (repetir la misma acción no es avanzar) ──
+  const select = useCallback((id: string) => {
+    act({ type: 'SELECT', id });
+    progress(`event:${id}`);
+    const e = EVENT_MAP.get(id);
+    if (e) progress(`profile:${e.userId}`);
+  }, [progress]);
+
+  const showActivity = useCallback((userId: string) => {
+    act({ type: 'QUERY', query: userId });
+    act({ type: 'TRACE', entry: `Filtró actividad · ${userId}` });
+    progress(`activity:${userId}`);
+  }, [progress]);
+
+  // ── Acciones recomendadas: enfocan paneles o aplican filtros; nunca seleccionan ni vinculan un evento ──
+  const runAssistantAction = useCallback((a: AssistantAction) => {
+    act({ type: 'TRACE', entry: `Acción recomendada · ${a.label}` });
+    switch (a.id) {
+      case 'focus-profile': return spotlight('identity-profile', T.BRAND.blue);
+      case 'focus-sessions': return spotlight(document.getElementById('identity-timeline') ? 'identity-timeline' : 'identity-reader', T.BRAND.blue);
+      case 'focus-zones': return spotlight('identity-zone-filter', T.BRAND.blue, { focus: true });
+      case 'show-user-activity': if (a.payload) showActivity(a.payload); return;
+    }
+  }, [T.BRAND.blue, showActivity]);
+
+  const requestAssistant = useCallback(() => {
+    assistant.request();
+    act({ type: 'TRACE', entry: 'Solicitó una recomendación a VÉRTICE' });
+  }, [assistant.request]);
 
   const devPanel = isDev() ? (
     <StationDevPanel
@@ -53,8 +90,7 @@ function Station() {
       mission={mission}
       dispatch={dispatch}
       phase={phase}
-      help={help}
-      onHelp={setHelpOverride}
+      assistant={assistant}
       onForceEvidence={() => submitToInvestigation(EVENT_MAP.get(STATION_EVIDENCE), mission, dispatch)}
     />
   ) : null;
@@ -79,10 +115,20 @@ function Station() {
               query={ui.query}
               result={ui.result}
               zone={ui.zone}
-              onQuery={(query) => act({ type: 'QUERY', query })}
-              onResult={(result) => act({ type: 'RESULT', result })}
-              onZone={(zone) => act({ type: 'ZONE', zone })}
-              onSelect={(id) => act({ type: 'SELECT', id })}
+              onQuery={(query) => {
+                act({ type: 'QUERY', query });
+                const q = query.trim().toLowerCase();
+                if (q.length >= 3) progress(`query:${q}`);
+              }}
+              onResult={(result) => {
+                act({ type: 'RESULT', result });
+                if (result !== 'todos') progress(`filter:result:${result}`);
+              }}
+              onZone={(zone) => {
+                act({ type: 'ZONE', zone });
+                if (zone !== 'todas') progress(`filter:zone:${zone}`);
+              }}
+              onSelect={select}
             />
             <IdentityEventReader
               event={selected}
@@ -92,7 +138,10 @@ function Station() {
               feedback={ui.feedback}
               linked={selected ? linkedIds.includes(selected.id) : false}
               onToggleDetails={() => {
-                if (selected && !ui.detailsOpen) act({ type: 'TRACE', entry: `Consultó detalles · ${selected.id}` });
+                if (selected && !ui.detailsOpen) {
+                  act({ type: 'TRACE', entry: `Consultó detalles · ${selected.id}` });
+                  progress(`details:${selected.id}`);
+                }
                 act({ type: 'TOGGLE_DETAILS' });
               }}
               onSubmit={submit}
@@ -100,10 +149,7 @@ function Station() {
             <div className="flex flex-col min-h-0 overflow-y-auto" style={{ gap: '1rem' }}>
               <IdentityProfile
                 userId={selected?.userId ?? null}
-                onShowActivity={(userId) => {
-                  act({ type: 'QUERY', query: userId });
-                  act({ type: 'TRACE', entry: `Filtró actividad · ${userId}` });
-                }}
+                onShowActivity={showActivity}
               />
               <div className="flex-1 min-h-0" style={{ display: 'flex' }}>
                 <div style={{ flex: 1, minHeight: 0 }}>
@@ -116,11 +162,7 @@ function Station() {
                       evidenceId: e.evidence ?? e.id,
                       icon: <IconShield size={18} color={T.STATUS.info} />,
                     }))}
-                    help={help}
-                    helpLines={[
-                      'Hay identidades con actividad simultánea desde contextos distintos.',
-                      'compara usuario, dispositivo, zona y comportamiento habitual.',
-                    ]}
+                    assistant={{ shown: assistant.shown, pending: assistant.pending, onRequest: requestAssistant, onAction: runAssistantAction }}
                     trace={ui.trace}
                     nouns={{
                       singular: 'evento',

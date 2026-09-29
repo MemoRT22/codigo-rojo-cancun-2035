@@ -17,7 +17,7 @@
 
 ## Siguiente — hacia el piloto
 
-- [ ] Infraestructura
+- [x] Estación 03 — Infraestructura v1 (`docs/stations/infraestructura.md`); NOD-204
 - [ ] Inteligencia
 - [ ] Respuesta (candado final, consola de respuesta, desenlaces, restablecimiento de una acción)
 - [ ] Integración completa portátil
@@ -55,7 +55,7 @@
 - [ ] Validar correlación sin facilitador (con alumnos; el motor ya la resuelve).
 
 ### Fase 3 — Análisis
-- [ ] Estación Infraestructura.
+- [x] Estación Infraestructura.
 - [ ] Estación Inteligencia.
 - [ ] Validar razonamiento entre estaciones.
 

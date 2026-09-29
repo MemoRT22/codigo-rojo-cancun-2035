@@ -128,6 +128,12 @@ export function DevPanel({ visible, onClose, world, mc, countdown, onManualOverr
           >
             Abrir estación Identidad (nueva pestaña) ↗
           </button>
+          <button
+            style={{ ...btn, width: '100%', marginTop: 4, textAlign: 'left' }}
+            onClick={() => window.open('/station/infraestructura', '_blank')}
+          >
+            Abrir estación Infraestructura (nueva pestaña) ↗
+          </button>
         </div>
 
         {/* ── Evidencias ── */}

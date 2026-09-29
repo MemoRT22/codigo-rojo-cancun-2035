@@ -2,7 +2,7 @@ import { useState, type CSSProperties, type ReactNode } from 'react';
 import { useTheme } from '../brand/ThemeContext';
 import type { MissionControls } from '../mission/useMission';
 import { EVIDENCE_IDS, RESPONSE_PLANS, type EvidenceId, type ResponsePlan } from '../mission/types';
-import { NARRATIVE_STATES, type NarrativeState, type SystemEvent } from '../types';
+import type { NarrativeState, SystemEvent } from '../types';
 import { fmtTime } from '../world/scenario';
 import type { WorldView } from '../world/useWorld';
 import { ALERT_LABEL } from './FacilitatorAlert';
@@ -34,6 +34,10 @@ const SCENARIO: Record<NarrativeState, string> = {
   CONTENCION_EXITOSA: 'Contención exitosa',
   CONTENCION_INCOMPLETA: 'Contención incompleta',
 };
+
+// Solo estados útiles para inspección narrativa: cambian el mundo visual pero no MissionState. Las fases finales se alcanzan
+// con eventos reales de misión desde «Ensayo / contingencia» (evidencias → correlación → autorización → plan → ejecución).
+const INSPECTION_STATES: NarrativeState[] = ['OPERACION_NORMAL', 'ANOMALIA_DETECTADA', 'INCIDENTE_ESCALANDO', 'CORRELACION_ESTABLECIDA'];
 
 const STATIONS: Record<EvidenceId, string> = { 'COR-512': 'Comunicaciones', 'ACC-417': 'Identidad', 'NOD-204': 'Infraestructura', 'AGR-27': 'Inteligencia' };
 const PLAN_LABEL: Record<ResponsePlan, string> = { ALFA: 'Alfa · Apagado general', BETA: 'Beta · Contención de identidad', GAMMA: 'Gamma · Aislamiento de inteligencia', DELTA: 'Delta · Contención dirigida' };
@@ -89,7 +93,14 @@ export function FacilitatorConsole({ world, mc, countdown, onScenario, onReset, 
   const [fsHint, setFsHint] = useState(false);
 
   const status = mission.status;
-  const cdState = countdown.seconds === 0 ? 'agotado' : countdown.running ? 'corriendo' : 'detenido';
+  // El control manual del contador solo aplica con la misión en curso y la anomalía ya visible; la pausa de la MISIÓN manda.
+  const cdEnabled = status === 'running' && world.spec.showCountdown && countdown.seconds > 0;
+  const cdState =
+    status === 'finished' ? 'FINALIZADA'
+    : status === 'paused' ? 'MISIÓN EN PAUSA'
+    : status === 'idle' || !world.spec.showCountdown ? 'ESPERANDO ACTIVACIÓN'
+    : countdown.seconds === 0 ? 'AGOTADO'
+    : countdown.running ? 'CORRIENDO' : 'DETENIDO';
 
   return (
     <div style={{ font: '13px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif', color: '#0E1D33', padding: 14, display: 'grid', gap: 12 }}>
@@ -139,9 +150,10 @@ export function FacilitatorConsole({ world, mc, countdown, onScenario, onReset, 
 
       {/* C · Control de escenario */}
       <Section title="Control de escenario">
+        <div style={{ marginBottom: 8, fontSize: 12, color: '#7B8DA5' }}>Solo cambia lo que se ve en VÉRTICE (inspección). Las fases finales se alcanzan desde «Ensayo / contingencia» con eventos reales.</div>
         <div style={{ marginBottom: 8, fontSize: 12, color: '#5A6D86' }}>Estado actual: <b style={{ color: '#0E1D33' }}>{SCENARIO[world.state]}</b></div>
         <div style={{ display: 'grid', gap: 5 }}>
-          {NARRATIVE_STATES.map((s) => (
+          {INSPECTION_STATES.map((s) => (
             <button key={s} style={{ ...btn, textAlign: 'left', ...(s === world.state ? on : {}) }} onClick={() => onScenario(s)}>{SCENARIO[s].toUpperCase()}</button>
           ))}
         </div>
@@ -188,10 +200,10 @@ export function FacilitatorConsole({ world, mc, countdown, onScenario, onReset, 
         <Row label="Tiempo" value={countdown.display} />
         <Row label="Estado" value={cdState} />
         <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
-          <button style={dis(warnBtn, !countdown.running)} disabled={!countdown.running} onClick={countdown.pause}>PAUSAR</button>
-          <button style={dis(btn, countdown.running || countdown.seconds === 0)} disabled={countdown.running || countdown.seconds === 0} onClick={countdown.start}>REANUDAR</button>
+          <button style={dis(warnBtn, !cdEnabled || !countdown.running)} disabled={!cdEnabled || !countdown.running} onClick={countdown.pause}>PAUSAR</button>
+          <button style={dis(btn, !cdEnabled || countdown.running)} disabled={!cdEnabled || countdown.running} onClick={countdown.start}>REANUDAR</button>
         </div>
-        <div style={{ marginTop: 6, fontSize: 12, color: '#7B8DA5' }}>Arranca sola con la anomalía; aquí solo se detiene o se reanuda.</div>
+        <div style={{ marginTop: 6, fontSize: 12, color: '#7B8DA5' }}>Arranca sola con la anomalía. Solo se puede detener o reanudar con la misión en curso y la anomalía visible.</div>
       </Section>
 
       {/* G · Tema y presentación */}

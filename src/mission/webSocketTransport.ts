@@ -1,6 +1,7 @@
 import type { MissionEvent } from './types';
 import type { MissionTransport, RemoteInfo } from './transport';
 import type { TransportRole } from './broadcastTransport';
+import type { PresentationChannel, PresentationMessage } from '../presentation/presentation';
 
 /**
  * Transporte del MODO LABORATORIO: varias computadoras en la misma red local, conectadas por WebSocket a un
@@ -20,6 +21,9 @@ type Wire =
   | { t: 'event'; event: MissionEvent }
   | { t: 'sync-request'; from: string; host?: boolean }
   | { t: 'sync'; to: string; events: MissionEvent[] }
+  // Canal de presentación (tema): mensajes aparte de los eventos de misión; el relay los repite sin interpretarlos.
+  | { t: 'ui'; msg: PresentationMessage }
+  | { t: 'ui-request' }
   | { t: 'hb' };
 
 /** Destinatario «todos»: el host lo usa al reconectar. */
@@ -50,6 +54,19 @@ export class WebSocketTransport implements MissionTransport {
   private lastRx = 0;
   private readonly retryMs: number[];
   private readonly hbTimeout: number;
+  private readonly presentationListeners = new Set<(m: PresentationMessage) => void>();
+  private snapshot: (() => PresentationMessage[]) | null = null;
+
+  /** Canal de presentación sobre este mismo socket (separado de la misión). */
+  readonly presentation: PresentationChannel = {
+    publish: (msg) => this.send({ t: 'ui', msg }),
+    subscribe: (l) => {
+      this.presentationListeners.add(l);
+      if (this.role === 'client') this.send({ t: 'ui-request' }); // late join: pide el estado actual al host
+      return () => { this.presentationListeners.delete(l); };
+    },
+    provideSnapshot: (fn) => { this.snapshot = fn; },
+  };
 
   constructor(private readonly role: TransportRole, private readonly url: string, opts: WebSocketTransportOptions = {}) {
     this.retryMs = opts.retryMs ?? RETRY_MS;
@@ -105,6 +122,7 @@ export class WebSocketTransport implements MissionTransport {
 
   private onOpen(): void {
     if (this.role === 'host') {
+      this.announcePresentation();
       if (!this.everOpen) {
         this.everOpen = true;
         // Primera conexión de este host: sesión nueva; las estaciones ya abiertas vuelven a «preparada».
@@ -121,6 +139,12 @@ export class WebSocketTransport implements MissionTransport {
     this.outbox = [];
     pending.forEach((w) => this.send(w));
     if (this.listeners.size > 0) this.send({ t: 'sync-request', from: this.id });
+    if (this.presentationListeners.size > 0) this.send({ t: 'ui-request' });
+  }
+
+  /** El host difunde su estado de presentación actual (al conectar o reconectar y cuando una estación lo pide). */
+  private announcePresentation(): void {
+    this.snapshot?.().forEach((msg) => this.send({ t: 'ui', msg }));
   }
 
   private scheduleRetry(): void {
@@ -169,6 +193,12 @@ export class WebSocketTransport implements MissionTransport {
       case 'event':
         this.record(w.event);
         this.listeners.forEach((l) => l(w.event));
+        break;
+      case 'ui':
+        this.presentationListeners.forEach((l) => l(w.msg));
+        break;
+      case 'ui-request':
+        if (this.role === 'host') this.announcePresentation();
         break;
       case 'sync-request':
         if (this.role === 'host' && !w.host) this.send({ t: 'sync', to: w.from, events: this.replay() });

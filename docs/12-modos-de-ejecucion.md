@@ -79,8 +79,8 @@ Es una característica normal del producto, no de desarrollo: un **interruptor s
 y en todas las estaciones (`StationShell`). Basta pulsarlo; no hace falta ningún parámetro de URL ni el panel de desarrollo.
 
 - **Persistencia:** se guarda en `localStorage` (`vertice-theme`); al recargar o abrir otra vista se mantiene la elección.
-- **Sincronización:** al cambiarlo en cualquier módulo, todas las pestañas VÉRTICE del mismo navegador cambian solas (canal
-  `BroadcastChannel` propio del tema, con el evento `storage` como respaldo). Es independiente del Mission Engine.
+- **Sincronización (canal de presentación, separado de la misión):** el tema es una preferencia compartida por toda la sesión. Cambiarlo en la Consola de facilitación, con `M` o con el interruptor de cualquier estación lo cambia en VÉRTICE y en todas las estaciones casi al mismo tiempo.
+  Portátil: `BroadcastChannel` (con `storage` como respaldo). Laboratorio: mensajes `THEME_CHANGED` por el mismo socket `/ws`, claramente separados de los eventos de misión (el servidor sigue siendo un repetidor sin semántica); VÉRTICE (host) responde con el tema actual a la estación que se une o reconecta, así que una PC nueva termina en el mismo tema que el resto. Nunca entra en `MissionState`, `MissionEvent` ni el reducer.
 - **Solo presentación:** no reinicia ni altera misión, estación, selección, evidencia, temporizador ni mundo simulado.
 - **Transición:** fundido de iluminación de toda la pantalla (View Transitions; respaldo con transiciones CSS; inmediato si el
   sistema pide reducir movimiento). El atajo `M` en VÉRTICE hace lo mismo.

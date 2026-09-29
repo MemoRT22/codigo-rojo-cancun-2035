@@ -22,11 +22,11 @@ Atajos que quedan en VÉRTICE: **D** consola · **M** tema · **F** pantalla com
 
 - **Sesión** — estado (Esperando / En curso / Pausada / Finalizada), hora simulada y tiempo restante. **INICIAR EXPERIENCIA**, **PAUSAR**, **REANUDAR** y **RESTABLECER SESIÓN** (pide confirmación en la misma consola).
 - **Estado de la investigación** — cuál de las cuatro evidencias está encontrada, correlación final, respuesta, plan seleccionado y desenlace. Es solo para ti, no para los alumnos.
-- **Control de escenario** — fuerza el estado narrativo de VÉRTICE (operación normal → … → contención exitosa/incompleta) para una demo, un ensayo o una contingencia. Muestra el estado actual.
+- **Control de escenario** — solo para inspección visual de VÉRTICE: Operación normal · Anomalía detectada · Incidente en escalamiento · Correlación establecida (no cambia la misión). Las fases finales (respuesta autorizada, contención exitosa/incompleta) se alcanzan con eventos reales desde «Ensayo / contingencia».
 - **Alertas VÉRTICE** — lanza un aviso visual en la LED: nivel (Información, Advertencia, Crítica, Recuperación), duración (4 s, 8 s, persistente) y un mensaje de la lista o uno personalizado (texto plano, máx. 120 caracteres). Aparece abajo al centro de VÉRTICE, se anota también en «Actividad reciente» y no cambia el estado de la misión. «Ocultar alerta» retira una persistente. Los mensajes predefinidos no revelan evidencia.
 - **Velocidad del reloj simulado** — ×1 (sesión real), ×4, ×8, ×16 (ensayo).
-- **Cuenta regresiva** — tiempo y estado; PAUSAR / REANUDAR. Arranca sola con la anomalía.
-- **Tema y presentación** — DAY / MIDNIGHT y pantalla completa (si el navegador no la permite desde esta ventana, usa `F` en VÉRTICE).
+- **Cuenta regresiva** — tiempo y estado. Antes de la anomalía muestra «20:00 · Esperando activación» sin controles; con la misión en curso y la anomalía visible, PAUSAR / REANUDAR; con la misión en pausa (o sin iniciar/finalizada) los controles quedan deshabilitados: la pausa de la misión manda. Arranca sola con la anomalía.
+- **Tema y presentación** — DAY / MIDNIGHT y pantalla completa (si el navegador no la permite desde esta ventana, usa `F` en VÉRTICE). El tema cambia en VÉRTICE y en **todas** las estaciones (también en el laboratorio) y una estación que se abre después entra con el tema actual.
 - **Ensayo / contingencia** (plegada) — atajos que se saltan el flujo real: registrar evidencia de prueba, validar la correlación canónica, autorizar la respuesta y ejecutar un plan.
 
 ## Inicio
@@ -39,7 +39,7 @@ Da el briefing (`docs/pilot/briefing.md`) y pulsa **INICIAR EXPERIENCIA**. Las c
 
 ## Reset entre grupos
 
-**RESTABLECER SESIÓN** → confirmar. VÉRTICE vuelve a operación normal («Célula de respuesta en espera»), las estaciones a su puesto preparado y el siguiente inicio vuelve a mostrar la activación.
+**RESTABLECER SESIÓN** → confirmar. Deja: misión en espera, VÉRTICE en operación normal («Célula de respuesta en espera»), cuenta regresiva en 20:00 detenida, alertas limpias y **velocidad en ×1** (un ensayo acelerado no contamina al siguiente grupo). Las estaciones vuelven a su puesto preparado y el siguiente inicio vuelve a mostrar la activación.
 
 ## Notas
 

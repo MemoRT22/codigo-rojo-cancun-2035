@@ -1,8 +1,10 @@
 import { BroadcastChannelTransport, type TransportRole } from './broadcastTransport';
 import { LocalTransport, type MissionTransport } from './transport';
 import { WebSocketTransport } from './webSocketTransport';
+import { createBroadcastPresentation, type PresentationChannel } from '../presentation/presentation';
 
 const singletons = new Map<TransportRole, MissionTransport>();
+const presentations = new Map<TransportRole, PresentationChannel>();
 
 /**
  * El modo depende del ENTORNO que se levantó, nunca de la barra de direcciones:
@@ -36,10 +38,26 @@ export function getMissionTransport(role: TransportRole): MissionTransport {
   return t;
 }
 
+/**
+ * Canal de PRESENTACIÓN (tema DAY / MIDNIGHT compartido por toda la sesión), separado del de misión.
+ * Laboratorio: comparte el socket del transporte de misión (el relay solo repite mensajes). Portátil: BroadcastChannel.
+ */
+export function getPresentationChannel(role: TransportRole): PresentationChannel {
+  let c = presentations.get(role);
+  if (!c) {
+    const t = getMissionTransport(role);
+    c = t instanceof WebSocketTransport ? t.presentation : createBroadcastPresentation();
+    presentations.set(role, c);
+  }
+  return c;
+}
+
 // HMR: cierra los canales del módulo anterior para no dejar oyentes huérfanos.
 if (import.meta.hot) {
   import.meta.hot.dispose(() => {
     singletons.forEach((t) => t.close?.());
     singletons.clear();
+    presentations.forEach((c) => c.close?.());
+    presentations.clear();
   });
 }

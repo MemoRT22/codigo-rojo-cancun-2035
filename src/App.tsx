@@ -62,10 +62,14 @@ function Stage() {
   }, [inject]);
   useEffect(() => clearAlert, [clearAlert]);
 
+  // Restablecer sesión (entre grupos): misión en idle, mundo en operación normal, cuenta regresiva en 20:00 detenida,
+  // alertas limpias y velocidad de vuelta a ×1 (un ensayo acelerado no debe contaminar al siguiente grupo).
+  const { setSpeed } = world;
   const reset = useCallback(() => {
     clearAlert();
     mc.resetMission();
-  }, [mc, clearAlert]);
+    setSpeed(1);
+  }, [mc, clearAlert, setSpeed]);
 
   const fullscreen = useCallback(async () => {
     try {
@@ -145,7 +149,7 @@ function Stage() {
 
 export default function App() {
   return (
-    <ThemeProvider>
+    <ThemeProvider role="host">
       <Stage />
     </ThemeProvider>
   );

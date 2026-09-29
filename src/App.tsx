@@ -7,6 +7,7 @@ import { FlowCanvas, type LiveWorld } from './map/FlowCanvas';
 import { W, H } from './map/scene';
 import { useWorld } from './world/useWorld';
 import { useCountdown } from './hooks/useCountdown';
+import { useMission } from './mission/useMission';
 import { Header } from './ui/Header';
 import { StateBanner } from './ui/StateBanner';
 import { ZoneCards } from './ui/ZoneCards';
@@ -17,7 +18,8 @@ import { DevPanel } from './components/DevPanel';
 function Stage() {
   const { theme: T, toggle: toggleTheme } = useTheme();
   const world = useWorld();
-  const { display, running, start, toggle, resetTimer, stop } = useCountdown();
+  const countdown = useCountdown();
+  const mc = useMission(world, countdown);
   const [scale, setScale] = useState(1);
   const [devOpen, setDevOpen] = useState(false);
 
@@ -25,14 +27,14 @@ function Stage() {
   const live = useRef<LiveWorld>({ status: d.status, flags: d.flags, flashNodes: d.flashNodes, latencyMs: world.latency.value });
   live.current = { status: d.status, flags: d.flags, flashNodes: d.flashNodes, latencyMs: world.latency.value };
 
-  const changeState = useCallback((next: NarrativeState) => {
+  const manualOverride = useCallback((next: NarrativeState) => {
+    mc.dispatch({ type: 'MANUAL_OVERRIDE', narrativeState: next });
     world.setState(next);
-    if (next === 'ANOMALIA_DETECTADA') { resetTimer(); setTimeout(start, 300); }
-    if (next === 'CONTENCION_EXITOSA' || next === 'CONTENCION_INCOMPLETA') stop();
-    if (next === 'OPERACION_NORMAL') resetTimer();
-  }, [world, resetTimer, start, stop]);
+  }, [mc, world]);
 
-  const reset = useCallback(() => { world.reset(); resetTimer(); }, [world, resetTimer]);
+  const reset = useCallback(() => {
+    mc.resetMission();
+  }, [mc]);
 
   useEffect(() => {
     const fit = () => setScale(Math.min(window.innerWidth / W, window.innerHeight / H));
@@ -46,18 +48,18 @@ function Stage() {
     const onKey = (e: KeyboardEvent) => {
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
       const n = parseInt(e.key);
-      if (n >= 1 && n <= 7) { changeState(NARRATIVE_STATES[n - 1]!); return; }
+      if (n >= 1 && n <= 7) { manualOverride(NARRATIVE_STATES[n - 1]!); return; }
       switch (e.key.toLowerCase()) {
         case 'r': reset(); break;
         case 'd': setDevOpen((v) => !v); break;
         case 'm': toggleTheme(); break;
         case 'f': if (document.fullscreenElement) void document.exitFullscreen(); else void document.documentElement.requestFullscreen().catch(() => {}); break;
-        case ' ': e.preventDefault(); toggle(); break;
+        case ' ': e.preventDefault(); countdown.toggle(); break;
       }
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [changeState, reset, toggle, toggleTheme]);
+  }, [manualOverride, reset, countdown, toggleTheme]);
 
   return (
     <div className="absolute inset-0 overflow-hidden" style={{ background: T.SURFACE.page, transition: 'background 0.6s ease' }}>
@@ -69,21 +71,15 @@ function Stage() {
         <Header w={world} />
         <StateBanner w={world} />
         <Feed events={world.feed} />
-        <Dock w={world} countdown={world.spec.showCountdown ? display : null} countdownRunning={running} />
+        <Dock w={world} countdown={world.spec.showCountdown ? countdown.display : null} countdownRunning={countdown.running} />
       </div>
       <DevPanel
         visible={devOpen}
         onClose={() => setDevOpen(false)}
-        state={world.state}
-        clock={world.clock}
-        speed={world.speed}
-        timerRunning={running}
-        timerDisplay={display}
-        onStateChange={changeState}
-        onReset={reset}
-        onSpeed={world.setSpeed}
-        onTimerToggle={toggle}
-        onInjectEvent={world.inject}
+        world={world}
+        mc={mc}
+        countdown={countdown}
+        onManualOverride={manualOverride}
       />
     </div>
   );

@@ -35,9 +35,11 @@ export interface WorldView {
   latency: Metric;
   sync: number;
   preserved: number;
+  paused: boolean;
   setState: (s: NarrativeState) => void;
   reset: () => void;
   setSpeed: (n: number) => void;
+  setPaused: (p: boolean) => void;
   inject: (message: string, level: SystemEvent['level']) => void;
 }
 
@@ -65,6 +67,7 @@ export function useWorld(): WorldView {
   const [speed, setSpeed] = useState(initialSpeed);
   const [clock, setClock] = useState(STATE_SPECS.OPERACION_NORMAL.baseTime);
   const [extra, setExtra] = useState<SystemEvent[]>([]);
+  const [paused, setPaused] = useState(false);
   const [, bump] = useState(0);
 
   const stateRef = useRef(state);
@@ -110,6 +113,7 @@ export function useWorld(): WorldView {
   }, []);
 
   useEffect(() => {
+    if (paused) return;
     const iv = setInterval(() => {
       const tick = ++tickRef.current;
       clockRef.current += 1;
@@ -146,7 +150,7 @@ export function useWorld(): WorldView {
       bump((n) => n + 1);
     }, 1000 / speed);
     return () => clearInterval(iv);
-  }, [speed]);
+  }, [speed, paused]);
 
   const inject = useCallback((message: string, level: SystemEvent['level']) => {
     setExtra((prev) => [...prev, { id: `dev-${++injected.current}`, time: fmtTime(clockRef.current), message, level }]);
@@ -176,9 +180,11 @@ export function useWorld(): WorldView {
     latency: metric(latency.current),
     sync,
     preserved,
+    paused,
     setState,
     reset,
     setSpeed,
+    setPaused,
     inject,
   };
 }

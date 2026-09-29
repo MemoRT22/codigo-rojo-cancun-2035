@@ -1,5 +1,7 @@
 import { useCallback, useEffect, useRef, useSyncExternalStore } from 'react';
 import { MissionEngine } from './engine';
+import { getMissionTransport } from './devTransport';
+import { LocalTransport } from './transport';
 import type { MissionEvent, MissionState, EvidenceId, ResponsePlan, TerminalId } from './types';
 import type { WorldView } from '../world/useWorld';
 
@@ -30,6 +32,12 @@ export function useMission(
   const engineRef = useRef<MissionEngine | null>(null);
   if (!engineRef.current) engineRef.current = new MissionEngine();
   const engine = engineRef.current;
+
+  // La LED es el host del transporte: las estaciones le envían evidencias y reciben de ella el estado.
+  useEffect(() => {
+    engine.setTransport(getMissionTransport('host'));
+    return () => engine.setTransport(new LocalTransport());
+  }, [engine]);
 
   // Track whether countdown was running before pause, so resume restores it.
   const countdownWasRunning = useRef(false);

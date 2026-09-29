@@ -15,7 +15,7 @@
 - [ ] Revisión en LED real del HUB.
 
 ## Fase 2 — Cadena causal
-- [ ] Estación Comunicaciones.
+- [x] Estación Comunicaciones (v1: ver `docs/stations/comunicaciones.md`).
 - [ ] Estación Identidad y accesos.
 - [ ] Validar correlación sin facilitador.
 

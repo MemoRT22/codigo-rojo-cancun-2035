@@ -116,11 +116,20 @@ export function DevPanel({ visible, onClose, world, mc, countdown, onManualOverr
             )}
             <button style={{ ...btn, flex: 1 }} onClick={mc.resetMission}>Restablecer</button>
           </div>
+          <button
+            style={{ ...btn, width: '100%', marginTop: 6, textAlign: 'left' }}
+            onClick={() => window.open('/station/comunicaciones', '_blank')}
+          >
+            Abrir estación Comunicaciones (nueva pestaña) ↗
+          </button>
         </div>
 
         {/* ── Evidencias ── */}
         <div style={section}>
-          <div style={heading}>Simular descubrimientos</div>
+          <div style={heading}>Forzar evidencia (solo pruebas)</div>
+          <div style={{ color: '#93A2B5', marginBottom: 6 }}>
+            Flujo normal: cada evidencia la registra su estación. Esto es un atajo que se salta el flujo real.
+          </div>
           <div style={{ display: 'grid', gap: 4 }}>
             {EVIDENCE_IDS.map((id) => {
               const info = EVIDENCE_SOURCES[id];

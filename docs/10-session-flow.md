@@ -151,31 +151,15 @@ Si eligen otra opción:
 - mostrar consecuencia específica,
 - nunca un simple “incorrecto”.
 
-## 11. Revelación y debrief — 2–3 minutos
+## 11. Cierre de misión — 60–90 segundos
 
-Mostrar cadena:
+Tras la consecuencia y el estado final del mapa, el facilitador decide cuándo cerrar (nunca automático): Consola de facilitación → **MOSTRAR CIERRE**. La LED muestra tres pasos breves como apoyo visual (guion y detalle en `docs/pilot/debrief.md`):
 
-> CORREO FRAUDULENTO  
-> ↓  
-> IDENTIDAD COMPROMETIDA  
-> ↓  
-> ACCESO NO AUTORIZADO  
-> ↓  
-> PROPAGACIÓN DE SERVICIO  
-> ↓  
-> ANOMALÍA DETECTADA
+1. **Reconstruir — «Así ocurrió»:** la cadena real (correo fraudulento → identidad comprometida → acceso anómalo → SIN-04 → propagación → inteligencia detecta el patrón) con los identificadores que encontraron (`COR-512`, `ACC-417`, `NOD-204`, `AGR-27`) y el plan ejecutado con su resultado real.
+2. **Entender:** «La IA encontró patrones. Ustedes encontraron la causa.», con `AGR-31` (84 %, 09:19:44) frente a `NOD-204` (09:17:22): **confianza ≠ certeza · correlación ≠ causalidad**.
+3. **Conectar:** IA + Ciberseguridad y lo que ocurre cuando se conectan (datos + contexto + criterio + decisión → respuesta tecnológica).
 
-Cerrar con:
-
-> La inteligencia detectó patrones.  
-> El equipo encontró la causa.
-
-El coordinador académico puede añadir una explicación muy breve:
-
-- Ciberseguridad: identidad, evidencia, infraestructura y respuesta.
-- IA: detección de patrones, correlación, incertidumbre y criterio humano.
-
-No convertir el cierre en una clase larga.
+Cierre: «La tecnología encontró señales. Ustedes encontraron la historia. · Código Rojo · Cancún 2035». No convertirlo en una clase larga.
 
 ## 12. Restablecimiento
 

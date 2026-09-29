@@ -19,6 +19,7 @@ import { FacilitatorAlert, type AlertData } from './facilitator/FacilitatorAlert
 import { FacilitatorConsole } from './facilitator/FacilitatorConsole';
 import { useFacilitatorWindow } from './facilitator/FacilitatorWindow';
 import { ResponseStage } from './ui/ResponseStage';
+import { MissionDebrief, type DebriefPhase } from './ui/MissionDebrief';
 
 function Stage() {
   const { theme: T, toggle: toggleTheme } = useTheme();
@@ -62,14 +63,36 @@ function Stage() {
   }, [inject]);
   useEffect(() => clearAlert, [clearAlert]);
 
+  // Cierre de misión (debrief): presentación local del host, lo abre el facilitador. No forma parte de MissionState.
+  const [debriefPhase, setDebriefPhase] = useState<DebriefPhase>('off');
+  const [debriefStep, setDebriefStep] = useState(1);
+  const [debriefDone, setDebriefDone] = useState(false);
+  const debriefTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const resetDebrief = useCallback(() => {
+    if (debriefTimer.current) { clearTimeout(debriefTimer.current); debriefTimer.current = null; }
+    setDebriefPhase('off'); setDebriefStep(1); setDebriefDone(false);
+  }, []);
+  useEffect(() => resetDebrief, [resetDebrief]);
+  // El cierre solo existe con la misión finalizada; si la sesión se restablece (aquí o desde otra instancia) se limpia.
+  useEffect(() => { if (mc.mission.status !== 'finished') resetDebrief(); }, [mc.mission.status, resetDebrief]);
+  const showDebrief = useCallback(() => { clearAlert(); setDebriefStep(1); setDebriefPhase('open'); }, [clearAlert]);
+  const prevDebrief = useCallback(() => setDebriefStep((n) => Math.max(1, n - 1)), []);
+  const nextDebrief = useCallback(() => setDebriefStep((n) => Math.min(3, n + 1)), []);
+  const closeDebrief = useCallback(() => {
+    setDebriefPhase('ending');
+    if (debriefTimer.current) clearTimeout(debriefTimer.current);
+    debriefTimer.current = setTimeout(() => { debriefTimer.current = null; setDebriefPhase('off'); setDebriefDone(true); }, 2200);
+  }, []);
+
   // Restablecer sesión (entre grupos): misión en idle, mundo en operación normal, cuenta regresiva en 20:00 detenida,
   // alertas limpias y velocidad de vuelta a ×1 (un ensayo acelerado no debe contaminar al siguiente grupo).
   const { setSpeed } = world;
   const reset = useCallback(() => {
     clearAlert();
+    resetDebrief();
     mc.resetMission();
     setSpeed(1);
-  }, [mc, clearAlert, setSpeed]);
+  }, [mc, clearAlert, resetDebrief, setSpeed]);
 
   const fullscreen = useCallback(async () => {
     try {
@@ -122,7 +145,8 @@ function Stage() {
         <Feed events={world.feed} />
         <Dock w={world} countdown={world.spec.showCountdown ? countdown.display : null} countdownRunning={countdown.running} />
         <ResponseStage mc={mc} countdown={world.spec.showCountdown ? countdown.display : null} />
-        <FacilitatorAlert alert={alert} />
+        <FacilitatorAlert alert={debriefPhase === 'off' ? alert : null} />
+        {debriefPhase !== 'off' && <MissionDebrief mission={mc.mission} phase={debriefPhase} step={debriefStep} />}
         {facilitator.blocked && (
           <div className="absolute" style={{ right: 40, bottom: 130, zIndex: 80, padding: '12px 18px', borderRadius: 10, background: T.SURFACE.card, border: `1px solid ${T.STATUS.warn}88`, fontSize: 16, color: T.INK.primary, boxShadow: `0 8px 24px ${T.SURFACE.shadow}` }}>
             No se pudo abrir la consola. Permite ventanas emergentes para este sitio.
@@ -140,6 +164,7 @@ function Stage() {
           onClearAlert={clearAlert}
           alertActive={!!alert}
           onFullscreen={fullscreen}
+          debrief={{ phase: debriefPhase, step: debriefStep, done: debriefDone, show: showDebrief, prev: prevDebrief, next: nextDebrief, close: closeDebrief }}
         />,
         facilitator.container,
       )}

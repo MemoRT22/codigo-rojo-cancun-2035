@@ -6,6 +6,7 @@ import type { NarrativeState, SystemEvent } from '../types';
 import { fmtTime } from '../world/scenario';
 import type { WorldView } from '../world/useWorld';
 import { ALERT_LABEL } from './FacilitatorAlert';
+import type { DebriefPhase } from '../ui/MissionDebrief';
 
 // ── VÉRTICE · CONSOLA DE FACILITACIÓN ──
 // Vive en la instancia host de VÉRTICE y se muestra en una ventana separada (nunca sobre la LED). Sus acciones usan los
@@ -23,6 +24,7 @@ interface Props {
   onClearAlert: () => void;
   alertActive: boolean;
   onFullscreen: () => Promise<boolean>;
+  debrief: { phase: DebriefPhase; step: number; done: boolean; show: () => void; prev: () => void; next: () => void; close: () => void };
 }
 
 const SCENARIO: Record<NarrativeState, string> = {
@@ -83,7 +85,7 @@ function Row({ label, value, tone }: { label: string; value: ReactNode; tone?: '
   );
 }
 
-export function FacilitatorConsole({ world, mc, countdown, onScenario, onReset, onAlert, onClearAlert, alertActive, onFullscreen }: Props) {
+export function FacilitatorConsole({ world, mc, countdown, onScenario, onReset, onAlert, onClearAlert, alertActive, onFullscreen, debrief }: Props) {
   const { mode, setMode } = useTheme();
   const { mission } = mc;
   const [confirmReset, setConfirmReset] = useState(false);
@@ -132,6 +134,18 @@ export function FacilitatorConsole({ world, mc, countdown, onScenario, onReset, 
             </div>
           </div>
         )}
+      </Section>
+
+      {/* Cierre de misión */}
+      <Section title="Cierre de misión">
+        <Row label="Estado" value={debrief.phase === 'open' ? `Paso ${debrief.step} / 3` : debrief.phase === 'ending' ? 'Cerrando…' : debrief.done ? 'Finalizado' : 'No iniciado'} tone={debrief.phase === 'open' ? 'ok' : undefined} />
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 6, marginTop: 8 }}>
+          <button style={dis(primary, status !== 'finished' || debrief.phase !== 'off')} disabled={status !== 'finished' || debrief.phase !== 'off'} onClick={debrief.show}>MOSTRAR CIERRE</button>
+          <button style={dis(dangerBtn, debrief.phase !== 'open')} disabled={debrief.phase !== 'open'} onClick={debrief.close}>CERRAR CIERRE</button>
+          <button style={dis(btn, debrief.phase !== 'open' || debrief.step <= 1)} disabled={debrief.phase !== 'open' || debrief.step <= 1} onClick={debrief.prev}>← ANTERIOR</button>
+          <button style={dis(btn, debrief.phase !== 'open' || debrief.step >= 3)} disabled={debrief.phase !== 'open' || debrief.step >= 3} onClick={debrief.next}>SIGUIENTE →</button>
+        </div>
+        <div style={{ marginTop: 6, fontSize: 12, color: '#7B8DA5' }}>{status === 'finished' ? 'Muéstralo cuando el grupo haya visto el resultado. Guion: docs/pilot/debrief.md.' : 'Disponible cuando la misión finalice (plan ejecutado).'}</div>
       </Section>
 
       {/* B · Estado de la investigación */}

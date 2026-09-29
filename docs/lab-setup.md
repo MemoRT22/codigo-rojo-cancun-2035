@@ -43,6 +43,9 @@ En la computadora de la LED: la dirección **VÉRTICE** (`/?mode=lab`) en pantal
 En cada computadora de análisis, en un navegador, la dirección de su estación (arriba). Si se escribe sin `?mode=lab`, el servidor ya la conecta al laboratorio.
 Nadie configura IPs ni instala nada.
 
+> **IMPORTANTE:** en modo laboratorio **solo la computadora de la LED** abre la ruta `/`. Las demás computadoras deben usar siempre `/station/*`.
+> Una segunda ventana en `/` se comportaría como otro VÉRTICE (host) y reiniciaría la sesión al conectarse.
+
 ## Requisitos
 
 - Todas las computadoras en la misma red local y **con alcance entre sí** (misma subred; sin «aislamiento de clientes» en el Wi‑Fi).
@@ -51,7 +54,7 @@ Nadie configura IPs ni instala nada.
 
 ## Prueba de red rápida
 
-Desde **otra** computadora abre `http://IP_HOST:8080/`. Si carga VÉRTICE, la conectividad básica funciona. Si no carga: revisa que estén en la misma red, el firewall,
+Desde **otra** computadora abre `http://IP_HOST:8080/station/comunicaciones`. Si carga la estación, la conectividad básica funciona. Si no carga: revisa que estén en la misma red, el firewall,
 y que la red no aísle a los equipos entre sí (redes de invitados o públicas suelen hacerlo; un router propio del taller lo evita).
 
 ## Firewall

@@ -18,7 +18,7 @@
 ## Siguiente — hacia el piloto
 
 - [x] Estación 03 — Infraestructura v1 (`docs/stations/infraestructura.md`); NOD-204
-- [ ] Inteligencia
+- [x] Estación 04 — Inteligencia v1 (`docs/stations/inteligencia.md`); AGR-27
 - [ ] Respuesta (candado final, consola de respuesta, desenlaces, restablecimiento de una acción)
 - [ ] Integración completa portátil
 - [ ] Prueba con alumnos (piloto con 4–8 participantes nuevos)
@@ -56,7 +56,7 @@
 
 ### Fase 3 — Análisis
 - [x] Estación Infraestructura.
-- [ ] Estación Inteligencia.
+- [x] Estación Inteligencia.
 - [ ] Validar razonamiento entre estaciones.
 
 ### Fase 4 — Resolución

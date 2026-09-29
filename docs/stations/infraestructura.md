@@ -40,7 +40,7 @@ Los identificadores `NOD-201…210` de las observaciones son ficticios salvo `NO
 
 ## Cómo se descubre
 
-1. El equipo explora los nodos (miniatura de actividad en la lista; orden por nombre o por mayor pico; filtro «Con cambios de actividad»).
+1. El equipo explora los nodos (miniatura de actividad y **pico** del periodo en la lista —no un valor «actual», porque los datos son estáticos—; orden por nombre o por mayor pico; filtro «Con cambios de actividad»).
 2. Abre `BUS-SEN-02`: tiene el mayor pico, pero sus eventos y su documentación muestran una sincronización programada. Se descarta **por contexto, no por color**.
 3. Abre `SIN-04`: habitual ≈14, cambio ≈163, inicio 09:17:22, referencia de sesión `ACC-417` (la que el equipo tiene en Identidad; la estación no
    dice qué significa). El identificador `NOD-204` está en **Detalles del nodo**.

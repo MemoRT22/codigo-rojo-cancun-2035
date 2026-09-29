@@ -68,7 +68,7 @@ cualquier orden (late join incluido: la estación abre en ACTIVE y recupera la s
 
 ## Limitaciones conocidas
 
-- Sin reloj de misión compartido: los datos son estáticos (08:50–09:20) mientras VÉRTICE arranca su cronología en 09:12 (misma deuda que
+- Sin reloj de misión compartido: los datos son estáticos (08:50–09:20) mientras VÉRTICE arranca su cronología en 09:15:58 (misma deuda que
   Comunicaciones e Identidad). El asistente no depende de ello.
 - Las cifras y los nodos secundarios son ficticios; la dificultad no se ha probado con alumnos.
 - Las conexiones a nodos de otros dominios (`ID-xx`, `SEN-xx`) se muestran pero no son navegables.

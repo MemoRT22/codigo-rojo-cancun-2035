@@ -153,7 +153,13 @@ sus recomendaciones intermedias en `communications/assistant.ts` y reportar señ
 ## Límites conocidos
 
 - Las estaciones no comparten reloj de misión: el registro es estático y termina hacia las 09:17, mientras VÉRTICE arranca su
-  cronología en 09:12; quien compare el reloj de VÉRTICE con las horas del registro al inicio verá eventos «futuros» (ocurre igual en
+  cronología en 09:15:58 (el reloj central ya no arranca minutos antes del incidente; aun así, las horas del registro hasta las 09:17 quedan por delante del reloj durante los primeros segundos; ocurre igual en
   Comunicaciones). Se resuelve con el reloj de misión compartido del modo distribuido. **Deuda documentada, no empeorada:** el asistente mide solo
   segundos de actividad local de la propia estación y no compara ninguna hora del registro con un reloj compartido.
 - No se probó aún la dificultad (objetivo 3–6 min) con alumnos reales.
+
+## Apertura del puesto (Mission Opening v1)
+
+Antes de iniciar la sesión, cada estación muestra su puesto (`src/stations/shell/roles.ts`, `WaitingScreen`): rol, responsabilidad, qué observa, pregunta de inicio y regla, sin respuestas. Al iniciar,
+`StationActivationSplash` muestra «Sesión operativa activada» + el rol unos 2 s (estado local de presentación: se dispara al pasar de WAITING a activa; una estación que entra con la misión ya en curso no lo reproduce).
+La LED arranca en 09:15:58: la anomalía aparece a los ~8 s y con ella empieza el tiempo de respuesta de 20:00. Guion del facilitador: `docs/pilot/briefing.md`.

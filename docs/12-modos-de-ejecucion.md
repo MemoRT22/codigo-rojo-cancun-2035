@@ -50,7 +50,7 @@ Estaciones      = CLIENTES  (piden sincronización; emiten eventos de sus accion
   una petición de sincronización; el host responde con el registro completo (empieza en `MISSION_START`). El replay es
   *idempotente*: aplicarlo varias veces, o sobre un motor con estado, converge al mismo estado. Nada depende de que un único
   mensaje llegue en un momento concreto.
-- Si el host arranca (o se recarga), difunde `MISSION_RESET`: las estaciones ya abiertas vuelven a «Estación preparada».
+- Si el host arranca (o se recarga), difunde `MISSION_RESET`: las estaciones ya abiertas vuelven a su puesto preparado (rol y «Esperando activación de VÉRTICE»).
 
 ### Qué ocurre al recargar
 

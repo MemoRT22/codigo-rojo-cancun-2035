@@ -6,6 +6,7 @@ import { DomainLayers } from './map/DomainLayers';
 import { FlowCanvas, type LiveWorld } from './map/FlowCanvas';
 import { W, H } from './map/scene';
 import { useWorld } from './world/useWorld';
+import { hms } from './world/scenario';
 import { useCountdown } from './hooks/useCountdown';
 import { useMission } from './mission/useMission';
 import { Header } from './ui/Header';
@@ -26,6 +27,13 @@ function Stage() {
   // La consola de respuesta (pantalla LED) está a la vista: se desactivan los atajos de facilitación que un toque accidental podría disparar.
   const responseStageRef = useRef(false);
   const onResponseStage = useCallback((v: boolean) => { responseStageRef.current = v; }, []);
+
+  // Apertura: en espera, el centro de operaciones está preparado; al iniciar, unos segundos de monitoreo activo antes de la anomalía.
+  const opening = world.state === 'OPERACION_NORMAL' ? mc.mission.status : null;
+  const openingSubheadline =
+    opening === 'idle' ? 'Centro de operaciones VÉRTICE · Célula de respuesta en espera'
+    : opening === 'running' ? (world.clock >= hms('09:16:01') ? 'Variación detectada · Verificando identidad' : 'Monitoreo activo')
+    : undefined;
 
   const d = world.derived;
   const live = useRef<LiveWorld>({ status: d.status, flags: d.flags, flashNodes: d.flashNodes, latencyMs: world.latency.value });
@@ -74,7 +82,7 @@ function Stage() {
         <FlowCanvas live={live} pixelRatio={Math.min(2, (window.devicePixelRatio || 1) * scale)} theme={T} />
         <ZoneCards zones={d.zones} />
         <Header w={world} />
-        <StateBanner w={world} />
+        <StateBanner w={world} subheadline={openingSubheadline} />
         <Feed events={world.feed} />
         <Dock w={world} countdown={world.spec.showCountdown ? countdown.display : null} countdownRunning={countdown.running} />
         <ResponseStage mc={mc} countdown={world.spec.showCountdown ? countdown.display : null} onVisibleChange={onResponseStage} />

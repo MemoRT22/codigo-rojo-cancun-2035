@@ -2,6 +2,7 @@ import { useEffect, type ReactNode } from 'react';
 import { useTheme } from '../../brand/ThemeContext';
 import { VerticeIsotipo } from '../../brand/VerticeLogo';
 import { ThemeToggle } from '../../brand/ThemeToggle';
+import { StationActivationSplash, useActivationSplash } from './StationActivationSplash';
 import type { StationPhase } from './types';
 
 interface Props {
@@ -15,6 +16,8 @@ interface Props {
   children: ReactNode;
   /** Controles ocultos de desarrollo (?dev=true). */
   dev?: ReactNode;
+  /** Título del puesto: si existe, se muestra el micro-momento «Sesión operativa activada» al iniciar la sesión. */
+  roleTitle?: string;
 }
 
 /**
@@ -22,8 +25,9 @@ interface Props {
  * Escala con el ancho de pantalla (1920×1080 primero, usable en 1366×768) y usa los tokens del tema
  * DAY/MIDNIGHT: no define colores propios.
  */
-export function StationShell({ moduleName, moduleSubtitle, phase, paused, toolbar, children, dev }: Props) {
+export function StationShell({ moduleName, moduleSubtitle, phase, paused, toolbar, children, dev, roleTitle }: Props) {
   const { theme: T } = useTheme();
+  const splash = useActivationSplash(phase, !!roleTitle);
 
   useEffect(() => {
     document.body.classList.add('station-mode');
@@ -89,6 +93,7 @@ export function StationShell({ moduleName, moduleSubtitle, phase, paused, toolba
       {toolbar}
 
       <main className="flex-1 min-h-0">{children}</main>
+      {splash && roleTitle && <StationActivationSplash roleTitle={roleTitle.toUpperCase()} />}
       {dev}
     </div>
   );

@@ -97,6 +97,6 @@ mismos contenidos (`PLANS`, `OUTCOMES`, `normalizeId`). El Mission Engine no cam
 ## Limitaciones conocidas
 
 - El mapa de VÉRTICE tiene un solo desenlace «Contención incompleta» para ALFA, BETA y GAMMA; la consecuencia específica de cada uno se ve en la consola de respuesta (estación o LED) antes de volver al mapa.
-- Las horas de la autorización dependen del reloj simulado de VÉRTICE (sin reloj compartido). Con velocidad normal, la autorización llega ~9 min después de iniciar; en pruebas se usa `?speed=`.
+- Las horas de la autorización dependen del reloj simulado de VÉRTICE (sin reloj compartido). Con velocidad normal, la autorización llega ~5 min después de iniciar (VÉRTICE arranca en 09:15:58 y autoriza a las 09:21:05); en pruebas se usa `?speed=`.
 - Tras `PLAN_CONFIRMED` el motor marca la misión como `finished`: las demás estaciones muestran «Sesión finalizada».
 - No hay debrief, estadísticas ni puntuación (fuera del alcance). Sin tests automáticos propios (fase piloto); validado manualmente en el navegador.

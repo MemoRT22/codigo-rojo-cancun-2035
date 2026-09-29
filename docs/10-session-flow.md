@@ -11,11 +11,11 @@ Duración objetivo: **20–25 minutos**.
 ## 0. Estado previo
 
 Antes de entrar el grupo:
-- todas las estaciones en estado inicial,
-- LED en operación normal,
+- todas las estaciones en su **puesto preparado**: rol, responsabilidad, qué observa, pregunta de inicio y «Esperando activación de VÉRTICE» (sin ninguna respuesta),
+- LED en operación normal con «Centro de operaciones VÉRTICE · Célula de respuesta en espera» (el reloj central espera en 09:15:58),
 - cuenta regresiva detenida,
 - consola final bloqueada,
-- roles preparados,
+- tarjetas de rol preparadas,
 - sonido/ambiente restablecido.
 
 El facilitador solo comprueba que el sistema esté listo.
@@ -27,9 +27,9 @@ Los participantes entran y ven la LED con:
 > VÉRTICE  
 > CENTRO DE OPERACIONES  
 > Operación normal  
-> Sincronización de servicios: 99.8%
+> Célula de respuesta en espera
 
-Reciben una tarjeta de rol.
+Reciben una tarjeta de rol y se sientan en su puesto, donde ya leen quiénes son y qué observan.
 
 No se explica todavía el incidente.
 
@@ -41,33 +41,26 @@ El facilitador dice únicamente:
 
 No explicar qué pista existe en cada estación.
 
-## 3. Activación — 2:00 a 3:30
+## 3. Briefing y activación — 2:00 a 3:00
 
-La LED cambia:
+El facilitador da el briefing de 45–60 s (`docs/pilot/briefing.md`; editable) y termina con «Activamos VÉRTICE».
+
+Entonces pulsa `D` → **INICIAR EXPERIENCIA** y ocurre, sin más intervención:
+
+1. **Las cuatro estaciones** muestran «Sesión operativa activada» + el título de su puesto (~2 s) y pasan casi a la vez a su interfaz.
+2. **La LED** (reloj central desde 09:15:58): «Operación normal» → «Monitoreo activo» → «Variación detectada · Verificando identidad» → en unos **8 s**:
 
 > ANOMALÍA DE IDENTIDAD DETECTADA  
-> Correlación incompleta  
-> Validación humana requerida
+> Correlación incompleta · Validación humana requerida
 
-Una locución o briefing breve comunica:
+3. Con la anomalía **empieza la cuenta regresiva**:
 
-> Se ha detectado actividad que VÉRTICE no logra explicar. El origen no está confirmado.  
-> Tienen acceso a las estaciones de análisis del Centro de Operaciones.  
-> La información puede estar incompleta y no toda anomalía forma parte del incidente.  
-> Comparen nombres, horarios, dispositivos e identificadores.  
-> Cuando encuentren evidencia relevante, conserven su identificador.  
-> No necesitan conocimientos previos de programación, redes o ciberseguridad.  
-> Pueden trabajar juntos y cambiar de estación en cualquier momento.  
-> Cuando logren reconstruir el incidente, la consola de respuesta les permitirá autorizar una acción.  
-> Tiempo de respuesta: veinte minutos.
-
-Entonces inicia la cuenta regresiva:
-
+> Tiempo de respuesta  
 > 20:00
 
-Estas son instrucciones de juego, no pistas de solución.
+Las instrucciones de juego del briefing (comparar nombres, horarios, dispositivos e identificadores; no todo forma parte del incidente; el equipo puede moverse) no son pistas de solución. Una estación que se abra con la misión ya en curso entra directamente activa, sin la «ceremonia» de inicio.
 
-## 4. Exploración libre — 3:30 a 9:00 aprox.
+## 4. Exploración libre — 3:00 a 9:00 aprox.
 
 Los roles indican dónde puede comenzar cada persona, pero nadie queda restringido.
 

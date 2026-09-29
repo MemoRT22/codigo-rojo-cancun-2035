@@ -36,8 +36,15 @@ export interface StateSpec {
   showCountdown: boolean;
 }
 
+/**
+ * Hora simulada con la que arranca la experiencia. La historia (tiempos canónicos) NO se mueve: se adelanta el
+ * MOMENTO EN QUE EMPIEZA la sesión, de modo que el primer acceso anómalo (09:16:04 → estado de anomalía a las 09:16:06)
+ * llegue ~8 s después de pulsar INICIAR, y no varios minutos después.
+ */
+export const START_CLOCK = '09:15:58';
+
 export const STATE_SPECS: Record<NarrativeState, StateSpec> = {
-  OPERACION_NORMAL: { baseTime: hms('09:12:10'), headline: 'Operación normal', tone: 'ok', showCountdown: false },
+  OPERACION_NORMAL: { baseTime: hms(START_CLOCK), headline: 'Operación normal', tone: 'ok', showCountdown: false },
   ANOMALIA_DETECTADA: { baseTime: hms('09:16:06'), headline: 'Anomalía de identidad detectada', tone: 'watch', showCountdown: true },
   INCIDENTE_ESCALANDO: { baseTime: hms('09:16:51'), headline: 'Incidente en escalamiento', tone: 'warn', showCountdown: true },
   CORRELACION_ESTABLECIDA: { baseTime: hms('09:20:11'), headline: 'Correlación de identidad establecida', tone: 'warn', showCountdown: true },

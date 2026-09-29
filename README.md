@@ -1,10 +1,10 @@
 # Código Rojo: Cancún 2035
 
-Escape room tecnológico inmersivo para el HUB de Inteligencia Artificial y Ciberseguridad de la Universidad Anáhuac Cancún.
+Experiencia inmersiva de respuesta tecnológica para el HUB de Inteligencia Artificial y Ciberseguridad de la Universidad Anáhuac Cancún.
 
 ## Concepto
 
-Los participantes ingresan al **Centro de Operaciones Vértice** y forman una Célula de Respuesta ante un incidente digital. Deben investigar evidencia parcial, correlacionarla entre estaciones y autorizar una respuesta antes de que termine el tiempo.
+Los participantes forman una **Célula de Respuesta** dentro del Centro de Operaciones VÉRTICE y deben investigar un incidente, conectar evidencia y decidir cómo responder. Cada persona ocupa un puesto (Comunicaciones, Identidad, Infraestructura, Inteligencia) y, al reconstruir el incidente, el equipo se reúne frente a la pantalla central para autorizar una respuesta antes de que termine el tiempo.
 
 No es una clase, un quiz ni una demostración guiada.
 
@@ -72,7 +72,7 @@ Imprime las direcciones de VÉRTICE y de cada estación para abrirlas en las otr
 
 ## Principios no negociables
 
-1. Escape room, no tutorial.
+1. Misión operativa, no tutorial.
 2. Todo contenido visible para participantes está en español.
 3. La solución no se resalta mediante interfaz.
 4. No se requiere conocimiento técnico previo.

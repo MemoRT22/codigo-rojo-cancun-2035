@@ -1,14 +1,39 @@
 # 11 — Tarjetas de rol
 
-Los roles generan identidad y reparten el arranque, pero **no limitan movimiento**.
+Los roles generan identidad y reparten el arranque, pero **no limitan movimiento**. Son seis roles base:
 
-## Configuración ideal — 6 participantes
+1. Coordinador/a de Incidente
+2. Analista de Comunicaciones
+3. Analista de Identidad
+4. Analista de Infraestructura
+5. Analista de Inteligencia
+6. Estratega de Respuesta
 
-### 1. Coordinador/a de Respuesta
+Los cuatro puestos de análisis coinciden con las cuatro computadoras del laboratorio (cada una muestra su rol antes de iniciar, con el mismo texto que su tarjeta). El Coordinador y el Estratega **no tienen computadora fija**.
 
-**Tu responsabilidad:** mantener una visión global y ayudar al equipo a conectar hallazgos.
+## Configuración base — 6 participantes
 
-**Pon atención a:** horarios, identificadores que otros encuentren, contradicciones y consecuencias de la decisión final.
+```text
+1 Coordinador/a de Incidente      (sin computadora fija)
+1 Analista de Comunicaciones      (PC Comunicaciones)
+1 Analista de Identidad           (PC Identidad)
+1 Analista de Infraestructura     (PC Infraestructura)
+1 Analista de Inteligencia        (PC Inteligencia)
+1 Estratega de Respuesta          (sin computadora fija)
+```
+
+---
+
+### 1. Coordinador/a de Incidente
+
+**Tu responsabilidad:** mantener la visión global y hacer que la información circule.
+
+**Preguntas sugeridas:**
+- ¿Qué encontraron?
+- ¿A qué hora ocurrió?
+- ¿Qué identificador tiene?
+- ¿A quién más le aparece?
+- ¿Qué ocurrió primero?
 
 **Regla:** no necesitas resolver cada estación personalmente. Haz que la información circule.
 
@@ -16,9 +41,11 @@ Los roles generan identidad y reparten el arranque, pero **no limitan movimiento
 
 ### 2. Analista de Comunicaciones
 
-**Tu responsabilidad:** revisar comunicaciones relacionadas con el incidente.
+**Tu responsabilidad:** revisar las comunicaciones relacionadas con el incidente.
 
-**Pon atención a:** remitentes, dominios, horarios, contexto, firmas e identificadores de mensaje.
+**Observa:** remitentes, direcciones, horarios, contexto e identificadores.
+
+**Pregunta de inicio:** ¿qué comunicación podría estar relacionada con el origen?
 
 **Regla:** un mensaje urgente no necesariamente es malicioso.
 
@@ -26,68 +53,72 @@ Los roles generan identidad y reparten el arranque, pero **no limitan movimiento
 
 ### 3. Analista de Identidad
 
-**Tu responsabilidad:** entender quién accedió, desde dónde y en qué momento.
+**Tu responsabilidad:** analizar quién accede, desde dónde y en qué momento.
 
-**Pon atención a:** usuarios, dispositivos, zonas, horarios, accesos concedidos o denegados y comportamiento habitual.
+**Observa:** usuarios, dispositivos, zonas, horarios y sesiones.
 
-**Regla:** un acceso fallido no necesariamente es un ataque.
+**Pregunta de inicio:** ¿qué acceso no encaja con el comportamiento habitual?
+
+**Regla:** un acceso fallido no necesariamente forma parte de un ataque.
 
 ---
 
 ### 4. Analista de Infraestructura
 
-**Tu responsabilidad:** observar cómo se comportan los servicios conectados.
+**Tu responsabilidad:** observar cómo cambia el comportamiento de los servicios de VÉRTICE.
 
-**Pon atención a:** cambios de actividad, relaciones entre nodos, horarios y referencias de sesión.
+**Observa:** actividad, horarios, servicios y referencias de sesión.
 
-**Regla:** el nodo con más tráfico no necesariamente es el origen.
+**Pregunta de inicio:** ¿qué cambió después de que comenzó el incidente?
+
+**Regla:** el servicio con más actividad no necesariamente es el origen.
 
 ---
 
 ### 5. Analista de Inteligencia
 
-**Tu responsabilidad:** interpretar las agrupaciones y las hipótesis generadas por el sistema.
+**Tu responsabilidad:** evaluar los patrones e hipótesis generados por VÉRTICE.
 
-**Pon atención a:** niveles de confianza, secuencia temporal y evidencia que apoya o contradice una hipótesis.
+**Observa:** confianza, cronología, relaciones, evidencia e hipótesis.
+
+**Pregunta de inicio:** ¿la hipótesis realmente puede explicar lo que ocurrió primero?
 
 **Regla:** una confianza alta no significa certeza.
 
 ---
 
-### 6. Responsable de Continuidad
+### 6. Estratega de Respuesta
 
-**Tu responsabilidad:** pensar en el impacto operativo de las decisiones.
+**Tu responsabilidad:** escuchar los hallazgos, pensar en la cadena completa y preparar al equipo para la decisión final.
 
-**Pon atención a:** qué servicios siguen sanos, cuáles están afectados y qué se perdería al apagar o aislar sistemas.
+**Durante la investigación** puedes circular entre puestos. **Piensa en:** qué servicios siguen sanos, cuáles están afectados y qué se perdería al apagar o aislar sistemas.
+
+**Cuando VÉRTICE diga «Célula de respuesta requerida»,** junto con el Coordinador guías la discusión frente a la LED.
 
 **Regla:** detener todo puede ser seguro técnicamente y malo operativamente.
 
-## Grupos de 4
+---
 
-Combinar:
-- Coordinación + Continuidad
-- Comunicaciones
-- Identidad
-- Infraestructura + Inteligencia
+## Otros tamaños de grupo
 
-## Grupos de 5
+**4 participantes:** Coordinación + Estrategia (una persona) · Comunicaciones · Identidad · Infraestructura + Inteligencia.
 
-Usar:
-- Coordinación + Continuidad
-- Comunicaciones
-- Identidad
-- Infraestructura
-- Inteligencia
+**5 participantes:** Coordinación + Estrategia (una persona) · Comunicaciones · Identidad · Infraestructura · Inteligencia.
 
-## Grupos de 7–10
+**7 participantes:** los seis roles base y **un adjunto** en Infraestructura (preferencia) o en Identidad, según el espacio.
 
-Agregar roles de apoyo:
-- Analista adjunto de comunicaciones
-- Analista adjunto de identidad
-- Analista adjunto de infraestructura
-- Analista adjunto de inteligencia
+**8 participantes:**
 
-Los adjuntos pueden moverse libremente y sirven para evitar espectadores pasivos.
+```text
+Identidad: 2
+Infraestructura: 2
+Comunicaciones: 1
+Inteligencia: 1
+Coordinador/a: 1
+Estratega: 1
+```
+
+Los adjuntos pueden moverse libremente y sirven para evitar espectadores pasivos. No hay lógica de software para el número de alumnos.
 
 ## Texto común al reverso de todas las tarjetas
 

@@ -3,7 +3,8 @@ import type { WorldView } from '../world/useWorld';
 import type { Tone } from '../world/scenario';
 import { severityOf } from './status';
 
-export function StateBanner({ w }: { w: WorldView }) {
+export function StateBanner({ w, subheadline }: { w: WorldView; subheadline?: string }) {
+  const sub = subheadline ?? w.subheadline;
   const { theme: T } = useTheme();
   const TONE_COLOR: Record<Tone, string> = {
     ok: T.STATUS.ok,
@@ -34,7 +35,7 @@ export function StateBanner({ w }: { w: WorldView }) {
         </span>
       </div>
       <div className="flex items-center relative" style={{ marginTop: 10, marginLeft: 36, gap: 18 }}>
-        <span key={w.subheadline} style={{ fontSize: 21, fontWeight: 460, color: T.INK.secondary }}>{w.subheadline}</span>
+        <span key={sub} className="animate-fade-in-up" style={{ fontSize: 21, fontWeight: 460, color: T.INK.secondary }}>{sub}</span>
       </div>
       <div className="flex items-center relative" style={{ marginTop: 14, marginLeft: 36, gap: 10 }}>
         <span style={{ fontSize: 12, fontWeight: 620, letterSpacing: '0.14em', color: T.INK.faint, textTransform: 'uppercase' }}>Severidad</span>

@@ -6,7 +6,7 @@
 
 ## Format
 
-Immersive technological escape room / professional simulation.
+Immersive technology-response experience / professional simulation (operational mission, not a tutorial).
 
 ## Audience
 

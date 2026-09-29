@@ -1,7 +1,7 @@
 import { useRef, type KeyboardEvent } from 'react';
 import { useTheme } from '../../brand/ThemeContext';
 import { Sparkline } from './ActivityChart';
-import { currentOf } from './data';
+import { peakOf } from './data';
 import { FILTERS, SORTS } from './logic';
 import type { InfraNode, NodeFilter, NodeSort } from './types';
 
@@ -106,7 +106,7 @@ export function NodeList({ nodes, total, selectedId, linkedIds, filter, sort, on
                 </div>
                 <div className="flex items-center shrink-0" style={{ gap: '0.65rem' }}>
                   <Sparkline id={n.id} color={T.INK.secondary} />
-                  <span style={{ fontSize: '0.875rem', fontWeight: 620, minWidth: '3.4rem', textAlign: 'right' }}>{currentOf(n.id)}<span style={{ fontWeight: 480, color: T.INK.secondary }}>/s</span></span>
+                  <span title="Pico de actividad del periodo" style={{ fontSize: '0.875rem', fontWeight: 620, minWidth: '4.6rem', textAlign: 'right' }}><span style={{ fontWeight: 480, fontSize: '0.75rem', color: T.INK.secondary }}>pico </span>{peakOf(n.id)}<span style={{ fontWeight: 480, color: T.INK.secondary }}>/s</span></span>
                 </div>
               </div>
             </button>

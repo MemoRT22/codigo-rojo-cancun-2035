@@ -126,14 +126,14 @@ function Station() {
 
           {stage === 'pending' && (
             <div style={{ width: '100%', maxWidth: '44rem', margin: '0 auto' }}>
-              {banner('CORRELACIÓN VERIFICADA', 'VÉRTICE está completando la validación operacional. Autorización de respuesta pendiente.', true)}
+              {banner('CORRELACIÓN VERIFICADA', 'VÉRTICE está completando la validación operacional. Autorización de respuesta pendiente. La consola se habilitará sola; mientras tanto, repasen con su equipo la cadena del incidente.', true)}
             </div>
           )}
 
           {inDecision && (
             <div className="flex-1 min-h-0 grid" style={{ gridTemplateColumns: 'minmax(0,1fr) 24rem', gap: '1.25rem', alignItems: 'start' }}>
               <div className="flex flex-col" style={{ gap: '1rem' }}>
-                {banner('CORRELACIÓN VERIFICADA', 'Autorización de respuesta concedida. Revisa los planes disponibles.')}
+                {banner('CORRELACIÓN VERIFICADA', stage === 'plans' ? 'Autorización de respuesta concedida. Revisa los planes disponibles.' : 'Autorización de respuesta concedida.')}
                 {stage === 'plans' && (
                   <>
                     <PlanGrid reviewing={ui.reviewing} disabled={paused} onReview={review} />

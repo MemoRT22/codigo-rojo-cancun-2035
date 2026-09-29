@@ -69,6 +69,7 @@ export function InvestigationRail({ phase, items, assistant, trace, nouns }: Pro
           <div className="animate-fade-in-up" style={{ marginTop: '0.9rem' }}>
             <StatusLine icon={<IconCheck size={16} color={T.STATUS.ok} />} text="Evidencia registrada y enviada" />
             <StatusLine icon={<span className="animate-status" style={{ width: 9, height: 9, borderRadius: 5, background: T.STATUS.warn, display: 'inline-block', margin: '0 3.5px' }} />} text="En espera de correlación" />
+            <div style={{ fontSize: '0.8125rem', color: T.INK.secondary, lineHeight: 1.45, marginTop: '0.45rem' }}>Comparte este hallazgo con tu equipo: lo necesitarán para reconstruir el incidente.</div>
           </div>
         )}
       </section>

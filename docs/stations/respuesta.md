@@ -29,6 +29,7 @@ Late join: la estación abre directamente en la etapa que corresponde (candado, 
 
 Cuatro campos bajo categorías neutrales: **ORIGEN · IDENTIDAD · PROPAGACIÓN · CORRELACIÓN** (sin nombrar estaciones). **No se autocompleta** aunque el motor ya tenga las cuatro evidencias.
 Se normaliza el formato (`cor512`, `COR 512` → `COR-512`). Clave canónica: `COR-512 / ACC-417 / NOD-204 / AGR-27`.
+«Validar correlación» solo se habilita con **4 de 4** identificadores en la investigación (restricción de UX; el motor no cambia): mientras falten, «Continúa la investigación antes de validar la correlación» (sin decir cuál falta).
 El envío es `FINAL_CORRELATION_SUBMITTED` al Mission Engine (la única validación). Si no coincide: «La correlación propuesta no puede validarse con la evidencia
 disponible. Revisa origen, identidad, propagación y correlación antes de volver a enviar.» (sin señalar campo, sin penalización, reintentable).
 

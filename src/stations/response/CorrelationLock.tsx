@@ -14,7 +14,8 @@ interface Props {
 export function CorrelationLock({ paused, evidenceCount, rejected, onSubmit }: Props) {
   const { theme: T } = useTheme();
   const [vals, setVals] = useState<Record<LockKey, string>>({ origin: '', identity: '', propagation: '', correlation: '' });
-  const ready = LOCK_FIELDS.every((f) => vals[f.key].trim().length > 0) && !paused;
+  const complete = evidenceCount >= 4;
+  const ready = LOCK_FIELDS.every((f) => vals[f.key].trim().length > 0) && !paused && complete;
   const submit = () => { if (ready) onSubmit({ origin: normalizeId(vals.origin), identity: normalizeId(vals.identity), propagation: normalizeId(vals.propagation), correlation: normalizeId(vals.correlation) }); };
 
   return (
@@ -56,7 +57,10 @@ export function CorrelationLock({ paused, evidenceCount, rejected, onSubmit }: P
         </div>
 
         <div className="flex items-center justify-between" style={{ marginTop: '1.5rem', gap: '1rem' }}>
-          <span style={{ fontSize: '0.875rem', color: T.INK.secondary }}>Identificadores en la investigación: {evidenceCount} de 4</span>
+          <span style={{ fontSize: '0.875rem', color: T.INK.secondary, lineHeight: 1.45 }}>
+            Identificadores en la investigación: {evidenceCount} de 4
+            {!complete && <><br />Continúa la investigación antes de validar la correlación.</>}
+          </span>
           <button
             type="submit"
             disabled={!ready}

@@ -24,7 +24,7 @@ export function Timeline({ group }: { group: Group | null }) {
         {TIMELINE.map((e) => {
           const on = lit.has(e.id);
           return (
-            <li key={e.id} className="flex items-start" style={{ gap: '0.75rem', padding: '0.32rem 0', position: 'relative', opacity: group && !on ? 0.55 : 1, transition: 'opacity .2s' }}>
+            <li key={e.id} className="flex items-start" style={{ gap: '0.75rem', padding: '0.32rem 0', position: 'relative', opacity: group && !on ? 0.85 : 1, transition: 'opacity .2s' }}>
               <span style={{ width: 12, height: 12, borderRadius: 6, marginTop: 4, flexShrink: 0, zIndex: 1, background: on ? T.BRAND.blue : T.SURFACE.card, border: `2px solid ${on ? T.BRAND.blue : T.INK.faint}` }} />
               <div className="min-w-0">
                 <div style={{ fontSize: '0.8125rem', fontWeight: 650, color: on ? T.BRAND.blue : T.INK.secondary }}>{e.time}{e.ref ? <span style={{ fontWeight: 560 }}> · {e.ref}</span> : null}</div>

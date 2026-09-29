@@ -46,6 +46,7 @@ Abrir en el mismo navegador:
 ```text
 http://localhost:5173/                        VÉRTICE (pantalla central, host)
 http://localhost:5173/station/comunicaciones  Estación 01 — Comunicaciones
+http://localhost:5173/station/identidad       Estación 02 — Identidad y Accesos
 ```
 
 Se pueden mostrar en una sola pantalla (cambiando de pestaña) o repartir en varias. La pantalla central sirve en monitor, TV,
@@ -81,4 +82,4 @@ cambia todas las pestañas a la vez.
 
 **Piloto v1: canon base congelado para implementación.**
 
-Implementado: VÉRTICE central, Mission Engine, modo portátil (BroadcastChannel) y Estación 01 — Comunicaciones. La siguiente fase es la estación de Identidad y Accesos (ver `docs/08-roadmap.md`).
+Implementado: VÉRTICE central, Mission Engine, modo portátil (BroadcastChannel) y las estaciones 01 — Comunicaciones y 02 — Identidad y Accesos. La siguiente fase es Infraestructura (ver `docs/08-roadmap.md`).

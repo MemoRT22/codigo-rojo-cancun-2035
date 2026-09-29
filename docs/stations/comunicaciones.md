@@ -31,8 +31,8 @@ para iniciar la misión sin VÉRTICE, marcar `COR-512`, volver a ACTIVE, reinici
 |---|---|
 | Contenido canónico (10 correos, incluido `COR-512`) | `src/stations/communications/data.ts` |
 | Lógica de descubrimiento, fases, filtros, ayudas | `src/stations/communications/logic.ts` |
-| Presentación | `CommunicationsStation.tsx`, `MessageList/Reader.tsx`, `InvestigationRail.tsx` |
-| Marco reutilizable (cabecera, estado, sincronía) | `src/stations/shell/` |
+| Presentación | `CommunicationsStation.tsx`, `MessageList.tsx`, `MessageReader.tsx` |
+| Compartido con las demás estaciones (marco, fase y acción de descubrimiento, ciclo de vida y ayudas, panel de investigación, espera, dev) | `src/stations/shell/` |
 | Cliente de misión de una estación | `src/mission/useMissionClient.ts` |
 | Transporte del modo portátil (BroadcastChannel) | `src/mission/broadcastTransport.ts` |
 | Selección de transporte (único punto de cambio) | `src/mission/createTransport.ts` |

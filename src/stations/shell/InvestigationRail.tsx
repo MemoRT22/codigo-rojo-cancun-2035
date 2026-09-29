@@ -1,53 +1,67 @@
+import type { ReactNode } from 'react';
 import { useTheme } from '../../brand/ThemeContext';
-import { IconCheck, IconMail, IconSpark, IconTrace } from '../shell/icons';
-import type { StationPhase } from '../shell/types';
-import type { HelpLevel } from './logic';
-import type { Message } from './types';
+import { IconCheck, IconSpark, IconTrace } from './icons';
+import type { HelpLevel } from './help';
+import type { StationPhase } from './types';
+
+export interface InvestigationItem {
+  id: string;
+  title: string;
+  meta: string;
+  evidenceId: string;
+  icon: ReactNode;
+}
 
 interface Props {
   phase: StationPhase;
-  linked: Message[];
+  items: InvestigationItem[];
   help: HelpLevel;
+  /** Texto de la ayuda de nivel 1 y 2 (lenguaje de sistema, sin señalar la respuesta). */
+  helpLines: [string, string];
+  /** Con el nivel 2 se antepone «Sugerencia de análisis:» a la segunda línea. */
   trace: string[];
+  nouns: { singular: string; plural: string; empty: string };
 }
 
-export function InvestigationRail({ phase, linked, help, trace }: Props) {
+/**
+ * Panel lateral común de investigación: elementos vinculados, estado de la evidencia registrada,
+ * asistente de análisis (ayudas progresivas) e historial de análisis.
+ */
+export function InvestigationRail({ phase, items, help, helpLines, trace, nouns }: Props) {
   const { theme: T } = useTheme();
   const card: React.CSSProperties = {
     background: T.SURFACE.card, border: `1px solid ${T.SURFACE.hairline}`, borderRadius: '0.875rem', boxShadow: `0 6px 24px ${T.SURFACE.shadow}`, padding: '1.1rem 1.2rem',
   };
   const label: React.CSSProperties = { fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.12em', color: T.INK.secondary, textTransform: 'uppercase' };
-  const found = phase === 'EVIDENCE_FOUND' || (phase === 'MISSION_FINISHED' && linked.length > 0);
+  const found = phase === 'EVIDENCE_FOUND' || (phase === 'MISSION_FINISHED' && items.length > 0);
 
   return (
     <aside className="flex flex-col min-h-0" style={{ gap: '1rem' }} aria-label="Investigación">
       <section style={card}>
         <div className="flex items-center justify-between">
           <span style={label}>Investigación actual</span>
-          <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: T.INK.secondary }}>{linked.length} {linked.length === 1 ? 'comunicación' : 'comunicaciones'}</span>
+          <span style={{ fontSize: '0.8125rem', fontWeight: 600, color: T.INK.secondary }}>{items.length} {items.length === 1 ? nouns.singular : nouns.plural}</span>
         </div>
 
-        {linked.length === 0 ? (
-          <div style={{ marginTop: '0.9rem', fontSize: '0.9375rem', color: T.INK.secondary, lineHeight: 1.5 }}>
-            Ninguna comunicación vinculada todavía. Las comunicaciones que agregues aparecerán aquí.
-          </div>
+        {items.length === 0 ? (
+          <div style={{ marginTop: '0.9rem', fontSize: '0.9375rem', color: T.INK.secondary, lineHeight: 1.5 }}>{nouns.empty}</div>
         ) : (
-          linked.map((m) => (
+          items.map((m) => (
             <div
               key={m.id}
               className="animate-fade-in-up"
               style={{ marginTop: '0.9rem', padding: '0.85rem 0.95rem', borderRadius: '0.75rem', border: `1px solid ${T.STATUS.info}44`, background: `${T.STATUS.info}0F` }}
             >
               <div className="flex items-start" style={{ gap: '0.65rem' }}>
-                <span style={{ marginTop: 2 }}><IconMail size={18} color={T.STATUS.info} /></span>
+                <span style={{ marginTop: 2 }}>{m.icon}</span>
                 <div className="min-w-0">
-                  <div style={{ fontSize: '0.9375rem', fontWeight: 620, lineHeight: 1.35 }}>{m.subject}</div>
-                  <div style={{ fontSize: '0.8125rem', color: T.INK.secondary, marginTop: '0.2rem' }}>{m.senderName} · {m.time}</div>
+                  <div style={{ fontSize: '0.9375rem', fontWeight: 620, lineHeight: 1.35 }}>{m.title}</div>
+                  <div style={{ fontSize: '0.8125rem', color: T.INK.secondary, marginTop: '0.2rem' }}>{m.meta}</div>
                 </div>
               </div>
               <div className="flex items-center justify-between" style={{ marginTop: '0.7rem', paddingTop: '0.6rem', borderTop: `1px solid ${T.STATUS.info}33` }}>
                 <span style={{ fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.12em', color: T.STATUS.info }}>EVIDENCIA</span>
-                <span style={{ fontSize: '1.05rem', fontWeight: 650, letterSpacing: '0.03em' }}>{m.evidence}</span>
+                <span style={{ fontSize: '1.05rem', fontWeight: 650, letterSpacing: '0.03em' }}>{m.evidenceId}</span>
               </div>
             </div>
           ))
@@ -67,18 +81,16 @@ export function InvestigationRail({ phase, linked, help, trace }: Props) {
             <IconSpark size={17} color={T.BRAND.blue} />
             <span style={{ ...label, color: T.BRAND.blue }}>VÉRTICE · Asistente de análisis</span>
           </div>
-          <div style={{ marginTop: '0.7rem', fontSize: '0.9375rem', lineHeight: 1.55 }}>
-            VÉRTICE detecta comunicaciones recientes con metadatos que conviene revisar.
-          </div>
+          <div style={{ marginTop: '0.7rem', fontSize: '0.9375rem', lineHeight: 1.55 }}>{helpLines[0]}</div>
           {help > 1 && (
             <div className="animate-fade-in-up" style={{ marginTop: '0.7rem', fontSize: '0.9375rem', lineHeight: 1.55, color: T.INK.secondary }}>
-              <span style={{ fontWeight: 650, color: T.INK.primary }}>Sugerencia de análisis:</span> compara remitente, dominio y horario. Un mensaje urgente no necesariamente es malicioso.
+              <span style={{ fontWeight: 650, color: T.INK.primary }}>Sugerencia de análisis:</span> {helpLines[1]}
             </div>
           )}
         </section>
       )}
 
-      <section className="flex flex-col min-h-0 flex-1" style={card}>
+      <section className="flex flex-col min-h-0 flex-1" style={{ ...card, minHeight: '8rem' }}>
         <div className="flex items-center" style={{ gap: '0.5rem' }}>
           <IconTrace size={16} color={T.INK.secondary} />
           <span style={label}>Historial de análisis</span>
@@ -97,7 +109,7 @@ export function InvestigationRail({ phase, linked, help, trace }: Props) {
   );
 }
 
-function StatusLine({ icon, text }: { icon: React.ReactNode; text: string }) {
+function StatusLine({ icon, text }: { icon: ReactNode; text: string }) {
   return (
     <div className="flex items-center" style={{ gap: '0.5rem', padding: '0.2rem 0', fontSize: '0.9rem', fontWeight: 560 }}>
       <span className="inline-flex" style={{ width: 16, justifyContent: 'center' }}>{icon}</span>
